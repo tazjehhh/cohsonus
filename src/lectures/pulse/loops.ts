@@ -14,12 +14,17 @@ export const L = {
 
 export const fixed = (l: GridLane): GridLane => ({ ...l, editable: false });
 
+/** Drum machine kick for house, techno and trap. */
+const MACHINE = { kick: "kickMachine" } as const;
+/** The kit through an old microphone, for boom bap. */
+const LOFI = { kick: "kickLofi", snare: "snareLofi", hat: "hatLofi" } as const;
+
 const bassLane = (notes: Note[]) => ({ id: "bass", voice: "synthBass" as const, notes });
 
 // ---------- part 1 ----------
 
 export const house124: Loop = {
-  ...drums({ bpm: 124 }, { kick: "x...x...x...x...", clap: "....x.......x...", hat: "g...g...g...g...", open: "..x...x...x...x." }),
+  ...drums({ bpm: 124, voices: MACHINE }, { kick: "x...x...x...x...", clap: "....x.......x...", hat: "g...g...g...g...", open: "..x...x...x...x." }),
 };
 house124.lanes.push(bassLane(hits("..x...x...x...x.").map((n) => ({ ...n, pitch: 33, len: 1.5 }))));
 
@@ -28,7 +33,7 @@ export const TEMPO_LOOPS: { id: string; genre: string; loop: Loop }[] = [
     id: "boombap",
     genre: "Boom bap",
     loop: drums(
-      { bpm: 88, swing: 0.56, voices: { kick: "kickDeep" } },
+      { bpm: 88, swing: 0.56, voices: LOFI },
       { kick: "x......x..x.....", snare: "....x.......x...", hat: "x.o.x.o.x.o.x.o." },
     ),
   },
@@ -36,12 +41,12 @@ export const TEMPO_LOOPS: { id: string; genre: string; loop: Loop }[] = [
     id: "indie",
     genre: "Indie rock",
     loop: (() => {
-      const l = drums({ bpm: 112, voices: { kick: "kickLive", snare: "snareLive" } }, { kick: "x.......x.x.....", snare: "....x.......x...", hat: "x.o.x.o.x.o.x.o." });
+      const l = drums({ bpm: 112 }, { kick: "x.......x.x.....", snare: "....x.......x...", hat: "x.o.x.o.x.o.x.o." });
       return { ...l, lanes: l.lanes.map((x, i) => ({ ...x, notes: humanize(x.notes, 0.12, 30 + i) })) };
     })(),
   },
-  { id: "house", genre: "House", loop: drums({ bpm: 124 }, { kick: "x...x...x...x...", clap: "....x.......x...", open: "..x...x...x...x." }) },
-  { id: "techno", genre: "Techno", loop: drums({ bpm: 136 }, { kick: "x...x...x...x...", hat: "gxgggxgggxgggxgg", open: "..o...o...o...o." }) },
+  { id: "house", genre: "House", loop: drums({ bpm: 124, voices: MACHINE }, { kick: "x...x...x...x...", clap: "....x.......x...", open: "..x...x...x...x." }) },
+  { id: "techno", genre: "Techno", loop: drums({ bpm: 136, voices: MACHINE }, { kick: "x...x...x...x...", hat: "gxgggxgggxgggxgg", open: "..o...o...o...o." }) },
 ];
 
 export const findOne: Loop = (() => {
@@ -51,7 +56,7 @@ export const findOne: Loop = (() => {
   return l;
 })();
 
-export const fourFloorStart: Loop = drums({ bpm: 120, stepsPerBeat: 1 }, { kick: "...." });
+export const fourFloorStart: Loop = drums({ bpm: 120, stepsPerBeat: 1, voices: MACHINE }, { kick: "...." });
 
 // ---------- part 2 ----------
 
@@ -73,8 +78,8 @@ export const densityC: Loop = drums({ bpm: 96 }, { ...ks, hat: "xgogxgogxgogxgog
 export const hats8: Loop = drums({ bpm: 96, stepsPerBeat: 2 }, { kick: "x...x.x.", snare: "..x...x.", hat: "xoxoxoxo" });
 export const hats16: Loop = drums({ bpm: 96, stepsPerBeat: 4 }, { kick: "x.......x...x...", snare: "....x.......x...", hat: "xgogxgogxgogxgog" });
 
-export const openTarget: Loop = drums({ bpm: 124 }, { kick: "x...x...x...x...", clap: "....x.......x...", open: "..x...x...x...x." });
-export const openStart: Loop = drums({ bpm: 124 }, { kick: "x...x...x...x...", clap: "....x.......x...", open: "................" });
+export const openTarget: Loop = drums({ bpm: 124, voices: MACHINE }, { kick: "x...x...x...x...", clap: "....x.......x...", open: "..x...x...x...x." });
+export const openStart: Loop = drums({ bpm: 124, voices: MACHINE }, { kick: "x...x...x...x...", clap: "....x.......x...", open: "................" });
 
 /** One hat lands a sixteenth late on beat 3. */
 export const errorLoop: Loop = drums({ bpm: 100 }, { kick: "x.......x.......", snare: "....x.......x...", hat: "x.x.x.x.x..xx.x." });
@@ -87,37 +92,37 @@ export const syncQuiz: Loop = drums({ bpm: 96 }, { kick: "x.......x..x....", sna
 
 const grooveKS = { kick: "x......x..x.....", snare: "....x.......x..." };
 const accented = hits("xgogxgogxgogxgog");
-export const machine: Loop = drums({ bpm: 90, voices: { kick: "kickDeep" } }, { ...grooveKS, hat: "xxxxxxxxxxxxxxxx" });
-export const swung: Loop = { ...drums({ bpm: 90, swing: 0.6, voices: { kick: "kickDeep" } }, grooveKS), lanes: [...drums({ bpm: 90 }, grooveKS).lanes.map((l) => ({ ...l, voice: l.id === "kick" ? ("kickDeep" as const) : l.voice })), { id: "hat", voice: "hatClosed", notes: accented }] };
+export const machine: Loop = drums({ bpm: 90, voices: LOFI }, { ...grooveKS, hat: "xxxxxxxxxxxxxxxx" });
+export const swung: Loop = { ...drums({ bpm: 90, swing: 0.6, voices: LOFI }, grooveKS), lanes: [...drums({ bpm: 90, voices: LOFI }, grooveKS).lanes, { id: "hat", voice: "hatLofi", notes: accented }] };
 export const human: Loop = (() => {
-  const base = drums({ bpm: 90, voices: { kick: "kickDeep" } }, grooveKS);
+  const base = drums({ bpm: 90, voices: LOFI }, grooveKS);
   return {
     ...base,
-    lanes: [...base.lanes.map((l, i) => ({ ...l, notes: humanize(l.notes, 0.16, 40 + i) })), { id: "hat", voice: "hatClosed" as const, notes: humanize(accented, 0.2, 49) }],
+    lanes: [...base.lanes.map((l, i) => ({ ...l, notes: humanize(l.notes, 0.16, 40 + i) })), { id: "hat", voice: "hatLofi" as const, notes: humanize(accented, 0.2, 49) }],
   };
 })();
 
-export const swingTarget: Loop = { ...drums({ bpm: 92, swing: 0.62, voices: { kick: "kickDeep" } }, { kick: "x.....x...x.....", snare: "....x.......x...", hat: "xgogxgogxgogxgog" }) };
+export const swingTarget: Loop = { ...drums({ bpm: 92, swing: 0.62, voices: LOFI }, { kick: "x.....x...x.....", snare: "....x.......x...", hat: "xgogxgogxgogxgog" }) };
 export const swingStart: Loop = { ...swingTarget, swing: 0.5 };
 
 export const flatHats: Loop = drums({ bpm: 96 }, { kick: "x.......x.x.....", snare: "....x.......x...", hat: "xxxxxxxxxxxxxxxx" });
 export const accentHats: Loop = drums({ bpm: 96 }, { kick: "x.......x.x.....", snare: "....x.......x...", hat: "Xgogxgogxgogxgog" });
 
 export const ghostOn: Loop = (() => {
-  const l = drums({ bpm: 100, voices: { kick: "kickLive", snare: "snareLive" } }, { kick: "x.......x.x.....", snare: "....x..g.g..x..g", hat: "x.o.x.o.x.o.x.o." });
+  const l = drums({ bpm: 100 }, { kick: "x.......x.x.....", snare: "....x..g.g..x..g", hat: "x.o.x.o.x.o.x.o." });
   return { ...l, lanes: l.lanes.map((x, i) => ({ ...x, notes: humanize(x.notes, 0.1, 60 + i) })) };
 })();
 export const ghostOff: Loop = { ...ghostOn, lanes: ghostOn.lanes.map((l) => (l.id === "snare" ? { ...l, notes: l.notes.filter((n) => (n.vel ?? 1) > 0.4) } : l)) };
 
-export const metronome: Loop = drums({ bpm: 90, bars: 2 }, { hat: "x.o.x.o.x.o.x.o.|x.o.x.o.x.o.x.o." });
+export const metronome: Loop = drums({ bpm: 90, bars: 2, voices: LOFI }, { hat: "x.o.x.o.x.o.x.o.|x.o.x.o.x.o.x.o." });
 metronome.lanes.push(
   { id: "click", voice: "click", notes: repeat([{ step: 0, vel: 1 }, { step: 4, vel: 0.5 }, { step: 8, vel: 0.5 }, { step: 12, vel: 0.5 }], 2, 16) },
-  { id: "kick", voice: "kickDeep", notes: [] },
-  { id: "snare", voice: "snare", notes: [] },
+  { id: "kick", voice: "kickLofi", notes: [] },
+  { id: "snare", voice: "snareLofi", notes: [] },
 );
 
 export const trap140: Loop = (() => {
-  const l = drums({ bpm: 140 }, { kick: "x.........x.....", snare: "........x.......", hat: "x.x.x.x.x.x.xxxx" });
+  const l = drums({ bpm: 140, voices: MACHINE }, { kick: "x.........x.....", snare: "........x.......", hat: "x.x.x.x.x.x.xxxx" });
   l.lanes.push({ id: "808", voice: "bass808", notes: [{ step: 0, pitch: 33, len: 9 }, { step: 10, pitch: 33, len: 6 }] });
   return l;
 })();
@@ -157,7 +162,7 @@ export const fillStart: Loop = (() => {
 })();
 
 export const trapPad: Loop = (() => {
-  const l = drums({ bpm: 140, bars: 2 }, { kick: "x.........x.....|x.........x.....", snare: "........x.......|........x.......", hat: "x.x.x.x.x.x.xxxx|x.x.x.x.x.x.x.x." });
+  const l = drums({ bpm: 140, bars: 2, voices: MACHINE }, { kick: "x.........x.....|x.........x.....", snare: "........x.......|........x.......", hat: "x.x.x.x.x.x.xxxx|x.x.x.x.x.x.x.x." });
   l.lanes.push({ id: "pad", voice: "pad", notes: [{ step: 0, chord: [57, 60, 64], len: 32, vel: 0.9 }] });
   return l;
 })();
@@ -179,8 +184,8 @@ export const earStart: Loop = drums({ bpm: 96 }, { kick: "................", sna
 
 // ---------- refresher ----------
 
-export const refreshTap: Loop = drums({ bpm: 108, voices: { kick: "kickLive", snare: "snareLive" } }, { kick: "x.......x.x.....", snare: "....x.......x...", hat: "x.o.x.o.x.o.x.o." });
+export const refreshTap: Loop = drums({ bpm: 108 }, { kick: "x.......x.x.....", snare: "....x.......x...", hat: "x.o.x.o.x.o.x.o." });
 export const refreshTarget: Loop = drums({ bpm: 98 }, { kick: "x..x..x...x.....", snare: "....x.......x...", hat: "x.x.x.x.x.x.x.x." });
 export const refreshStart: Loop = drums({ bpm: 98 }, { kick: "................", snare: "................", hat: "x.x.x.x.x.x.x.x." });
-export const refreshStraight: Loop = drums({ bpm: 94, voices: { kick: "kickDeep" } }, { kick: "x......x..x.....", snare: "....x.......x...", hat: "xgogxgogxgogxgog" });
+export const refreshStraight: Loop = drums({ bpm: 94, voices: LOFI }, { kick: "x......x..x.....", snare: "....x.......x...", hat: "xgogxgogxgogxgog" });
 export const refreshSwung: Loop = { ...refreshStraight, swing: 0.62 };

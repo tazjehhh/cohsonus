@@ -1,6 +1,7 @@
 import { audio, unlock } from "./engine";
 import { Channel, type ChannelOpts } from "./mixer";
-import { VOICES, prewarm } from "./instruments";
+import { VOICES, instrumentOf } from "./voices";
+import { load } from "./sampler";
 import { loopSteps, stepSeconds, type Lane, type Loop, type Note } from "../music/model";
 import { indexLoop, noteOffset, type Indexed } from "../music/timing";
 
@@ -34,7 +35,7 @@ export class Player {
   /** Audio time at which step 0 of the current cycle started. */
   private origin = 0;
   private run = 0;
-  private starting = false;
+  starting = false;
   playing = false;
 
   constructor(
@@ -44,6 +45,12 @@ export class Player {
     this.loop = loop;
     this.index = indexLoop(loop, (i) => loop.lanes[i]);
     if (import.meta.env.DEV) ((window as unknown as { __players: Player[] }).__players ??= []).push(this);
+    void this.ready();
+  }
+
+  /** Loads every sample the current loop needs. */
+  ready() {
+    return load(new Set(this.loop.lanes.flatMap((l) => [instrumentOf(l.voice), ...l.notes.filter((n) => n.voice).map((n) => instrumentOf(n.voice!))])));
   }
 
   setLoop(loop: Loop) {
@@ -52,6 +59,7 @@ export class Player {
     this.loop = loop;
     this.index = indexLoop(loop, (i) => loop.lanes[i]);
     if (this.nextStep >= total) this.nextStep = 0;
+    void this.ready();
   }
 
   getLoop() {
@@ -101,13 +109,13 @@ export class Player {
     current = this;
     const run = ++this.run;
     this.starting = true;
+    this.emit(null);
     await unlock();
+    await this.ready();
     this.starting = false;
     if (current !== this || run !== this.run) return;
     const c = audio();
     for (const id of this.channelIds()) this.channel(id);
-    prewarm(this.loop.lanes.flatMap((l) => l.notes.map((note) => ({ voice: note.voice ?? l.voice, note }))));
-    for (const ch of this.channels.values()) ch.startAmbient();
     this.applyMutes();
     this.playing = true;
     this.nextStep = fromStep;
@@ -121,6 +129,7 @@ export class Player {
   }
 
   stop() {
+    const was = this.playing || this.starting;
     this.run++;
     this.starting = false;
     if (this.timer !== null) clearInterval(this.timer);
@@ -128,8 +137,6 @@ export class Player {
     this.timer = null;
     this.raf = null;
     this.queue = [];
-    for (const ch of this.channels.values()) ch.stopAmbient();
-    const was = this.playing;
     this.playing = false;
     if (current === this) current = null;
     this.shown = null;
@@ -146,6 +153,7 @@ export class Player {
     await unlock();
     const lane = this.loop.lanes.find((l) => l.id === laneId);
     if (!lane) return;
+    await load([instrumentOf(note.voice ?? lane.voice)]);
     const ch = this.channel(lane.channel ?? lane.id);
     VOICES[note.voice ?? lane.voice](audio().currentTime + 0.01, note, ch.input, stepSeconds(this.loop));
   }

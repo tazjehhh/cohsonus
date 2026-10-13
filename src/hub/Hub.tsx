@@ -65,6 +65,9 @@ export function Hub() {
           <Card key={l.id} lecture={l} progress={all[l.id]} isNext={l.id === next?.id} />
         ))}
       </div>
+      <footer className="hub-foot">
+        <a href="#/credits">Sounds</a>
+      </footer>
     </div>
   );
 }

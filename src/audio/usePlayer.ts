@@ -9,6 +9,7 @@ export function usePlayer(loop: Loop, channelOpts?: Record<string, ChannelOpts>)
   const player = ref.current;
   const [step, setStep] = useState<number | null>(null);
   const [playing, setPlaying] = useState(false);
+  const [busy, setBusy] = useState(false);
 
   useEffect(() => {
     player.setLoop(loop);
@@ -18,6 +19,7 @@ export function usePlayer(loop: Loop, channelOpts?: Record<string, ChannelOpts>)
     const off = player.subscribe((s) => {
       setStep(s);
       setPlaying(player.playing);
+      setBusy(player.starting);
     });
     return () => {
       off();
@@ -28,7 +30,8 @@ export function usePlayer(loop: Loop, channelOpts?: Record<string, ChannelOpts>)
   return {
     player,
     step,
-    playing,
+    playing: playing || busy,
+    busy,
     toggle: () => player.toggle(),
     play: () => void player.play(),
     stop: () => player.stop(),

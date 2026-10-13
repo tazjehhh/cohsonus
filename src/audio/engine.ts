@@ -1,7 +1,6 @@
 let ctx: AudioContext | null = null;
 let master: GainNode;
 let fxIn: GainNode;
-let noise: AudioBuffer;
 
 function buildReverb(c: AudioContext, seconds: number, decay: number) {
   const len = Math.floor(c.sampleRate * seconds);
@@ -45,9 +44,6 @@ export function audio(): AudioContext {
   fxIn = ctx.createGain();
   fxIn.connect(reverb).connect(reverbOut).connect(master);
 
-  noise = ctx.createBuffer(1, ctx.sampleRate * 2, ctx.sampleRate);
-  const n = noise.getChannelData(0);
-  for (let i = 0; i < n.length; i++) n[i] = Math.random() * 2 - 1;
   return ctx;
 }
 
@@ -58,7 +54,6 @@ export async function unlock() {
 
 export const masterIn = () => (audio(), master);
 export const reverbIn = () => (audio(), fxIn);
-export const noiseBuffer = () => (audio(), noise);
 
 /** Seconds between the clock and the speaker, used to line taps up with what was heard. */
 export function heardOffset() {

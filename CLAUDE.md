@@ -21,7 +21,28 @@ node scripts/flows.mjs                                                         #
 node scripts/shot.mjs "<hash>" shots/x.png ... "eval:$(cat scripts/measure.js)"  # channel levels of what is playing
 ```
 
-Sound cannot be heard here. Balance mixes by numbers (scripts/measure.js): kick and bass around -18 dB RMS, harmony and melody -20 to -23, hats -35 to -39, master peaks below 0.
+Sound cannot be heard here. Balance mixes by numbers (scripts/measure.js): kick and bass around -18 dB RMS, harmony and melody -20 to -23, hats -35 to -39, master peaks below 0. Set an instrument's base level in `src/audio/voices.ts`; per-track adjustments go in the track's channel options.
+
+## Samples
+
+```
+pip install numpy soundfile
+python3 scripts/samples/build.py                 # everything
+python3 scripts/samples/build.py kit.snare       # one instrument
+```
+
+The script clones the source libraries without blobs into `.cache/samples`, fetches only the files it uses, mixes the drum microphones, trims, measures the pitch of every tonal sample (octave by majority vote, fine tuning per file) and writes `public/samples/`, `src/audio/samples.json` and `CREDITS.md`.
+
+Synth instruments are rendered from Surge XT factory patches. They need the Python bindings:
+
+```
+apt-get install libasound2-dev libx11-dev libxrandr-dev libxinerama-dev libxcursor-dev libxcomposite-dev libxext-dev libfreetype-dev libfontconfig1-dev libcurl4-openssl-dev
+git clone --depth 1 --recurse-submodules --shallow-submodules https://github.com/surge-synthesizer/surge.git
+cmake -S surge -B surge/buildpy -GNinja -DCMAKE_BUILD_TYPE=Release -DSURGE_BUILD_PYTHON_BINDINGS=ON && ninja -C surge/buildpy surgepy
+SURGEPY=surge/buildpy/src/surge-python SURGE_PATCHES=surge/resources/data/patches_factory python3 scripts/samples/build.py synth.bass
+```
+
+Drum machines (808, 909) are to come from Freesound, CC0 only, with the key in `FREESOUND_API_KEY`. Until then `machine.kick` is a Surge render and the 808 is the Surge sub bass with a pitch drop.
 
 ## Principles
 
@@ -34,14 +55,16 @@ Sound cannot be heard here. Balance mixes by numbers (scripts/measure.js): kick 
 - Checks are deterministic. There is no AI at runtime.
 - The road between lectures is a suggestion, not a lock. Every lecture must work on its own.
 - Refreshers test first; the summary comes after.
-- Examples from real music are genre classics, linked (YouTube search), never embedded. All audio is synthesized in the browser.
+- Examples from real music are genre classics, linked (YouTube search), never embedded.
+- Every sound is a recording or an offline render. Nothing is synthesized in the browser. Only CC0 or CC-BY sources (attribution on the Sounds page), or our own renders; never "royalty-free" packs, which forbid passing the sounds on.
 - YAGNI for the shared engine (platform first: Web Audio, SVG, CSS). Not for the craft of a lecture, which is allowed to be bespoke.
 - Verify visually: screenshot every step you change and look at it.
 - docs/plan.md, docs/findings.md and docs/progress.md are committed. Containers are thrown away; the repo is the memory.
 
 ## Map
 
-- `src/audio/` engine (context, reverb, limiter), `instruments.ts` (all synthesized voices), `mixer.ts` (channels with mute, analyser, dusty and echo), `player.ts` (look-ahead scheduler, swing, solo/mute), `usePlayer.ts`
+- `src/audio/` engine (context, reverb, limiter), `sampler.ts` (velocity layers, round robin, pitched playback, choke groups), `voices.ts` (voice name → instrument and level), `samples.json` (generated manifest), `mixer.ts` (channels with mute, analyser, dusty and echo), `player.ts` (look-ahead scheduler, swing, solo/mute; loads its samples before it starts), `usePlayer.ts`
+- `public/samples/` the audio (FLAC), built by `scripts/samples/build.py`
 - `src/music/` pure logic: `model.ts` (Loop, Lane, Note), `patterns.ts` (pattern strings, humanize), `timing.ts` (swing, tap tempo, quantize), `checks.ts` (backbeat, fills…), `notation.ts` (drum notation layout)
 - `src/ui/` shared pieces: StepGrid + DrumStaff (same column layout), Studio, Strips (mixer), Spectrum, BeatCircle, Choice
 - `src/lectures/` `types.ts`, `LectureView.tsx` (cover → part intro → steps → homework), `RefresherView.tsx`, `registry.ts` (all eleven lectures, road order), one folder per built lecture

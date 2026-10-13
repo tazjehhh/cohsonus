@@ -4,6 +4,7 @@ import { LectureView } from "./lectures/LectureView";
 import { RefresherView } from "./lectures/RefresherView";
 import { lectureById } from "./lectures/registry";
 import { stopAll } from "./audio/player";
+import { Credits } from "./Credits";
 
 function useHash() {
   const [hash, setHash] = useState(location.hash);
@@ -24,5 +25,6 @@ export function App() {
   const def = id ? lectureById(id)?.def : undefined;
   if (kind === "l" && def) return <LectureView key={hash} lecture={def} startPart={part ? Number(part) - 1 : undefined} />;
   if (kind === "r" && def?.refresher) return <RefresherView key={def.id} lecture={def} />;
+  if (kind === "credits") return <Credits />;
   return <Hub />;
 }

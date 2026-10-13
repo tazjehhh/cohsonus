@@ -2,3 +2,5 @@ node_modules
 dist
 shots
 *.log
+.cache
+__pycache__

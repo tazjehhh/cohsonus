@@ -36,3 +36,12 @@
 - Pulse & Groove ends on a question (some 808 notes fit the chord, others don't) that Keys I answers.
 - Three worlds (sample, synth, band) show that a role is a job, not an instrument.
 - Every step is built around a likely wrong belief: more hats = faster, on the grid = better, a role = an instrument.
+
+## Sounds
+
+- The owner does not want sounds synthesized in the browser: coded audio sounded poor. Sources must allow later commercial use.
+- Allowed: CC0, CC-BY (with attribution on the Sounds page), own offline renders. Not allowed: "royalty-free" packs (99Sounds, Wave Alchemy, Looperman and the like) since they forbid redistributing the sounds, and anything NC (e.g. jRhodes).
+- Used: Virtuosity Drums (CC0, kit and lo-fi mic), VCSL (CC0: claps, woodblock, vibraphone; also has grand and upright pianos for Keys), Black And Blue Basses and Black And Green Guitars (Karoryfer, CC0), Greg Sullivan's Wurlitzer EP200 (CC BY 3.0), Surge XT factory patches rendered offline.
+- More CC0 in the sfzinstruments org: Osiris Piano, Big Rusty / Swirly / Unruly drums, Frankensnare, Meatbass, Emily Guitar, Bear Sax, and others.
+- No verified CC0 recordings of real 808/909 hardware were found; Freesound (CC0 filter) is the plan.
+- Library quirks found by measuring pitch: Black And Blue Basses sound an octave below their file names (five-string with low B); VCSL vibraphone files are named an octave low; Surge patches often carry octave offsets (bass and lead patches -12, House Organ -24). Detuned synth voices mislead fine-pitch measurement, so Surge renders keep exact roots.

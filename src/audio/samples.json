@@ -1,0 +1,1680 @@
+{
+ "instruments": {
+  "kit.kick": {
+   "source": "virtuosity",
+   "pitched": false,
+   "zones": [
+    {
+     "file": "samples/kit.kick/00.flac",
+     "vlo": 0,
+     "vhi": 0.35,
+     "rr": 1
+    },
+    {
+     "file": "samples/kit.kick/01.flac",
+     "vlo": 0,
+     "vhi": 0.35,
+     "rr": 2
+    },
+    {
+     "file": "samples/kit.kick/02.flac",
+     "vlo": 0.35,
+     "vhi": 0.6,
+     "rr": 1
+    },
+    {
+     "file": "samples/kit.kick/03.flac",
+     "vlo": 0.35,
+     "vhi": 0.6,
+     "rr": 2
+    },
+    {
+     "file": "samples/kit.kick/04.flac",
+     "vlo": 0.6,
+     "vhi": 0.85,
+     "rr": 1
+    },
+    {
+     "file": "samples/kit.kick/05.flac",
+     "vlo": 0.6,
+     "vhi": 0.85,
+     "rr": 2
+    },
+    {
+     "file": "samples/kit.kick/06.flac",
+     "vlo": 0.85,
+     "vhi": 1.0,
+     "rr": 1
+    },
+    {
+     "file": "samples/kit.kick/07.flac",
+     "vlo": 0.85,
+     "vhi": 1.0,
+     "rr": 2
+    }
+   ]
+  },
+  "kit.snare": {
+   "source": "virtuosity",
+   "pitched": false,
+   "zones": [
+    {
+     "file": "samples/kit.snare/00.flac",
+     "vlo": 0,
+     "vhi": 0.3,
+     "rr": 1
+    },
+    {
+     "file": "samples/kit.snare/01.flac",
+     "vlo": 0,
+     "vhi": 0.3,
+     "rr": 2
+    },
+    {
+     "file": "samples/kit.snare/02.flac",
+     "vlo": 0.3,
+     "vhi": 0.5,
+     "rr": 1
+    },
+    {
+     "file": "samples/kit.snare/03.flac",
+     "vlo": 0.3,
+     "vhi": 0.5,
+     "rr": 2
+    },
+    {
+     "file": "samples/kit.snare/04.flac",
+     "vlo": 0.5,
+     "vhi": 0.65,
+     "rr": 1
+    },
+    {
+     "file": "samples/kit.snare/05.flac",
+     "vlo": 0.5,
+     "vhi": 0.65,
+     "rr": 2
+    },
+    {
+     "file": "samples/kit.snare/06.flac",
+     "vlo": 0.65,
+     "vhi": 0.8,
+     "rr": 1
+    },
+    {
+     "file": "samples/kit.snare/07.flac",
+     "vlo": 0.65,
+     "vhi": 0.8,
+     "rr": 2
+    },
+    {
+     "file": "samples/kit.snare/08.flac",
+     "vlo": 0.8,
+     "vhi": 0.92,
+     "rr": 1
+    },
+    {
+     "file": "samples/kit.snare/09.flac",
+     "vlo": 0.8,
+     "vhi": 0.92,
+     "rr": 2
+    },
+    {
+     "file": "samples/kit.snare/10.flac",
+     "vlo": 0.92,
+     "vhi": 1.0,
+     "rr": 1
+    },
+    {
+     "file": "samples/kit.snare/11.flac",
+     "vlo": 0.92,
+     "vhi": 1.0,
+     "rr": 2
+    }
+   ]
+  },
+  "kit.hat": {
+   "source": "virtuosity",
+   "pitched": false,
+   "choke": "hat",
+   "zones": [
+    {
+     "file": "samples/kit.hat/00.flac",
+     "vlo": 0,
+     "vhi": 0.35,
+     "rr": 1
+    },
+    {
+     "file": "samples/kit.hat/01.flac",
+     "vlo": 0,
+     "vhi": 0.35,
+     "rr": 2
+    },
+    {
+     "file": "samples/kit.hat/02.flac",
+     "vlo": 0.35,
+     "vhi": 0.6,
+     "rr": 1
+    },
+    {
+     "file": "samples/kit.hat/03.flac",
+     "vlo": 0.35,
+     "vhi": 0.6,
+     "rr": 2
+    },
+    {
+     "file": "samples/kit.hat/04.flac",
+     "vlo": 0.6,
+     "vhi": 0.85,
+     "rr": 1
+    },
+    {
+     "file": "samples/kit.hat/05.flac",
+     "vlo": 0.6,
+     "vhi": 0.85,
+     "rr": 2
+    },
+    {
+     "file": "samples/kit.hat/06.flac",
+     "vlo": 0.85,
+     "vhi": 1.0,
+     "rr": 1
+    },
+    {
+     "file": "samples/kit.hat/07.flac",
+     "vlo": 0.85,
+     "vhi": 1.0,
+     "rr": 2
+    }
+   ]
+  },
+  "kit.open": {
+   "source": "virtuosity",
+   "pitched": false,
+   "choke": "hat",
+   "chokedBy": true,
+   "zones": [
+    {
+     "file": "samples/kit.open/00.flac",
+     "vlo": 0,
+     "vhi": 0.5,
+     "rr": 1
+    },
+    {
+     "file": "samples/kit.open/01.flac",
+     "vlo": 0.5,
+     "vhi": 0.8,
+     "rr": 1
+    },
+    {
+     "file": "samples/kit.open/02.flac",
+     "vlo": 0.8,
+     "vhi": 1.0,
+     "rr": 1
+    }
+   ]
+  },
+  "kit.tomHigh": {
+   "source": "virtuosity",
+   "pitched": false,
+   "zones": [
+    {
+     "file": "samples/kit.tomHigh/00.flac",
+     "vlo": 0,
+     "vhi": 0.5,
+     "rr": 1
+    },
+    {
+     "file": "samples/kit.tomHigh/01.flac",
+     "vlo": 0.5,
+     "vhi": 0.8,
+     "rr": 1
+    },
+    {
+     "file": "samples/kit.tomHigh/02.flac",
+     "vlo": 0.8,
+     "vhi": 1.0,
+     "rr": 1
+    }
+   ]
+  },
+  "kit.tomLow": {
+   "source": "virtuosity",
+   "pitched": false,
+   "zones": [
+    {
+     "file": "samples/kit.tomLow/00.flac",
+     "vlo": 0,
+     "vhi": 0.5,
+     "rr": 1
+    },
+    {
+     "file": "samples/kit.tomLow/01.flac",
+     "vlo": 0.5,
+     "vhi": 0.8,
+     "rr": 1
+    },
+    {
+     "file": "samples/kit.tomLow/02.flac",
+     "vlo": 0.8,
+     "vhi": 1.0,
+     "rr": 1
+    }
+   ]
+  },
+  "kit.crash": {
+   "source": "virtuosity",
+   "pitched": false,
+   "zones": [
+    {
+     "file": "samples/kit.crash/00.flac",
+     "vlo": 0,
+     "vhi": 0.6,
+     "rr": 1
+    },
+    {
+     "file": "samples/kit.crash/01.flac",
+     "vlo": 0.6,
+     "vhi": 1.0,
+     "rr": 1
+    }
+   ]
+  },
+  "lofi.kick": {
+   "source": "virtuosity",
+   "pitched": false,
+   "zones": [
+    {
+     "file": "samples/lofi.kick/00.flac",
+     "vlo": 0,
+     "vhi": 0.5,
+     "rr": 1
+    },
+    {
+     "file": "samples/lofi.kick/01.flac",
+     "vlo": 0,
+     "vhi": 0.5,
+     "rr": 2
+    },
+    {
+     "file": "samples/lofi.kick/02.flac",
+     "vlo": 0.5,
+     "vhi": 0.8,
+     "rr": 1
+    },
+    {
+     "file": "samples/lofi.kick/03.flac",
+     "vlo": 0.5,
+     "vhi": 0.8,
+     "rr": 2
+    },
+    {
+     "file": "samples/lofi.kick/04.flac",
+     "vlo": 0.8,
+     "vhi": 1.0,
+     "rr": 1
+    },
+    {
+     "file": "samples/lofi.kick/05.flac",
+     "vlo": 0.8,
+     "vhi": 1.0,
+     "rr": 2
+    }
+   ]
+  },
+  "lofi.snare": {
+   "source": "virtuosity",
+   "pitched": false,
+   "zones": [
+    {
+     "file": "samples/lofi.snare/00.flac",
+     "vlo": 0,
+     "vhi": 0.3,
+     "rr": 1
+    },
+    {
+     "file": "samples/lofi.snare/01.flac",
+     "vlo": 0,
+     "vhi": 0.3,
+     "rr": 2
+    },
+    {
+     "file": "samples/lofi.snare/02.flac",
+     "vlo": 0.3,
+     "vhi": 0.5,
+     "rr": 1
+    },
+    {
+     "file": "samples/lofi.snare/03.flac",
+     "vlo": 0.3,
+     "vhi": 0.5,
+     "rr": 2
+    },
+    {
+     "file": "samples/lofi.snare/04.flac",
+     "vlo": 0.5,
+     "vhi": 0.65,
+     "rr": 1
+    },
+    {
+     "file": "samples/lofi.snare/05.flac",
+     "vlo": 0.5,
+     "vhi": 0.65,
+     "rr": 2
+    },
+    {
+     "file": "samples/lofi.snare/06.flac",
+     "vlo": 0.65,
+     "vhi": 0.8,
+     "rr": 1
+    },
+    {
+     "file": "samples/lofi.snare/07.flac",
+     "vlo": 0.65,
+     "vhi": 0.8,
+     "rr": 2
+    },
+    {
+     "file": "samples/lofi.snare/08.flac",
+     "vlo": 0.8,
+     "vhi": 0.92,
+     "rr": 1
+    },
+    {
+     "file": "samples/lofi.snare/09.flac",
+     "vlo": 0.8,
+     "vhi": 0.92,
+     "rr": 2
+    },
+    {
+     "file": "samples/lofi.snare/10.flac",
+     "vlo": 0.92,
+     "vhi": 1.0,
+     "rr": 1
+    },
+    {
+     "file": "samples/lofi.snare/11.flac",
+     "vlo": 0.92,
+     "vhi": 1.0,
+     "rr": 2
+    }
+   ]
+  },
+  "lofi.hat": {
+   "source": "virtuosity",
+   "pitched": false,
+   "choke": "lofihat",
+   "zones": [
+    {
+     "file": "samples/lofi.hat/00.flac",
+     "vlo": 0,
+     "vhi": 0.35,
+     "rr": 1
+    },
+    {
+     "file": "samples/lofi.hat/01.flac",
+     "vlo": 0.35,
+     "vhi": 0.6,
+     "rr": 1
+    },
+    {
+     "file": "samples/lofi.hat/02.flac",
+     "vlo": 0.6,
+     "vhi": 0.85,
+     "rr": 1
+    },
+    {
+     "file": "samples/lofi.hat/03.flac",
+     "vlo": 0.85,
+     "vhi": 1.0,
+     "rr": 1
+    }
+   ]
+  },
+  "perc.clap": {
+   "source": "vcsl",
+   "pitched": false,
+   "zones": [
+    {
+     "file": "samples/perc.clap/00.flac",
+     "vlo": 0,
+     "vhi": 1,
+     "rr": 1
+    },
+    {
+     "file": "samples/perc.clap/01.flac",
+     "vlo": 0,
+     "vhi": 1,
+     "rr": 2
+    },
+    {
+     "file": "samples/perc.clap/02.flac",
+     "vlo": 0,
+     "vhi": 1,
+     "rr": 3
+    },
+    {
+     "file": "samples/perc.clap/03.flac",
+     "vlo": 0,
+     "vhi": 1,
+     "rr": 4
+    }
+   ]
+  },
+  "perc.click": {
+   "source": "vcsl",
+   "pitched": false,
+   "zones": [
+    {
+     "file": "samples/perc.click/00.flac",
+     "vlo": 0,
+     "vhi": 0.8,
+     "rr": 1
+    },
+    {
+     "file": "samples/perc.click/01.flac",
+     "vlo": 0.8,
+     "vhi": 1,
+     "rr": 1
+    }
+   ]
+  },
+  "bass.electric": {
+   "source": "bbbass",
+   "pitched": true,
+   "release": 0.08,
+   "zones": [
+    {
+     "file": "samples/bass.electric/00.flac",
+     "vlo": 0,
+     "vhi": 0.65,
+     "rr": 2,
+     "root": 25.994
+    },
+    {
+     "file": "samples/bass.electric/01.flac",
+     "vlo": 0,
+     "vhi": 0.65,
+     "rr": 1,
+     "root": 26.006
+    },
+    {
+     "file": "samples/bass.electric/02.flac",
+     "vlo": 0.65,
+     "vhi": 1.0,
+     "rr": 2,
+     "root": 26.057
+    },
+    {
+     "file": "samples/bass.electric/03.flac",
+     "vlo": 0.65,
+     "vhi": 1.0,
+     "rr": 1,
+     "root": 26.04
+    },
+    {
+     "file": "samples/bass.electric/04.flac",
+     "vlo": 0,
+     "vhi": 0.65,
+     "rr": 2,
+     "root": 29.032
+    },
+    {
+     "file": "samples/bass.electric/05.flac",
+     "vlo": 0,
+     "vhi": 0.65,
+     "rr": 1,
+     "root": 29.037
+    },
+    {
+     "file": "samples/bass.electric/06.flac",
+     "vlo": 0.65,
+     "vhi": 1.0,
+     "rr": 2,
+     "root": 29.123
+    },
+    {
+     "file": "samples/bass.electric/07.flac",
+     "vlo": 0.65,
+     "vhi": 1.0,
+     "rr": 1,
+     "root": 29.104
+    },
+    {
+     "file": "samples/bass.electric/08.flac",
+     "vlo": 0,
+     "vhi": 0.65,
+     "rr": 2,
+     "root": 31.965
+    },
+    {
+     "file": "samples/bass.electric/09.flac",
+     "vlo": 0,
+     "vhi": 0.65,
+     "rr": 1,
+     "root": 31.979
+    },
+    {
+     "file": "samples/bass.electric/10.flac",
+     "vlo": 0.65,
+     "vhi": 1.0,
+     "rr": 2,
+     "root": 31.999
+    },
+    {
+     "file": "samples/bass.electric/11.flac",
+     "vlo": 0.65,
+     "vhi": 1.0,
+     "rr": 1,
+     "root": 32.01
+    },
+    {
+     "file": "samples/bass.electric/12.flac",
+     "vlo": 0,
+     "vhi": 0.65,
+     "rr": 2,
+     "root": 34.999
+    },
+    {
+     "file": "samples/bass.electric/13.flac",
+     "vlo": 0,
+     "vhi": 0.65,
+     "rr": 1,
+     "root": 35.004
+    },
+    {
+     "file": "samples/bass.electric/14.flac",
+     "vlo": 0.65,
+     "vhi": 1.0,
+     "rr": 2,
+     "root": 35.061
+    },
+    {
+     "file": "samples/bass.electric/15.flac",
+     "vlo": 0.65,
+     "vhi": 1.0,
+     "rr": 1,
+     "root": 35.059
+    },
+    {
+     "file": "samples/bass.electric/16.flac",
+     "vlo": 0,
+     "vhi": 0.65,
+     "rr": 2,
+     "root": 37.958
+    },
+    {
+     "file": "samples/bass.electric/17.flac",
+     "vlo": 0,
+     "vhi": 0.65,
+     "rr": 1,
+     "root": 37.969
+    },
+    {
+     "file": "samples/bass.electric/18.flac",
+     "vlo": 0.65,
+     "vhi": 1.0,
+     "rr": 2,
+     "root": 37.996
+    },
+    {
+     "file": "samples/bass.electric/19.flac",
+     "vlo": 0.65,
+     "vhi": 1.0,
+     "rr": 1,
+     "root": 38.006
+    },
+    {
+     "file": "samples/bass.electric/20.flac",
+     "vlo": 0,
+     "vhi": 0.65,
+     "rr": 2,
+     "root": 40.937
+    },
+    {
+     "file": "samples/bass.electric/21.flac",
+     "vlo": 0,
+     "vhi": 0.65,
+     "rr": 1,
+     "root": 40.931
+    },
+    {
+     "file": "samples/bass.electric/22.flac",
+     "vlo": 0.65,
+     "vhi": 1.0,
+     "rr": 2,
+     "root": 40.925
+    },
+    {
+     "file": "samples/bass.electric/23.flac",
+     "vlo": 0.65,
+     "vhi": 1.0,
+     "rr": 1,
+     "root": 40.932
+    },
+    {
+     "file": "samples/bass.electric/24.flac",
+     "vlo": 0,
+     "vhi": 0.65,
+     "rr": 2,
+     "root": 43.975
+    },
+    {
+     "file": "samples/bass.electric/25.flac",
+     "vlo": 0,
+     "vhi": 0.65,
+     "rr": 1,
+     "root": 43.977
+    },
+    {
+     "file": "samples/bass.electric/26.flac",
+     "vlo": 0.65,
+     "vhi": 1.0,
+     "rr": 2,
+     "root": 44.0
+    },
+    {
+     "file": "samples/bass.electric/27.flac",
+     "vlo": 0.65,
+     "vhi": 1.0,
+     "rr": 1,
+     "root": 43.992
+    },
+    {
+     "file": "samples/bass.electric/28.flac",
+     "vlo": 0,
+     "vhi": 0.65,
+     "rr": 2,
+     "root": 46.926
+    },
+    {
+     "file": "samples/bass.electric/29.flac",
+     "vlo": 0,
+     "vhi": 0.65,
+     "rr": 1,
+     "root": 46.927
+    },
+    {
+     "file": "samples/bass.electric/30.flac",
+     "vlo": 0.65,
+     "vhi": 1.0,
+     "rr": 2,
+     "root": 46.948
+    },
+    {
+     "file": "samples/bass.electric/31.flac",
+     "vlo": 0.65,
+     "vhi": 1.0,
+     "rr": 1,
+     "root": 46.943
+    },
+    {
+     "file": "samples/bass.electric/32.flac",
+     "vlo": 0,
+     "vhi": 0.65,
+     "rr": 2,
+     "root": 49.913
+    },
+    {
+     "file": "samples/bass.electric/33.flac",
+     "vlo": 0,
+     "vhi": 0.65,
+     "rr": 1,
+     "root": 49.912
+    },
+    {
+     "file": "samples/bass.electric/34.flac",
+     "vlo": 0.65,
+     "vhi": 1.0,
+     "rr": 2,
+     "root": 49.926
+    },
+    {
+     "file": "samples/bass.electric/35.flac",
+     "vlo": 0.65,
+     "vhi": 1.0,
+     "rr": 1,
+     "root": 49.929
+    }
+   ]
+  },
+  "guitar.electric": {
+   "source": "bgguitars",
+   "pitched": true,
+   "release": 0.12,
+   "zones": [
+    {
+     "file": "samples/guitar.electric/00.flac",
+     "vlo": 0,
+     "vhi": 0.7,
+     "rr": 1,
+     "root": 40.007
+    },
+    {
+     "file": "samples/guitar.electric/01.flac",
+     "vlo": 0.7,
+     "vhi": 1.0,
+     "rr": 1,
+     "root": 40.091
+    },
+    {
+     "file": "samples/guitar.electric/02.flac",
+     "vlo": 0,
+     "vhi": 0.7,
+     "rr": 1,
+     "root": 43.073
+    },
+    {
+     "file": "samples/guitar.electric/03.flac",
+     "vlo": 0.7,
+     "vhi": 1.0,
+     "rr": 1,
+     "root": 43.1
+    },
+    {
+     "file": "samples/guitar.electric/04.flac",
+     "vlo": 0,
+     "vhi": 0.7,
+     "rr": 1,
+     "root": 46.046
+    },
+    {
+     "file": "samples/guitar.electric/05.flac",
+     "vlo": 0.7,
+     "vhi": 1.0,
+     "rr": 1,
+     "root": 46.111
+    },
+    {
+     "file": "samples/guitar.electric/06.flac",
+     "vlo": 0,
+     "vhi": 0.7,
+     "rr": 1,
+     "root": 49.032
+    },
+    {
+     "file": "samples/guitar.electric/07.flac",
+     "vlo": 0.7,
+     "vhi": 1.0,
+     "rr": 1,
+     "root": 49.038
+    },
+    {
+     "file": "samples/guitar.electric/08.flac",
+     "vlo": 0,
+     "vhi": 0.7,
+     "rr": 1,
+     "root": 52.069
+    },
+    {
+     "file": "samples/guitar.electric/09.flac",
+     "vlo": 0.7,
+     "vhi": 1.0,
+     "rr": 1,
+     "root": 52.08
+    },
+    {
+     "file": "samples/guitar.electric/10.flac",
+     "vlo": 0,
+     "vhi": 0.7,
+     "rr": 1,
+     "root": 55.092
+    },
+    {
+     "file": "samples/guitar.electric/11.flac",
+     "vlo": 0.7,
+     "vhi": 1.0,
+     "rr": 1,
+     "root": 55.0
+    },
+    {
+     "file": "samples/guitar.electric/12.flac",
+     "vlo": 0,
+     "vhi": 0.7,
+     "rr": 1,
+     "root": 58.072
+    },
+    {
+     "file": "samples/guitar.electric/13.flac",
+     "vlo": 0.7,
+     "vhi": 1.0,
+     "rr": 1,
+     "root": 58.092
+    },
+    {
+     "file": "samples/guitar.electric/14.flac",
+     "vlo": 0,
+     "vhi": 0.7,
+     "rr": 1,
+     "root": 61.065
+    },
+    {
+     "file": "samples/guitar.electric/15.flac",
+     "vlo": 0.7,
+     "vhi": 1.0,
+     "rr": 1,
+     "root": 61.07
+    },
+    {
+     "file": "samples/guitar.electric/16.flac",
+     "vlo": 0,
+     "vhi": 0.7,
+     "rr": 1,
+     "root": 64.049
+    },
+    {
+     "file": "samples/guitar.electric/17.flac",
+     "vlo": 0.7,
+     "vhi": 1.0,
+     "rr": 1,
+     "root": 64.049
+    },
+    {
+     "file": "samples/guitar.electric/18.flac",
+     "vlo": 0,
+     "vhi": 0.7,
+     "rr": 1,
+     "root": 67.054
+    },
+    {
+     "file": "samples/guitar.electric/19.flac",
+     "vlo": 0.7,
+     "vhi": 1.0,
+     "rr": 1,
+     "root": 67.055
+    },
+    {
+     "file": "samples/guitar.electric/20.flac",
+     "vlo": 0,
+     "vhi": 0.7,
+     "rr": 1,
+     "root": 70.02
+    },
+    {
+     "file": "samples/guitar.electric/21.flac",
+     "vlo": 0.7,
+     "vhi": 1.0,
+     "rr": 1,
+     "root": 70.006
+    },
+    {
+     "file": "samples/guitar.electric/22.flac",
+     "vlo": 0,
+     "vhi": 0.7,
+     "rr": 1,
+     "root": 72.96
+    },
+    {
+     "file": "samples/guitar.electric/23.flac",
+     "vlo": 0.7,
+     "vhi": 1.0,
+     "rr": 1,
+     "root": 72.945
+    },
+    {
+     "file": "samples/guitar.electric/24.flac",
+     "vlo": 0,
+     "vhi": 0.7,
+     "rr": 1,
+     "root": 75.93
+    },
+    {
+     "file": "samples/guitar.electric/25.flac",
+     "vlo": 0.7,
+     "vhi": 1.0,
+     "rr": 1,
+     "root": 75.921
+    },
+    {
+     "file": "samples/guitar.electric/26.flac",
+     "vlo": 0,
+     "vhi": 0.7,
+     "rr": 1,
+     "root": 78.913
+    },
+    {
+     "file": "samples/guitar.electric/27.flac",
+     "vlo": 0.7,
+     "vhi": 1.0,
+     "rr": 1,
+     "root": 78.906
+    }
+   ]
+  },
+  "keys.wurli": {
+   "source": "epianos",
+   "pitched": true,
+   "release": 0.35,
+   "zones": [
+    {
+     "file": "samples/keys.wurli/00.flac",
+     "vlo": 0,
+     "vhi": 0.6,
+     "rr": 1,
+     "root": 79.08
+    },
+    {
+     "file": "samples/keys.wurli/01.flac",
+     "vlo": 0,
+     "vhi": 0.6,
+     "rr": 1,
+     "root": 84.94
+    },
+    {
+     "file": "samples/keys.wurli/02.flac",
+     "vlo": 0,
+     "vhi": 0.6,
+     "rr": 1,
+     "root": 91.98
+    },
+    {
+     "file": "samples/keys.wurli/03.flac",
+     "vlo": 0,
+     "vhi": 0.6,
+     "rr": 1,
+     "root": 33.05
+    },
+    {
+     "file": "samples/keys.wurli/04.flac",
+     "vlo": 0,
+     "vhi": 0.6,
+     "rr": 1,
+     "root": 40.04
+    },
+    {
+     "file": "samples/keys.wurli/05.flac",
+     "vlo": 0,
+     "vhi": 0.6,
+     "rr": 1,
+     "root": 45.02
+    },
+    {
+     "file": "samples/keys.wurli/06.flac",
+     "vlo": 0,
+     "vhi": 0.6,
+     "rr": 1,
+     "root": 51.09
+    },
+    {
+     "file": "samples/keys.wurli/07.flac",
+     "vlo": 0,
+     "vhi": 0.6,
+     "rr": 1,
+     "root": 56.08
+    },
+    {
+     "file": "samples/keys.wurli/08.flac",
+     "vlo": 0,
+     "vhi": 0.6,
+     "rr": 1,
+     "root": 60.96
+    },
+    {
+     "file": "samples/keys.wurli/09.flac",
+     "vlo": 0,
+     "vhi": 0.6,
+     "rr": 1,
+     "root": 65.93
+    },
+    {
+     "file": "samples/keys.wurli/10.flac",
+     "vlo": 0,
+     "vhi": 0.6,
+     "rr": 1,
+     "root": 71.05
+    },
+    {
+     "file": "samples/keys.wurli/11.flac",
+     "vlo": 0,
+     "vhi": 0.6,
+     "rr": 1,
+     "root": 72.97
+    },
+    {
+     "file": "samples/keys.wurli/12.flac",
+     "vlo": 0,
+     "vhi": 0.6,
+     "rr": 1,
+     "root": 79.08
+    },
+    {
+     "file": "samples/keys.wurli/13.flac",
+     "vlo": 0,
+     "vhi": 0.6,
+     "rr": 1,
+     "root": 84.94
+    },
+    {
+     "file": "samples/keys.wurli/14.flac",
+     "vlo": 0,
+     "vhi": 0.6,
+     "rr": 1,
+     "root": 91.98
+    },
+    {
+     "file": "samples/keys.wurli/15.flac",
+     "vlo": 0.6,
+     "vhi": 1.0,
+     "rr": 1,
+     "root": 33.05
+    },
+    {
+     "file": "samples/keys.wurli/16.flac",
+     "vlo": 0.6,
+     "vhi": 1.0,
+     "rr": 1,
+     "root": 36.07
+    },
+    {
+     "file": "samples/keys.wurli/17.flac",
+     "vlo": 0.6,
+     "vhi": 1.0,
+     "rr": 1,
+     "root": 41.06
+    },
+    {
+     "file": "samples/keys.wurli/18.flac",
+     "vlo": 0.6,
+     "vhi": 1.0,
+     "rr": 1,
+     "root": 47.08
+    },
+    {
+     "file": "samples/keys.wurli/19.flac",
+     "vlo": 0.6,
+     "vhi": 1.0,
+     "rr": 1,
+     "root": 52.04
+    },
+    {
+     "file": "samples/keys.wurli/20.flac",
+     "vlo": 0.6,
+     "vhi": 1.0,
+     "rr": 1,
+     "root": 56.11
+    },
+    {
+     "file": "samples/keys.wurli/21.flac",
+     "vlo": 0.6,
+     "vhi": 1.0,
+     "rr": 1,
+     "root": 61.02
+    },
+    {
+     "file": "samples/keys.wurli/22.flac",
+     "vlo": 0.6,
+     "vhi": 1.0,
+     "rr": 1,
+     "root": 68.0
+    },
+    {
+     "file": "samples/keys.wurli/23.flac",
+     "vlo": 0.6,
+     "vhi": 1.0,
+     "rr": 1,
+     "root": 72.97
+    },
+    {
+     "file": "samples/keys.wurli/24.flac",
+     "vlo": 0.6,
+     "vhi": 1.0,
+     "rr": 1,
+     "root": 79.07
+    },
+    {
+     "file": "samples/keys.wurli/25.flac",
+     "vlo": 0.6,
+     "vhi": 1.0,
+     "rr": 1,
+     "root": 85.0
+    },
+    {
+     "file": "samples/keys.wurli/26.flac",
+     "vlo": 0.6,
+     "vhi": 1.0,
+     "rr": 1,
+     "root": 92.0
+    },
+    {
+     "file": "samples/keys.wurli/27.flac",
+     "vlo": 0.6,
+     "vhi": 1.0,
+     "rr": 1,
+     "root": 85.0
+    },
+    {
+     "file": "samples/keys.wurli/28.flac",
+     "vlo": 0.6,
+     "vhi": 1.0,
+     "rr": 1,
+     "root": 92.0
+    }
+   ]
+  },
+  "keys.vibes": {
+   "source": "vcsl",
+   "pitched": true,
+   "release": 1.2,
+   "zones": [
+    {
+     "file": "samples/keys.vibes/00.flac",
+     "vlo": 0,
+     "vhi": 0.6,
+     "rr": 1,
+     "root": 56.999
+    },
+    {
+     "file": "samples/keys.vibes/01.flac",
+     "vlo": 0.6,
+     "vhi": 1.0,
+     "rr": 1,
+     "root": 56.999
+    },
+    {
+     "file": "samples/keys.vibes/02.flac",
+     "vlo": 0,
+     "vhi": 0.6,
+     "rr": 1,
+     "root": 80.999
+    },
+    {
+     "file": "samples/keys.vibes/03.flac",
+     "vlo": 0.6,
+     "vhi": 1.0,
+     "rr": 1,
+     "root": 81.0
+    },
+    {
+     "file": "samples/keys.vibes/04.flac",
+     "vlo": 0,
+     "vhi": 0.6,
+     "rr": 1,
+     "root": 70.998
+    },
+    {
+     "file": "samples/keys.vibes/05.flac",
+     "vlo": 0.6,
+     "vhi": 1.0,
+     "rr": 1,
+     "root": 70.999
+    },
+    {
+     "file": "samples/keys.vibes/06.flac",
+     "vlo": 0,
+     "vhi": 0.6,
+     "rr": 1,
+     "root": 60.0
+    },
+    {
+     "file": "samples/keys.vibes/07.flac",
+     "vlo": 0.6,
+     "vhi": 1.0,
+     "rr": 1,
+     "root": 59.997
+    },
+    {
+     "file": "samples/keys.vibes/08.flac",
+     "vlo": 0,
+     "vhi": 0.6,
+     "rr": 1,
+     "root": 84.0
+    },
+    {
+     "file": "samples/keys.vibes/09.flac",
+     "vlo": 0.6,
+     "vhi": 1.0,
+     "rr": 1,
+     "root": 84.0
+    },
+    {
+     "file": "samples/keys.vibes/10.flac",
+     "vlo": 0,
+     "vhi": 0.6,
+     "rr": 1,
+     "root": 74.0
+    },
+    {
+     "file": "samples/keys.vibes/11.flac",
+     "vlo": 0.6,
+     "vhi": 1.0,
+     "rr": 1,
+     "root": 74.0
+    },
+    {
+     "file": "samples/keys.vibes/12.flac",
+     "vlo": 0,
+     "vhi": 0.6,
+     "rr": 1,
+     "root": 64.0
+    },
+    {
+     "file": "samples/keys.vibes/13.flac",
+     "vlo": 0.6,
+     "vhi": 1.0,
+     "rr": 1,
+     "root": 63.999
+    },
+    {
+     "file": "samples/keys.vibes/14.flac",
+     "vlo": 0,
+     "vhi": 0.6,
+     "rr": 1,
+     "root": 88.0
+    },
+    {
+     "file": "samples/keys.vibes/15.flac",
+     "vlo": 0.6,
+     "vhi": 1.0,
+     "rr": 1,
+     "root": 88.0
+    },
+    {
+     "file": "samples/keys.vibes/16.flac",
+     "vlo": 0,
+     "vhi": 0.6,
+     "rr": 1,
+     "root": 52.98
+    },
+    {
+     "file": "samples/keys.vibes/17.flac",
+     "vlo": 0.6,
+     "vhi": 1.0,
+     "rr": 1,
+     "root": 53.0
+    },
+    {
+     "file": "samples/keys.vibes/18.flac",
+     "vlo": 0,
+     "vhi": 0.6,
+     "rr": 1,
+     "root": 77.0
+    },
+    {
+     "file": "samples/keys.vibes/19.flac",
+     "vlo": 0.6,
+     "vhi": 1.0,
+     "rr": 1,
+     "root": 77.0
+    },
+    {
+     "file": "samples/keys.vibes/20.flac",
+     "vlo": 0,
+     "vhi": 0.6,
+     "rr": 1,
+     "root": 66.999
+    },
+    {
+     "file": "samples/keys.vibes/21.flac",
+     "vlo": 0.6,
+     "vhi": 1.0,
+     "rr": 1,
+     "root": 66.998
+    }
+   ]
+  },
+  "synth.bass": {
+   "source": "surge",
+   "pitched": true,
+   "release": 0.06,
+   "zones": [
+    {
+     "file": "samples/synth.bass/00.flac",
+     "vlo": 0,
+     "vhi": 1,
+     "rr": 1,
+     "root": 26.0
+    },
+    {
+     "file": "samples/synth.bass/01.flac",
+     "vlo": 0,
+     "vhi": 1,
+     "rr": 1,
+     "root": 30.0
+    },
+    {
+     "file": "samples/synth.bass/02.flac",
+     "vlo": 0,
+     "vhi": 1,
+     "rr": 1,
+     "root": 34.0
+    },
+    {
+     "file": "samples/synth.bass/03.flac",
+     "vlo": 0,
+     "vhi": 1,
+     "rr": 1,
+     "root": 38.0
+    },
+    {
+     "file": "samples/synth.bass/04.flac",
+     "vlo": 0,
+     "vhi": 1,
+     "rr": 1,
+     "root": 42.0
+    },
+    {
+     "file": "samples/synth.bass/05.flac",
+     "vlo": 0,
+     "vhi": 1,
+     "rr": 1,
+     "root": 46.0
+    },
+    {
+     "file": "samples/synth.bass/06.flac",
+     "vlo": 0,
+     "vhi": 1,
+     "rr": 1,
+     "root": 50.0
+    }
+   ]
+  },
+  "synth.organ": {
+   "source": "surge",
+   "pitched": true,
+   "release": 0.08,
+   "zones": [
+    {
+     "file": "samples/synth.organ/00.flac",
+     "vlo": 0,
+     "vhi": 1,
+     "rr": 1,
+     "root": 48.0
+    },
+    {
+     "file": "samples/synth.organ/01.flac",
+     "vlo": 0,
+     "vhi": 1,
+     "rr": 1,
+     "root": 52.0
+    },
+    {
+     "file": "samples/synth.organ/02.flac",
+     "vlo": 0,
+     "vhi": 1,
+     "rr": 1,
+     "root": 56.0
+    },
+    {
+     "file": "samples/synth.organ/03.flac",
+     "vlo": 0,
+     "vhi": 1,
+     "rr": 1,
+     "root": 60.0
+    },
+    {
+     "file": "samples/synth.organ/04.flac",
+     "vlo": 0,
+     "vhi": 1,
+     "rr": 1,
+     "root": 64.0
+    },
+    {
+     "file": "samples/synth.organ/05.flac",
+     "vlo": 0,
+     "vhi": 1,
+     "rr": 1,
+     "root": 68.0
+    },
+    {
+     "file": "samples/synth.organ/06.flac",
+     "vlo": 0,
+     "vhi": 1,
+     "rr": 1,
+     "root": 72.0
+    },
+    {
+     "file": "samples/synth.organ/07.flac",
+     "vlo": 0,
+     "vhi": 1,
+     "rr": 1,
+     "root": 76.0
+    }
+   ]
+  },
+  "synth.lead": {
+   "source": "surge",
+   "pitched": true,
+   "release": 0.1,
+   "zones": [
+    {
+     "file": "samples/synth.lead/00.flac",
+     "vlo": 0,
+     "vhi": 1,
+     "rr": 1,
+     "root": 56.0
+    },
+    {
+     "file": "samples/synth.lead/01.flac",
+     "vlo": 0,
+     "vhi": 1,
+     "rr": 1,
+     "root": 60.0
+    },
+    {
+     "file": "samples/synth.lead/02.flac",
+     "vlo": 0,
+     "vhi": 1,
+     "rr": 1,
+     "root": 64.0
+    },
+    {
+     "file": "samples/synth.lead/03.flac",
+     "vlo": 0,
+     "vhi": 1,
+     "rr": 1,
+     "root": 68.0
+    },
+    {
+     "file": "samples/synth.lead/04.flac",
+     "vlo": 0,
+     "vhi": 1,
+     "rr": 1,
+     "root": 72.0
+    },
+    {
+     "file": "samples/synth.lead/05.flac",
+     "vlo": 0,
+     "vhi": 1,
+     "rr": 1,
+     "root": 76.0
+    },
+    {
+     "file": "samples/synth.lead/06.flac",
+     "vlo": 0,
+     "vhi": 1,
+     "rr": 1,
+     "root": 80.0
+    },
+    {
+     "file": "samples/synth.lead/07.flac",
+     "vlo": 0,
+     "vhi": 1,
+     "rr": 1,
+     "root": 84.0
+    },
+    {
+     "file": "samples/synth.lead/08.flac",
+     "vlo": 0,
+     "vhi": 1,
+     "rr": 1,
+     "root": 88.0
+    }
+   ]
+  },
+  "synth.pad": {
+   "source": "surge",
+   "pitched": true,
+   "release": 0.9,
+   "zones": [
+    {
+     "file": "samples/synth.pad/00.flac",
+     "vlo": 0,
+     "vhi": 1,
+     "rr": 1,
+     "root": 44.0
+    },
+    {
+     "file": "samples/synth.pad/01.flac",
+     "vlo": 0,
+     "vhi": 1,
+     "rr": 1,
+     "root": 48.0
+    },
+    {
+     "file": "samples/synth.pad/02.flac",
+     "vlo": 0,
+     "vhi": 1,
+     "rr": 1,
+     "root": 52.0
+    },
+    {
+     "file": "samples/synth.pad/03.flac",
+     "vlo": 0,
+     "vhi": 1,
+     "rr": 1,
+     "root": 56.0
+    },
+    {
+     "file": "samples/synth.pad/04.flac",
+     "vlo": 0,
+     "vhi": 1,
+     "rr": 1,
+     "root": 60.0
+    },
+    {
+     "file": "samples/synth.pad/05.flac",
+     "vlo": 0,
+     "vhi": 1,
+     "rr": 1,
+     "root": 64.0
+    },
+    {
+     "file": "samples/synth.pad/06.flac",
+     "vlo": 0,
+     "vhi": 1,
+     "rr": 1,
+     "root": 68.0
+    },
+    {
+     "file": "samples/synth.pad/07.flac",
+     "vlo": 0,
+     "vhi": 1,
+     "rr": 1,
+     "root": 72.0
+    },
+    {
+     "file": "samples/synth.pad/08.flac",
+     "vlo": 0,
+     "vhi": 1,
+     "rr": 1,
+     "root": 76.0
+    }
+   ]
+  },
+  "synth.sub": {
+   "source": "surge",
+   "pitched": true,
+   "release": 0.08,
+   "zones": [
+    {
+     "file": "samples/synth.sub/00.flac",
+     "vlo": 0,
+     "vhi": 1,
+     "rr": 1,
+     "root": 26.0
+    },
+    {
+     "file": "samples/synth.sub/01.flac",
+     "vlo": 0,
+     "vhi": 1,
+     "rr": 1,
+     "root": 30.0
+    },
+    {
+     "file": "samples/synth.sub/02.flac",
+     "vlo": 0,
+     "vhi": 1,
+     "rr": 1,
+     "root": 34.0
+    },
+    {
+     "file": "samples/synth.sub/03.flac",
+     "vlo": 0,
+     "vhi": 1,
+     "rr": 1,
+     "root": 38.0
+    },
+    {
+     "file": "samples/synth.sub/04.flac",
+     "vlo": 0,
+     "vhi": 1,
+     "rr": 1,
+     "root": 42.0
+    },
+    {
+     "file": "samples/synth.sub/05.flac",
+     "vlo": 0,
+     "vhi": 1,
+     "rr": 1,
+     "root": 46.0
+    },
+    {
+     "file": "samples/synth.sub/06.flac",
+     "vlo": 0,
+     "vhi": 1,
+     "rr": 1,
+     "root": 50.0
+    }
+   ]
+  },
+  "machine.kick": {
+   "source": "surge",
+   "pitched": false,
+   "zones": [
+    {
+     "file": "samples/machine.kick/00.flac",
+     "vlo": 0,
+     "vhi": 1,
+     "rr": 1
+    }
+   ]
+  }
+ },
+ "sources": {
+  "virtuosity": {
+   "url": "https://github.com/sfzinstruments/virtuosity_drums",
+   "title": "Virtuosity Drums",
+   "author": "Versilian Studios and Karoryfer Samples",
+   "license": "CC0 1.0"
+  },
+  "vcsl": {
+   "url": "https://github.com/sgossner/VCSL",
+   "title": "Versilian Community Sample Library",
+   "author": "Versilian Studios",
+   "license": "CC0 1.0"
+  },
+  "bbbass": {
+   "url": "https://github.com/sfzinstruments/karoryfer.black-and-blue-basses",
+   "title": "Black And Blue Basses",
+   "author": "Karoryfer Samples",
+   "license": "CC0 1.0"
+  },
+  "bgguitars": {
+   "url": "https://github.com/sfzinstruments/karoryfer.black-and-green-guitars",
+   "title": "Black And Green Guitars",
+   "author": "Karoryfer Samples, recorded by Brian Wood",
+   "license": "CC0 1.0"
+  },
+  "epianos": {
+   "url": "https://github.com/sfzinstruments/GregSullivan.E-Pianos",
+   "title": "Wurlitzer EP200 (from E-Pianos)",
+   "author": "Greg Sullivan, SFZ mapping by kinwie",
+   "license": "CC BY 3.0"
+  },
+  "surge": {
+   "url": "https://github.com/surge-synthesizer/surge",
+   "title": "Surge XT factory patches, rendered offline",
+   "author": "Surge Synth Team",
+   "license": "Rendered audio; Surge XT is GPL-3.0"
+  }
+ }
+}

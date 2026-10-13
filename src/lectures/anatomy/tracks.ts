@@ -54,7 +54,7 @@ export const house: Track = {
     beatsPerBar: 4,
     bars: 4,
     lanes: [
-      lane("kick", "kick", repeat(hits("x...x...x...x..."), 4, 16)),
+      lane("kick", "kickMachine", repeat(hits("x...x...x...x..."), 4, 16)),
       lane("clap", "clap", repeat(hits("....x.......x..."), 4, 16)),
       lane(
         "hats",
@@ -71,7 +71,7 @@ export const house: Track = {
         [[2, 36, 1.5], [6, 36, 1.5], [10, 36, 1.5], [14, 48, 1.5]],
         [[2, 31, 1.5], [6, 31, 1.5], [10, 31, 1.5], [14, 43, 1.5]],
       ])),
-      lane("chords", "stab", chords([
+      lane("chords", "organ", chords([
         { at: [0, 3, 10], chord: AM, len: [2, 2, 3] },
         { at: [0, 3, 10], chord: F, len: [2, 2, 3] },
         { at: [0, 3, 10], chord: C, len: [2, 2, 3] },
@@ -90,10 +90,10 @@ export const house: Track = {
     { id: "clap", name: "Clap", instrument: "Drum machine clap", role: "drums", register: "mid" },
     { id: "hats", name: "Hi-hats", instrument: "Drum machine hats", role: "drums", register: "high" },
     { id: "bass", name: "Bass", instrument: "Synth bass", role: "bass", register: "low" },
-    { id: "chords", name: "Chords", instrument: "Synth stabs", role: "harmony", register: "mid" },
+    { id: "chords", name: "Chords", instrument: "House organ", role: "harmony", register: "mid" },
     { id: "lead", name: "Lead", instrument: "Synth lead", role: "melody", register: "high" },
   ],
-  channels: { kick: { gain: 1 }, clap: { gain: 1.4 }, bass: { gain: 0.42 }, chords: { reverb: 0.18 }, lead: { echo: true, reverb: 0.2, gain: 1.7 }, hats: { gain: 0.5 } },
+  channels: { chords: { reverb: 0.18 }, lead: { echo: true, reverb: 0.2 }, hats: { gain: 3.4 } },
 };
 
 // ---------- sample world: boom bap, 90 BPM, D minor ----------
@@ -112,22 +112,22 @@ export const boombap: Track = {
     bars: 4,
     swing: 0.58,
     lanes: [
-      lane("kick", "kickDeep", repeat(hits("x......x..x.....|x.........x...x."), 2, 32)),
-      lane("snare", "snare", repeat(hits("....x.......x..g|....x.......x..."), 2, 32)),
-      lane("hats", "hatClosed", repeat(hits("x.o.x.o.x.o.xgo."), 4, 16)),
+      lane("kick", "kickLofi", repeat(hits("x......x..x.....|x.........x...x."), 2, 32)),
+      lane("snare", "snareLofi", repeat(hits("....x.......x..g|....x.......x..."), 2, 32)),
+      lane("hats", "hatLofi", repeat(hits("x.o.x.o.x.o.xgo."), 4, 16)),
       lane("bass", "subBass", seq([
         [[0, 38, 6], [7, 38, 2], [10, 41, 4]],
         [[0, 38, 6], [10, 36, 4], [14, 33, 2]],
         [[0, 34, 6], [7, 34, 2], [10, 38, 4]],
         [[0, 34, 6], [10, 36, 6]],
       ], 0.9)),
-      lane("chords", "ep", chords([
+      lane("chords", "wurli", chords([
         { at: [0, 10], chord: DM7, len: [10, 6] },
         { at: [0, 10], chord: DM7, len: [10, 6] },
         { at: [0, 10], chord: BBMAJ7, len: [10, 6] },
         { at: [0, 10], chord: BBMAJ7, len: [10, 6] },
       ], 0.75)),
-      lane("melody", "flute", seq([
+      lane("melody", "vibes", seq([
         [[4, 69, 4], [8, 72, 2], [10, 74, 6]],
         [[4, 72, 3], [7, 69, 9]],
         [[4, 74, 4], [8, 72, 2], [10, 69, 6]],
@@ -136,14 +136,14 @@ export const boombap: Track = {
     ],
   },
   stems: [
-    { id: "kick", name: "Kick", instrument: "Sampled kick", role: "drums", register: "low" },
-    { id: "snare", name: "Snare", instrument: "Sampled snare", role: "drums", register: "mid" },
-    { id: "hats", name: "Hi-hats", instrument: "Sampled hats", role: "drums", register: "high" },
+    { id: "kick", name: "Kick", instrument: "Kick drum, old microphone", role: "drums", register: "low" },
+    { id: "snare", name: "Snare", instrument: "Snare, old microphone", role: "drums", register: "mid" },
+    { id: "hats", name: "Hi-hats", instrument: "Hi-hats, old microphone", role: "drums", register: "high" },
     { id: "bass", name: "Bass", instrument: "Sub bass", role: "bass", register: "low" },
-    { id: "chords", name: "Chords", instrument: "Electric piano, sampled from a record", role: "harmony", register: "mid" },
-    { id: "melody", name: "Flute", instrument: "Flute", role: "melody", register: "high" },
+    { id: "chords", name: "Chords", instrument: "Wurlitzer electric piano, dusty", role: "harmony", register: "mid" },
+    { id: "melody", name: "Vibraphone", instrument: "Vibraphone", role: "melody", register: "high" },
   ],
-  channels: { chords: { dusty: true, reverb: 0.12, gain: 0.8 }, melody: { reverb: 0.3, gain: 1.1 }, hats: { gain: 1.4 }, bass: { gain: 0.36 } },
+  channels: { chords: { dusty: true, reverb: 0.12 }, melody: { reverb: 0.25 } },
 };
 
 // ---------- band world: indie, 112 BPM, G major ----------
@@ -170,17 +170,17 @@ export const indie: Track = {
     beatsPerBar: 4,
     bars: 4,
     lanes: [
-      lane("kick", "kickLive", humanize(repeat(hits("x.......x.x....."), 4, 16), 0.12, 11)),
-      lane("snare", "snareLive", humanize(repeat(hits("....x..g....x.g."), 4, 16), 0.12, 12)),
+      lane("kick", "kick", humanize(repeat(hits("x.......x.x....."), 4, 16), 0.12, 11)),
+      lane("snare", "snare", humanize(repeat(hits("....x..g....x.g."), 4, 16), 0.12, 12)),
       lane("hats", "hatClosed", humanize([...repeat(hits("x.o.x.o.x.o.x.o."), 3, 16), ...hits("x.o.x.o.x.o.x...").map((n) => ({ ...n, step: n.step + 48 })), { step: 62, vel: 0.6, voice: "hatOpen" }], 0.14, 13)),
-      lane("bass", "pluckBass", humanize(seq([
+      lane("bass", "eBass", humanize(seq([
         [[0, 43, 2], [2, 43, 2], [4, 43, 2], [6, 43, 2], [8, 43, 2], [10, 43, 2], [12, 43, 2], [14, 47, 2]],
         [[0, 38, 2], [2, 38, 2], [4, 38, 2], [6, 38, 2], [8, 38, 2], [10, 38, 2], [12, 38, 2], [14, 42, 2]],
         [[0, 40, 2], [2, 40, 2], [4, 40, 2], [6, 40, 2], [8, 40, 2], [10, 40, 2], [12, 40, 2], [14, 38, 2]],
         [[0, 36, 2], [2, 36, 2], [4, 36, 2], [6, 36, 2], [8, 36, 2], [10, 36, 2], [12, 38, 2], [14, 40, 2]],
       ], 0.85), 0.1, 14)),
       lane("chords", "strum", humanize([...strumBar(G_OPEN), ...strumBar(D_OPEN).map((n) => ({ ...n, step: n.step + 16 })), ...strumBar(EM_OPEN).map((n) => ({ ...n, step: n.step + 32 })), ...strumBar(C_OPEN).map((n) => ({ ...n, step: n.step + 48 }))], 0.08, 15)),
-      lane("melody", "pluck", humanize(seq([
+      lane("melody", "guitar", humanize(seq([
         [[0, 71, 3], [3, 69, 3], [6, 67, 4], [10, 74, 6]],
         [[0, 69, 3], [3, 71, 3], [6, 69, 4], [10, 66, 6]],
         [[0, 67, 3], [3, 71, 3], [6, 76, 4], [10, 74, 6]],
@@ -196,7 +196,7 @@ export const indie: Track = {
     { id: "chords", name: "Rhythm guitar", instrument: "Rhythm guitar", role: "harmony", register: "mid" },
     { id: "melody", name: "Lead guitar", instrument: "Lead guitar", role: "melody", register: "high" },
   ],
-  channels: { chords: { reverb: 0.15, gain: 1.8 }, melody: { reverb: 0.25, gain: 1.1 }, hats: { gain: 1.25 }, bass: { gain: 1 }, snare: { gain: 1.2 } },
+  channels: { chords: { reverb: 0.15 }, melody: { reverb: 0.22 } },
 };
 
 export const TRACKS = { house, boombap, indie };

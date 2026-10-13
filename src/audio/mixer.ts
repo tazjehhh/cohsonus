@@ -1,7 +1,7 @@
-import { audio, masterIn, noiseBuffer, reverbIn } from "./engine";
+import { audio, masterIn, reverbIn } from "./engine";
 
 export interface ChannelOpts {
-  /** Old-record treatment: band-limited with surface noise. */
+  /** Old-record treatment: band-limited like a sample lifted from vinyl. */
   dusty?: boolean;
   echo?: boolean;
   reverb?: number;
@@ -14,8 +14,6 @@ export class Channel {
   private fader: GainNode;
   private level: number;
   private muted = false;
-  private crackle: AudioBufferSourceNode | null = null;
-  private crackleGain: GainNode | null = null;
   private nodes: AudioNode[] = [];
 
   constructor(
@@ -42,9 +40,6 @@ export class Channel {
       tail.connect(hp).connect(lp);
       tail = lp;
       this.nodes.push(hp, lp);
-      this.crackleGain = c.createGain();
-      this.crackleGain.gain.value = 0.9;
-      this.crackleGain.connect(this.fader);
     }
     tail.connect(this.fader);
     this.fader.connect(this.analyser);
@@ -76,33 +71,7 @@ export class Channel {
     return this.muted;
   }
 
-  startAmbient() {
-    if (!this.crackleGain || this.crackle) return;
-    const c = audio();
-    const len = c.sampleRate * 2;
-    const buf = c.createBuffer(1, len, c.sampleRate);
-    const d = buf.getChannelData(0);
-    const hiss = noiseBuffer().getChannelData(0);
-    for (let i = 0; i < len; i++) {
-      d[i] = hiss[i % hiss.length] * 0.006;
-      if (Math.random() < 0.0009) d[i] += (Math.random() * 2 - 1) * 0.35;
-    }
-    const s = c.createBufferSource();
-    s.buffer = buf;
-    s.loop = true;
-    s.connect(this.crackleGain);
-    s.start();
-    this.crackle = s;
-  }
-
-  stopAmbient() {
-    this.crackle?.stop();
-    this.crackle?.disconnect();
-    this.crackle = null;
-  }
-
   dispose() {
-    this.stopAmbient();
-    for (const n of [this.input, this.fader, this.analyser, this.crackleGain, ...this.nodes]) n?.disconnect();
+    for (const n of [this.input, this.fader, this.analyser, ...this.nodes]) n.disconnect();
   }
 }

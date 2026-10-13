@@ -8,3 +8,5 @@
 - Built 00 Anatomy of a Track and 01 Pulse & Groove.
 - Mix balanced by measurement (scripts/measure.js).
 - Verified: unit tests (timing, checks, notation), screenshots of every step, flows in Chromium (tap tempo, find the one, rebuild, live record + quantize, final beat rules).
+
+- Replaced browser synthesis with samples: built Surge XT Python bindings from source, wrote scripts/samples/build.py (fetch, mic mixing, trimming, pitch check, FLAC, manifest, credits), wrote the sampler (velocity layers, round robin, pitched playback, hi-hat choke, mono 808), rebalanced all mixes by measurement, added the Sounds page.
