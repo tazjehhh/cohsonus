@@ -121,11 +121,89 @@ a.card:hover {
 .card-figure {
   height: 240px;
   border-bottom: 1px solid var(--line);
-  --hairline-plate: var(--bg-2);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  position: relative;
 }
-.card-figure > div {
-  width: 100%;
-  height: 100%;
+.card-figure-num {
+  font-size: 72px;
+  color: var(--line-2);
+  letter-spacing: -0.04em;
+}
+
+/* card previews: a miniature of each lecture's own stage */
+.pv-anatomy {
+  width: 240px;
+  display: grid;
+  gap: 8px;
+}
+.pv-groups {
+  display: flex;
+  gap: 6px;
+}
+.pv-groups i {
+  height: 2px;
+}
+.pv-strips {
+  display: flex;
+  gap: 6px;
+}
+.pv-strip {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  padding: 8px 0 6px;
+  background: var(--bg);
+}
+.pv-strip span {
+  font-family: var(--mono);
+  font-size: 8px;
+  color: var(--ink-3);
+}
+.pv-meter {
+  width: 6px;
+  height: 110px;
+  background: var(--bg-2);
+  border-radius: 2px;
+  position: relative;
+  overflow: hidden;
+}
+.pv-meter i {
+  position: absolute;
+  inset: 0;
+  transform-origin: bottom;
+  animation-name: pv-hit;
+  animation-iteration-count: infinite;
+  animation-timing-function: cubic-bezier(0.1, 0.8, 0.3, 1);
+}
+@keyframes pv-hit {
+  from {
+    transform: scaleY(0.95);
+  }
+  to {
+    transform: scaleY(0.12);
+  }
+}
+.pv-pulse {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.pv-scale {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) scale(0.48);
+  transform-origin: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
 }
 .card-body {
   padding: 18px 20px 20px;

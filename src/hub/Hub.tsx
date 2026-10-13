@@ -1,21 +1,7 @@
-import { useEffect, useRef, type ComponentType } from "react";
-import { Exploded, Hub as HubFigure, Keyboard, Laptop, Patch, Phosphor, Relay, Slow, Terrain, Elevator, Turntable, type HairlineProps } from "@lucasmarkes/hairline/react";
+import { useEffect, useRef } from "react";
 import { LECTURES, type LectureEntry } from "../lectures/registry";
 import { useAllProgress, type LectureProgress } from "../progress";
-
-const FIGURE: Record<string, ComponentType<HairlineProps>> = {
-  anatomy: Exploded,
-  pulse: Phosphor,
-  "keys-1": Keyboard,
-  "sampling-1": Turntable,
-  "keys-2": HubFigure,
-  bass: Terrain,
-  "keys-3": Patch,
-  melody: Elevator,
-  "sampling-2": Slow,
-  arrangement: Relay,
-  daw: Laptop,
-};
+import { PREVIEWS } from "./previews";
 
 const DAY = 86_400_000;
 
@@ -74,7 +60,7 @@ export function Hub() {
 
 function Card({ lecture, progress, isNext }: { lecture: LectureEntry; progress?: LectureProgress; isNext: boolean }) {
   const st = status(lecture, progress);
-  const Figure = FIGURE[lecture.id];
+  const Preview = PREVIEWS[lecture.id];
   const parts = lecture.def?.parts ?? [];
   const minutes = parts.reduce((a, p) => a + p.minutes, 0);
   const doneParts = parts.filter((p) => progress?.parts.includes(p.id)).length;
@@ -82,9 +68,7 @@ function Card({ lecture, progress, isNext }: { lecture: LectureEntry; progress?:
   const stale = st === "done" && since !== undefined && Date.now() - since > 14 * DAY;
   const body = (
     <>
-      <div className="card-figure">
-        <Figure theme="dark" intensity={0.55} play={isNext && st !== "soon"} />
-      </div>
+      <div className="card-figure">{Preview ? <Preview /> : <span className="card-figure-num mono">{String(lecture.number).padStart(2, "0")}</span>}</div>
       <div className="card-body">
         <div className="card-num mono">{String(lecture.number).padStart(2, "0")}</div>
         <div className="card-title">{lecture.title}</div>

@@ -68,11 +68,12 @@ Drum machines (808, 909) are to come from Freesound, CC0 only, with the key in `
 - `src/music/` pure logic: `model.ts` (Loop, Lane, Note), `patterns.ts` (pattern strings, humanize), `timing.ts` (swing, tap tempo, quantize), `checks.ts` (backbeat, fills…), `notation.ts` (drum notation layout)
 - `src/ui/` shared pieces: StepGrid + DrumStaff (same column layout), Studio, Strips (mixer), Spectrum, BeatCircle, Choice
 - `src/lectures/` `types.ts`, `LectureView.tsx` (cover → part intro → steps → homework), `RefresherView.tsx`, `registry.ts` (all eleven lectures, road order), one folder per built lecture
-- `src/hub/` lecture cards with hairline figures
+- `src/hub/` lecture cards; `previews.tsx` draws each built lecture's own stage in miniature as its card art
 
 ## Adding a lecture
 
 1. Folder `src/lectures/<id>/` exporting a `LectureDef` (parts → steps, homework, refresher tasks).
 2. Each step is a component that calls `complete(data)` when its task is met; stored data comes back as `saved`, other steps' data as `memory`.
 3. Set `def` on its entry in `registry.ts`.
-4. Screenshot every step; run the flows that touch it.
+4. Add its card art to `PREVIEWS` in `src/hub/previews.tsx`: its own stage in miniature, not a standalone icon. Until then the card shows its number.
+5. Screenshot every step; run the flows that touch it.

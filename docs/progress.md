@@ -10,3 +10,5 @@
 - Verified: unit tests (timing, checks, notation), screenshots of every step, flows in Chromium (tap tempo, find the one, rebuild, live record + quantize, final beat rules).
 
 - Replaced browser synthesis with samples: built Surge XT Python bindings from source, wrote scripts/samples/build.py (fetch, mic mixing, trimming, pitch check, FLAC, manifest, credits), wrote the sampler (velocity layers, round robin, pitched playback, hi-hat choke, mono 808), rebalanced all mixes by measurement, added the Sounds page.
+- Hub card art: replaced hairline figures with live miniatures of each lecture's stage; unbuilt lectures show their number. Dropped the hairline dependency, loaded latin-only font subsets, set a relative base so the build runs from any folder.
+- Published a desktop preview as a private artifact (samples converted to WAV for it, since artifacts do not serve FLAC).

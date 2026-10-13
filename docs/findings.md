@@ -20,7 +20,7 @@
 
 ## Repos the owner likes, and what was taken
 
-- lucasmarkes/hairline: isometric line figures that answer the pointer. Used as hub card art (Exploded, Phosphor, Keyboard, Turntable, …). The tour idea (a figure shows itself, then hands over) fits the listen phase.
+- lucasmarkes/hairline: isometric line figures that answer the pointer. Tried as hub card art and dropped: the owner found single objects wrong for a card. A card shows the lecture's whole world, so each card now draws that lecture's own stage in miniature (Anatomy: the strips with live meters; Pulse: the step grid over the staff, running). The tour idea (a figure shows itself, then hands over) still fits the listen phase.
 - wheresryan22/anatomy: agent skill that explains an idea as a working machine. Taken: one model drives everything shown; screenshot verification. Candidate for hero objects later (MPC, 808, tape reel, piano action).
 - ManimCommunity/manim: taken as a grammar (one shape transforms into another), built live in the browser: the bar circle unrolls into a line.
 - dmtrKovalenko/fframes: Rust framework that renders video from SVG frames. Not used; lectures need interaction rather than video.
