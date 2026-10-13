@@ -8,6 +8,7 @@ import { StepGrid } from "../../ui/StepGrid";
 import { PlayButton } from "../../ui/PlayButton";
 import { usePlayer } from "../../audio/usePlayer";
 import { useKeys } from "../../ui/taps";
+import { Explain } from "../../ui/Explain";
 import { quantize } from "../../music/timing";
 import { Listen, TapPad, Verdict, Versions, type TapResult } from "./common";
 import { L, accentHats, fixed, flatHats, ghostOff, ghostOn, human, machine, metronome, swingStart, swingTarget, swung, trap140 } from "./loops";
@@ -18,7 +19,7 @@ export function ThreeVersions({ complete, saved }: StepProps) {
   const [solved, setSolved] = useState(!!saved);
   return (
     <div className="col">
-      <h2 className="prompt">{best ? "Which one is a machine playing exactly on the grid?" : "Which one feels best?"}</h2>
+      <h2 className="prompt">{best ? "Which version is a machine playing every note exactly on the grid?" : "Which of the three versions feels best to you?"}</h2>
       <Versions
         items={[
           { id: "a", label: "A", loop: swung, caption: solved ? "swung" : undefined },
@@ -38,6 +39,7 @@ export function ThreeVersions({ complete, saved }: StepProps) {
           options={["a", "b", "c"].map((id) => ({ id, label: id.toUpperCase() }))}
           correct="b"
           initial={solved ? "b" : undefined}
+          wrongText="Not that one. That version is not exactly on the grid."
           onResult={(_, attempts) => {
             setSolved(true);
             complete({ best, attempts });
@@ -45,9 +47,25 @@ export function ThreeVersions({ complete, saved }: StepProps) {
         />
       )}
       {solved && (
-        <p className="sub fade-in">
-          {best === "b" ? "You liked the machine best. Plenty of great records are built exactly that way." : "The one you liked best is not on the grid."} Groove lives in small timing differences.
-        </p>
+        <>
+          <Verdict ok>Correct. Version B is the machine.</Verdict>
+          <Explain>
+            <p>
+              {best === "b" ? "You preferred version B, the one played exactly on the grid." : `You preferred version ${best?.toUpperCase()}, which is not exactly on the grid.`}{" "}
+              All three versions play the same kick, snare and hi-hat pattern at 90 BPM; only the timing and the loudness of the notes differ.
+            </p>
+            <p>
+              In version B every note falls exactly on the grid and every hi-hat is equally loud. In version A every second sixteenth note arrives late, a feel
+              called <strong>swing</strong>. In version C each note is moved early or late by up to about 17 milliseconds and played a little louder or softer, the
+              way a drummer&apos;s hands vary from hit to hit.
+            </p>
+            <p>
+              <strong>Groove</strong> is the quality of a rhythm that makes listeners want to move with it. It depends on the pattern and also on small differences
+              in timing and loudness like these, which listeners feel rather than hear as mistakes. Exact grid timing is also a deliberate choice; much house and
+              techno is built that way.
+            </p>
+          </Explain>
+        </>
       )}
     </div>
   );
@@ -59,7 +77,7 @@ export function MatchSwing({ complete, saved }: StepProps) {
   const target = swingTarget.swing!;
   return (
     <div className="col">
-      <h2 className="prompt">Match the swing.</h2>
+      <h2 className="prompt">Set the swing so that your loop matches the groove.</h2>
       <Listen loop={swingTarget} label="The groove" />
       <Studio
         loop={loop}
@@ -87,10 +105,24 @@ export function MatchSwing({ complete, saved }: StepProps) {
         </button>
       )}
       <Verdict ok={checked === null ? null : checked === "ok"}>
-        {checked === "ok" && `${Math.round(target * 100)}%. Every second sixteenth arrives late, and the beat starts to bounce.`}
-        {checked === "low" && "Still too straight."}
-        {checked === "high" && "Too much. It starts to limp."}
+        {checked === "ok" && `Correct. The groove has ${Math.round(target * 100)}% swing.`}
+        {checked === "low" && "Not yet. Your loop is straighter than the groove."}
+        {checked === "high" && "Not yet. Your loop swings more than the groove."}
       </Verdict>
+      {checked === "ok" && (
+        <Explain>
+          <p>
+            Swing is set as a percentage that describes how a pair of sixteenth notes shares the length of one eighth note. At 50% both notes are equally long and
+            the rhythm is <strong>straight</strong>. At {Math.round(target * 100)}%, as in this groove, the first note of each pair takes {Math.round(target * 100)}%
+            of the time and the second note arrives correspondingly late.
+          </p>
+          <p>
+            At 92 BPM an eighth note lasts 0.33 seconds (60 ÷ 92 ÷ 2), so {Math.round(target * 100)}% swing delays every second sixteenth note by about 39
+            milliseconds. The kick and the snare on the beats do not move; only the notes between them shift. Drum machines and DAWs offer the same control,
+            usually under the name swing or shuffle.
+          </p>
+        </Explain>
+      )}
     </div>
   );
 }
@@ -100,7 +132,7 @@ export function Velocity({ complete, saved }: StepProps) {
   const [loop, setLoop] = useState<Loop>(accentHats);
   return (
     <div className="col">
-      <h2 className="prompt">Which one sounds like a person playing?</h2>
+      <h2 className="prompt">Which of the two versions sounds more like a person playing?</h2>
       <Versions
         items={[
           { id: "a", label: "A", loop: flatHats },
@@ -114,7 +146,7 @@ export function Velocity({ complete, saved }: StepProps) {
         ]}
         correct="b"
         initial={solved ? "b" : undefined}
-        wrongText="Listen to the hi-hats only."
+        wrongText="Not that one. Listen only to the hi-hats."
         onResult={(_, attempts) => {
           setSolved(true);
           complete({ attempts });
@@ -122,9 +154,20 @@ export function Velocity({ complete, saved }: StepProps) {
       />
       {solved && (
         <div className="col fade-in">
-          <p className="sub">
-            B. Every hit has its own strength: <strong>velocity</strong>. Drag the bars up and down.
-          </p>
+          <Verdict ok>Correct. Version B sounds played by hand.</Verdict>
+          <Explain>
+            <p>
+              <strong>Velocity</strong> is the strength with which a note is played. The term comes from <strong>MIDI</strong> (Musical Instrument Digital
+              Interface), the 1983 standard that lets electronic instruments and computers exchange notes. MIDI records how fast a key or pad was struck, on a scale
+              from 1 to 127, and a higher velocity plays a louder and usually brighter sound.
+            </p>
+            <p>
+              In version A every hi-hat has the same velocity. In version B the first beat of the bar is the loudest, the other beats are a little softer, the
+              &ldquo;&amp;&rdquo; is at about half strength and the &ldquo;e&rdquo; and the &ldquo;a&rdquo; are very soft. A note played louder than the notes
+              around it is an <strong>accent</strong>. Drummers rarely strike two notes with exactly the same force, so a row of equal velocities sounds mechanical.
+            </p>
+          </Explain>
+          <h3 className="prompt small">Drag the hi-hat velocity bars up and down and listen to the change.</h3>
           <Studio loop={loop} onChange={setLoop} lanes={[fixed(L.kick), fixed(L.snare), L.hat]} velocity staff={false} />
         </div>
       )}
@@ -142,10 +185,10 @@ export function GhostNotes({ complete, saved }: StepProps) {
   }, [flips, complete]);
   return (
     <div className="col">
-      <h2 className="prompt">Switch the ghost notes off. Then on again.</h2>
+      <h2 className="prompt">Turn the quiet snare notes off, then turn them back on.</h2>
       <div className="segbar" role="tablist">
         <button role="tab" aria-selected={on} className={on ? "on" : ""} onClick={() => !on && (setOn(true), setFlips((f) => f + 1))}>
-          Ghost notes on
+          Quiet notes on
         </button>
         <button role="tab" aria-selected={!on} className={!on ? "on" : ""} onClick={() => on && (setOn(false), setFlips((f) => f + 1))}>
           Off
@@ -155,7 +198,23 @@ export function GhostNotes({ complete, saved }: StepProps) {
         <PlayButton playing={t.playing} onClick={t.toggle} step={t.step} />
         <StepGrid loop={loop} lanes={[L.kick, L.snare, L.hat]} step={t.step} velocity />
       </div>
-      {flips >= 2 && <p className="sub fade-in">Barely audible snare hits between the loud ones. Take them away and the groove goes stiff.</p>}
+      {flips >= 2 && (
+        <Explain>
+          <p>
+            <strong>Ghost notes</strong> are very soft notes played between the main hits, usually on the snare drum. They are felt more than heard: they fill the
+            space around the backbeat and keep the groove in constant motion.
+          </p>
+          <p>
+            In this beat the snare plays the backbeat on 2 and 4 and ghost notes on &ldquo;2&nbsp;a&rdquo;, &ldquo;3&nbsp;e&rdquo; and &ldquo;4&nbsp;a&rdquo;, at about a
+            quarter of the backbeat&apos;s velocity. In the grid they are the short bars in the snare row. Without them the pattern still works, but it sounds
+            stiffer and emptier.
+          </p>
+          <p>
+            Ghost notes are central to funk, soul and R&amp;B drumming. Jeff Porcaro&apos;s shuffle on Toto&apos;s Rosanna (1982) is a well-known example, with
+            ghost notes on the snare between the hi-hat strokes.
+          </p>
+        </Explain>
+      )}
     </div>
   );
 }
@@ -227,9 +286,9 @@ export function LiveRecord({ complete, saved }: StepProps) {
 
   return (
     <div className="col">
-      <h2 className="prompt">Play it yourself.</h2>
+      <h2 className="prompt">Record two bars of kick and snare by playing them on the keyboard.</h2>
       <p className="sub">
-        <kbd>F</kbd> kick · <kbd>J</kbd> snare · two bars
+        Press <kbd>F</kbd> for the kick and <kbd>J</kbd> for the snare. Recording begins when the loop returns to bar 1 and lasts two bars.
       </p>
       <div className="panel" style={{ width: 860 }}>
         <div className="toolbar">
@@ -257,7 +316,23 @@ export function LiveRecord({ complete, saved }: StepProps) {
         <Timeline rec={phase === "done" ? rec.map((r) => ({ ...r, step: quantize([{ step: r.step }], amount, total)[0].step })) : buffer.current} total={total} step={t.step} />
         <PadsRow onHit={(lane) => window.dispatchEvent(new KeyboardEvent("keydown", { key: lane === "kick" ? "f" : "j" }))} />
       </div>
-      {ready && <p className="sub fade-in">Quantize pulls every hit onto the grid. All the way, and you sound like a machine.</p>}
+      {ready && (
+        <Explain>
+          <p>
+            <strong>Quantization</strong> (also called <strong>quantizing</strong>) moves recorded notes toward the nearest position on the grid. The amount, often
+            called the <strong>strength</strong>, sets how far each note moves: at 0% the notes stay where you played them, at 50% each note moves halfway to the
+            grid, and at 100% every note sits exactly on it.
+          </p>
+          <p>
+            As the amount rises, the dots in the timeline slide onto the sixteenth-note lines. At 100% your recording has machine timing, and the small
+            differences that made it sound played by hand are gone.
+          </p>
+          <p>
+            Quantizing became a standard feature of drum machines and sequencers in the 1980s. Many producers use a partial amount, which corrects large mistakes
+            and keeps part of the human feel.
+          </p>
+        </Explain>
+      )}
     </div>
   );
 }
@@ -303,7 +378,7 @@ export function HalfTime({ complete, saved }: StepProps) {
   const [res, setRes] = useState<TapResult | null>((saved as TapResult) ?? null);
   return (
     <div className="col">
-      <h2 className="prompt">Tap along again.</h2>
+      <h2 className="prompt">Tap along with this beat.</h2>
       <PlayButton playing={t.playing} onClick={t.toggle} step={t.step} />
       <TapPad
         playing={t.playing}
@@ -315,13 +390,22 @@ export function HalfTime({ complete, saved }: StepProps) {
         }}
       />
       <Verdict ok={res ? true : null}>
-        {res && (
-          <>
-            {res.rel === "half" ? "You tapped around 70. " : res.rel === "same" ? "You tapped around 140. " : `You tapped ${Math.round(res.bpm)}. `}
-            The track runs at 140, but with the snare only on beat 3 it feels like 70: <strong>half-time</strong>.
-          </>
-        )}
+        {res && (res.rel === "half" ? "You tapped at about 70 BPM." : res.rel === "same" ? "You tapped at about 140 BPM." : `You tapped at ${Math.round(res.bpm)} BPM.`)}
       </Verdict>
+      {res && (
+        <Explain>
+          <p>
+            The track runs at 140 BPM, yet many listeners nod at about 70. The snare plays only once per bar, on beat 3, instead of on 2 and 4. This feel is called{" "}
+            <strong>half-time</strong>. With the backbeat moved to beat 3, the groove feels half as fast as the tempo, while the hi-hats keep the faster pulse of
+            140 BPM going.
+          </p>
+          <p>
+            The quick run of hi-hat notes at the end of the bar is a <strong>hi-hat roll</strong>. Half-time drums with hi-hat rolls and long 808 bass notes are
+            the basis of <strong>trap</strong>, a style of hip-hop that developed in Atlanta in the 2000s. Dubstep, which usually runs at about 140 BPM with the
+            snare on beat 3, uses the same feel.
+          </p>
+        </Explain>
+      )}
     </div>
   );
 }

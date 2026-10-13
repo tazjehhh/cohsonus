@@ -7,11 +7,11 @@ import { Rebuild } from "./p2";
 import { L, earStart, earTarget, finalStart } from "./loops";
 
 const RULES: { id: string; text: string; test: (l: Loop) => boolean }[] = [
-  { id: "backbeat", text: "Snare on 2 and 4 in every bar", test: hasBackbeat },
-  { id: "hats", text: "Hi-hats on every eighth", test: hasSteadyHats },
-  { id: "sync", text: "At least one kick off the beat", test: hasOffbeatKick },
+  { id: "backbeat", text: "Snare on beats 2 and 4 in every bar", test: hasBackbeat },
+  { id: "hats", text: "Hi-hat on every eighth note", test: hasSteadyHats },
+  { id: "sync", text: "At least one kick between the beats", test: hasOffbeatKick },
   { id: "dyn", text: "Some hits softer than others", test: hasDynamics },
-  { id: "fill", text: "A fill at the end of bar 4", test: hasFill },
+  { id: "fill", text: "A fill on the last beat of bar 4", test: hasFill },
 ];
 
 export function YourBeat({ complete, saved }: StepProps) {
@@ -33,7 +33,7 @@ export function YourBeat({ complete, saved }: StepProps) {
   };
   return (
     <div className="col">
-      <h2 className="prompt">Four bars. Yours.</h2>
+      <h2 className="prompt">Build a four-bar beat of your own that meets every rule in the list.</h2>
       <div className="final">
         <Studio
           loop={loop}
@@ -70,13 +70,29 @@ export function YourBeat({ complete, saved }: StepProps) {
 }
 
 export function EarTest(p: StepProps) {
-  return <Rebuild {...p} prompt="New beat. Build it by ear." target={earTarget} start={earStart} lanes={[L.kick, L.snare, L.hat]} editable={["kick", "snare", "hat"]} />;
+  return (
+    <Rebuild
+      {...p}
+      prompt="Listen to this new beat and rebuild it by ear."
+      target={earTarget}
+      start={earStart}
+      lanes={[L.kick, L.snare, L.hat]}
+      editable={["kick", "snare", "hat"]}
+      explain={
+        <p>
+          The snare plays the backbeat on 2 and 4, and the hi-hat plays every eighth note with one extra sixteenth on &ldquo;4&nbsp;a&rdquo;. The kick plays on 1 and
+          then twice between the beats, on &ldquo;2&nbsp;&amp;&rdquo; and &ldquo;3&nbsp;&amp;&rdquo;; these two kicks are syncopated. The extra hi-hat note at the end of
+          the bar leads into the next downbeat.
+        </p>
+      }
+    />
+  );
 }
 
 const POINTS = [
-  "Kick and snare take turns: kick on 1 and 3, snare on 2 and 4.",
-  "The snare lands on the weaker beats and gives them the accent. That push and pull is the backbeat.",
-  "The steady back and forth gives your body a down and an up to follow.",
+  "The kick and the snare alternate. The kick plays on beats 1 and 3, the snare on beats 2 and 4.",
+  "In 4/4 time, beats 1 and 3 are the strong beats and 2 and 4 the weak ones. The snare accents the weak beats, and this accent on 2 and 4 is called the backbeat.",
+  "The regular alternation of a low kick and a sharp snare gives the body two points to follow, such as the head moving down and coming back up.",
 ];
 
 export function ExplainIt({ complete, saved }: StepProps) {
@@ -87,7 +103,7 @@ export function ExplainIt({ complete, saved }: StepProps) {
   return (
     <div className="col" style={{ maxWidth: 680 }}>
       <h2 className="prompt">Why does a snare on 2 and 4 make your head nod?</h2>
-      <p className="sub">Explain it to a friend who has never thought about it.</p>
+      <p className="sub">Write your answer as if you were explaining it to a friend who has never thought about it.</p>
       <textarea value={text} onChange={(e) => setText(e.target.value)} readOnly={shown} aria-label="Your explanation" />
       {!shown ? (
         <button
@@ -118,7 +134,7 @@ export function ExplainIt({ complete, saved }: StepProps) {
               </label>
             </li>
           ))}
-          <li className="points-foot">Tick what your explanation already said.</li>
+          <li className="points-foot">Check each point that your explanation already includes.</li>
         </ul>
       )}
     </div>
