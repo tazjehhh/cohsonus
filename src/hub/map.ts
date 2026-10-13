@@ -78,3 +78,11 @@ export function layoutMap(nodes: MapNode[]): { placed: Placed[]; branches: Branc
     branches: branches.map((b) => ({ from: b.from, to: b.to, via: b.keys.map((k) => ({ row: Number(k.split("@")[1]), x: x.get(k)! })) })),
   };
 }
+
+export type Zone = "focus" | "near" | "far";
+
+/** What the eye gets: the lecture to do next, everything down to one row below it, and the rest as dots. */
+export function zoneOf(placed: Placed[], focusId: string | undefined): Map<string, Zone> {
+  const focusRow = placed.find((p) => p.id === focusId)?.row ?? 0;
+  return new Map(placed.map((p) => [p.id, p.id === focusId ? "focus" : p.row <= focusRow + 1 ? "near" : "far"]));
+}

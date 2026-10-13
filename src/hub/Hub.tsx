@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { LECTURES, type LectureEntry } from "../lectures/registry";
 import { useAllProgress, type LectureProgress } from "../progress";
-import { layoutMap } from "./map";
+import { layoutMap, zoneOf, type Zone } from "./map";
 
 const DAY = 86_400_000;
 
@@ -75,7 +75,7 @@ export function Hub() {
         </nav>
       </header>
       <div className="hub-scroll" ref={scroller}>
-        {view === "path" && <PathMap card={cardProps} />}
+        {view === "path" && <PathMap card={cardProps} focus={next?.id} />}
         {view === "all" && (
           <div className="hub-grid">
             {LECTURES.map((l) => (
@@ -94,51 +94,110 @@ export function Hub() {
 
 type CardPropsOf = (l: LectureEntry) => { lecture: LectureEntry; progress?: LectureProgress; isNext: boolean };
 
-const CARD_W = 220;
-const CARD_H = 258;
-const COL = 268;
-const ROW = 340;
+const COL = 300;
+const FAR_SQUEEZE = 0.55;
+/** Box of each kind of node on the path, in px. */
+const SIZE: Record<Zone, { w: number; h: number }> = {
+  focus: { w: 300, h: 388 },
+  near: { w: 210, h: 84 },
+  far: { w: 10, h: 10 },
+};
 
-function PathMap({ card }: { card: CardPropsOf }) {
+function PathMap({ card, focus }: { card: CardPropsOf; focus?: string }) {
   const all = useAllProgress();
+  const [hover, setHover] = useState<string | null>(null);
   const { placed, branches } = layoutMap(LECTURES);
+  const zones = zoneOf(placed, focus);
   const pos = new Map(placed.map((p) => [p.id, p]));
+  const byId = new Map(LECTURES.map((l) => [l.id, l]));
   const reach = Math.max(...placed.map((p) => Math.abs(p.x)), ...branches.flatMap((b) => b.via.map((v) => Math.abs(v.x))));
   const width = (reach * 2 + 1) * COL;
-  const height = Math.max(...placed.map((p) => p.row)) * ROW + CARD_H;
-  const cx = (x: number) => width / 2 + x * COL;
-  const walked = (id: string) => status(LECTURES.find((l) => l.id === id)!, all[id]) === "done";
+  const done = (id: string) => status(byId.get(id)!, all[id]) === "done";
+  // rows of dots draw together under the cards instead of spreading as wide
+  const focusRow = pos.get(focus ?? "")?.row ?? 0;
+  const cx = (x: number, row: number) => width / 2 + x * COL * (row > focusRow + 1 ? FAR_SQUEEZE : 1);
 
-  // down from the bottom of one card to the top of the next, through the gap between rows
+  // rows are as tall as their tallest node; dots sit closer together than cards
+  const rows = Math.max(...placed.map((p) => p.row)) + 1;
+  const rowH = Array.from({ length: rows }, (_, r) => Math.max(...placed.filter((p) => p.row === r).map((p) => SIZE[zones.get(p.id)!].h)));
+  const rowTop: number[] = [];
+  let y = 0;
+  for (let r = 0; r < rows; r++) {
+    rowTop[r] = y;
+    const dots = (k: number) => rowH[k] === SIZE.far.h;
+    y += rowH[r] + (r + 1 >= rows ? 0 : dots(r) && dots(r + 1) ? 34 : dots(r + 1) ? 48 : 56);
+  }
+  const height = rowTop[rows - 1] + rowH[rows - 1];
+  const bottomOf = (id: string) => rowTop[pos.get(id)!.row] + SIZE[zones.get(id)!].h;
+
+  // down from the bottom of one node to the top of the next, through the gap between rows
   const bend = (x0: number, y0: number, x1: number, y1: number) => {
     const m = (y0 + y1) / 2;
     return `C${x0} ${m}, ${x1} ${m}, ${x1} ${y1}`;
   };
+
+  const lineClass = (from: string, to: string) => {
+    const kind = from === focus ? "ahead" : done(from) ? "walked" : zones.get(to) === "far" ? "far" : "";
+    return `${kind} ${hover === from || hover === to ? "lit" : ""}`;
+  };
+
+  const point = (id: string) => ({
+    onMouseEnter: () => setHover(id),
+    onMouseLeave: () => setHover((h) => (h === id ? null : h)),
+    onFocus: () => setHover(id),
+    onBlur: () => setHover((h) => (h === id ? null : h)),
+  });
 
   return (
     <div className="map" style={{ width, height }}>
       <svg className="map-lines" width={width} height={height} aria-hidden>
         {branches.map((b) => {
           const from = pos.get(b.from)!;
-          const to = pos.get(b.to)!;
-          let x = cx(from.x);
-          let y = from.row * ROW + CARD_H;
-          let d = `M${x} ${y}`;
+          let x = cx(from.x, from.row);
+          // a node shorter than its row drops straight to the row's bottom first, clear of the big card beside it
+          let y = rowTop[from.row] + rowH[from.row];
+          let d = `M${x} ${bottomOf(b.from)} L${x} ${y}`;
+          let x1 = x;
           for (const v of b.via) {
-            d += ` ${bend(x, y, cx(v.x), v.row * ROW)} L${cx(v.x)} ${v.row * ROW + CARD_H}`;
-            x = cx(v.x);
-            y = v.row * ROW + CARD_H;
+            x1 = cx(v.x, v.row);
+            d += ` ${bend(x, y, x1, rowTop[v.row])} L${x1} ${rowTop[v.row] + rowH[v.row]}`;
+            x = x1;
+            y = rowTop[v.row] + rowH[v.row];
           }
-          d += ` ${bend(x, y, cx(to.x), to.row * ROW)}`;
-          return <path key={`${b.from}-${b.to}`} className={walked(b.from) ? "walked" : ""} d={d} />;
+          const to = pos.get(b.to)!;
+          d += ` ${bend(x, y, cx(to.x, to.row), rowTop[to.row])}`;
+          return <path key={`${b.from}-${b.to}`} className={lineClass(b.from, b.to)} d={d} />;
         })}
       </svg>
-      {placed.map((p) => (
-        <div key={p.id} className="map-spot" style={{ left: cx(p.x) - CARD_W / 2, top: p.row * ROW, width: CARD_W }}>
-          <Card {...card(LECTURES.find((l) => l.id === p.id)!)} size="small" />
-        </div>
-      ))}
+      {placed.map((p) => {
+        const zone = zones.get(p.id)!;
+        const { w, h } = SIZE[zone];
+        const l = byId.get(p.id)!;
+        return (
+          <div key={p.id} className={`map-spot ${zone}`} data-id={p.id} style={{ left: cx(p.x, p.row) - w / 2, top: rowTop[p.row], width: w, height: h }} {...point(p.id)}>
+            {zone === "far" ? <Dot lecture={l} side={p.x < 0 ? "left" : "right"} /> : <Card {...card(l)} size={zone === "focus" ? "large" : "compact"} />}
+          </div>
+        );
+      })}
     </div>
+  );
+}
+
+/** A lecture far down the path: a point on the line, its name when pointed at. */
+function Dot({ lecture, side }: { lecture: LectureEntry; side: "left" | "right" }) {
+  const name = (
+    <span className={`map-dot-label ${side}`}>
+      <span className="mono">{String(lecture.number).padStart(2, "0")}</span> {lecture.title}
+    </span>
+  );
+  return lecture.def ? (
+    <a className="map-dot released" href={`#/l/${lecture.id}`} aria-label={lecture.title}>
+      {name}
+    </a>
+  ) : (
+    <span className="map-dot" tabIndex={0} aria-label={`${lecture.title}, soon`}>
+      {name}
+    </span>
   );
 }
 
@@ -176,7 +235,7 @@ function Released({ card }: { card: CardPropsOf }) {
   );
 }
 
-function Card({ lecture, progress, isNext, size = "large" }: { lecture: LectureEntry; progress?: LectureProgress; isNext: boolean; size?: "large" | "small" }) {
+function Card({ lecture, progress, isNext, size = "large" }: { lecture: LectureEntry; progress?: LectureProgress; isNext: boolean; size?: "large" | "compact" }) {
   const st = status(lecture, progress);
   const parts = lecture.def?.parts ?? [];
   const minutes = parts.reduce((a, p) => a + p.minutes, 0);
@@ -186,9 +245,11 @@ function Card({ lecture, progress, isNext, size = "large" }: { lecture: LectureE
   const art = ART[lecture.id];
   const body = (
     <>
-      <div className="card-figure">
-        {art ? <img src={art} alt="" draggable={false} /> : <span className="card-figure-num mono">{String(lecture.number).padStart(2, "0")}</span>}
-      </div>
+      {size === "large" && (
+        <div className="card-figure">
+          {art ? <img src={art} alt="" draggable={false} /> : <span className="card-figure-num mono">{String(lecture.number).padStart(2, "0")}</span>}
+        </div>
+      )}
       <div className="card-body">
         <div className="card-num mono">{String(lecture.number).padStart(2, "0")}</div>
         <div className="card-title">{lecture.title}</div>

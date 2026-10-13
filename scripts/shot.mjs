@@ -1,5 +1,5 @@
 // Usage: node scripts/shot.mjs <hash> <out.png> [action ...]
-// actions: click:<selector>  key:<Key>  wait:<ms>  eval:<js>  shot:<file.png>  storage:<json>
+// actions: click:<selector>  hover:<selector>  key:<Key>  wait:<ms>  eval:<js>  shot:<file.png>  storage:<json>
 import { chromium } from "playwright-core";
 
 const [hash = "#/", out = "shots/page.png", ...actions] = process.argv.slice(2);
@@ -26,6 +26,7 @@ for (const a of actions) {
   const [kind, ...rest] = a.split(":");
   const arg = rest.join(":");
   if (kind === "click") await page.locator(arg).first().click();
+  else if (kind === "hover") await page.locator(arg).first().hover();
   else if (kind === "key") await page.keyboard.press(arg);
   else if (kind === "wait") await page.waitForTimeout(Number(arg));
   else if (kind === "eval") console.log(JSON.stringify(await page.evaluate(arg)));

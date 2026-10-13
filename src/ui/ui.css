@@ -91,7 +91,7 @@
 }
 .hub-scroll {
   overflow: auto;
-  padding: 40px 16px 72px;
+  padding: 32px 16px 56px;
   display: grid;
   justify-items: center;
   align-content: start;
@@ -108,14 +108,73 @@
 }
 .map-lines path {
   fill: none;
-  stroke: var(--line-2);
+  stroke: var(--line);
   stroke-width: 1;
+  transition: stroke calc(var(--drawing) * 2) var(--frames-2);
+}
+.map-lines path.far {
+  stroke-dasharray: 2 5;
 }
 .map-lines path.walked {
   stroke: var(--ink-3);
 }
+.map-lines path.ahead {
+  stroke: var(--ink-2);
+}
+.map-lines path.lit {
+  stroke: var(--ink);
+}
 .map-spot {
   position: absolute;
+}
+.map-dot {
+  position: relative;
+  display: block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1px solid var(--line-2);
+  background: var(--bg);
+  cursor: default;
+  transition: border-color calc(var(--drawing) * 2) var(--frames-2);
+}
+.map-dot.released {
+  background: var(--ink-3);
+  border-color: var(--ink-3);
+  cursor: pointer;
+}
+.map-dot:hover,
+.map-dot:focus-visible {
+  border-color: var(--ink);
+  outline: none;
+}
+.map-dot-label {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  white-space: nowrap;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: var(--bg);
+  color: var(--ink);
+  font-size: 13px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity calc(var(--drawing) * 2) var(--frames-2);
+}
+.map-dot-label .mono {
+  color: var(--ink-3);
+  font-size: 11px;
+}
+.map-dot-label.right {
+  left: 16px;
+}
+.map-dot-label.left {
+  right: 16px;
+}
+.map-dot:hover .map-dot-label,
+.map-dot:focus-visible .map-dot-label {
+  opacity: 1;
 }
 
 /* all, released: plain rows of cards */
@@ -166,7 +225,7 @@ a.card:hover {
   border-color: var(--line-2);
   transform: translateY(-4px);
 }
-a.card.small:hover {
+.map a.card:hover {
   transform: none;
   border-color: var(--ink-3);
 }
@@ -230,32 +289,38 @@ a.card.small:hover {
   height: 100%;
   background: var(--ink);
 }
-.card.small {
-  width: 220px;
-  height: 258px;
+.card.large {
+  height: 388px;
   display: grid;
-  grid-template-rows: 176px 1fr;
+  grid-template-rows: 240px 1fr;
 }
-.card.small .card-figure {
+.card.large .card-figure {
   height: auto;
 }
-.card.small .card-figure-num {
-  font-size: 52px;
+.card.compact {
+  width: 210px;
+  height: 84px;
 }
-.card.small .card-body {
-  padding: 12px 14px 0;
+.card.compact .card-body {
+  padding: 12px 14px;
   gap: 2px;
-  align-content: start;
 }
-.card.small .card-title {
+.card.compact .card-title {
   font-size: 15px;
   min-height: 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.card.small .card-bar {
+.card.compact .card-bar {
   display: none;
+}
+.card.compact + .refresh {
+  top: 8px;
+  right: 8px;
+  padding: 2px 9px;
+  font-size: 11px;
+  line-height: 16px;
 }
 .refresh {
   position: absolute;

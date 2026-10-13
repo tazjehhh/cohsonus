@@ -15,3 +15,4 @@
 - Card art is now placeholder images (src/hub/cards) for the owner to replace by hand; the miniatures are gone.
 - All motion runs at 12 drawings a second at most, at real-time speed: stepped easing tokens in CSS, held keyframes for the beat ring, and a drawing clock (useDrawings) for meters, spectrum and the beat circle, locked to the beat. Measured: meters redraw 10.3 times a second at 124 BPM, never closer than 1/12 s.
 - Hub rebuilt as a tree that branches down from Anatomy, with lines routed through their own gaps; plus All and Released views, remembered per browser.
+- Path view reworked to guide the eye: one big card for the lecture to do next (the map is centred on it), small title cards down to one row below it, dots further down drawn in toward the centre, line brightness by role (walked, ahead, far), hovering a lecture lights its branches.

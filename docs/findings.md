@@ -20,6 +20,7 @@
 - Card art: the owner makes it by hand. Single hairline objects did not fit, and neither did miniatures of each lecture's stage. Placeholders until then.
 - Into animation and knows the craft. Motion at most 12 drawings a second (on twos), real-time speed kept: fewer drawings, not slower playback. The card miniatures moved far too quickly.
 - The hub is a tree, not a line: Anatomy branches into strands that branch again. Switch between the recommended path, all lectures, and by release.
+- The full tree of equal cards was overwhelming. Chosen: only what's near. The lecture to do next is the one big card with art; up to one row below it, small title cards; deeper ones are dots on dashed lines, named on hover.
 - Wants text, images and moving images in the lectures too, composed to fit: an interactive e-learning, not only exercises.
 - Found the sample version still sounding bad ("the song works, but it sounds really bad").
 - Name: cohsonus, from coherent; co-sonus and co- as in cooperative were also in mind.

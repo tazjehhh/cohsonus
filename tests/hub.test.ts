@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { layoutMap } from "../src/hub/map";
+import { layoutMap, zoneOf } from "../src/hub/map";
 import { LECTURES } from "../src/lectures/registry";
 
 describe("map", () => {
@@ -23,4 +23,17 @@ describe("map", () => {
       for (const v of br.via) for (const c of placed) if (c.row === v.row) expect(Math.abs(c.x - v.x)).toBeGreaterThanOrEqual(half);
     }
   });
+});
+
+describe("zones", () => {
+  const { placed } = layoutMap(LECTURES);
+  for (const focus of ["anatomy", "pulse"]) {
+    it(`with ${focus} next, shows down to one row below it and dots the rest`, () => {
+      const zones = zoneOf(placed, focus);
+      const row = placed.find((p) => p.id === focus)!.row;
+      expect([...zones.values()].filter((z) => z === "focus")).toHaveLength(1);
+      expect(zones.get(focus)).toBe("focus");
+      for (const p of placed) if (p.id !== focus) expect(zones.get(p.id)).toBe(p.row <= row + 1 ? "near" : "far");
+    });
+  }
 });
