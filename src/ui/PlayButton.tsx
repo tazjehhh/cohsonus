@@ -26,7 +26,7 @@ export function PlayButton({
       aria-label={label ?? (playing ? "Stop" : "Play")}
       aria-pressed={playing}
     >
-      <span key={beat} className="pulse" style={playing && beat ? { animation: "ring calc(var(--drawing) * 4) step-end" } : undefined} />
+      <span key={beat} className="pulse" style={playing && beat ? { animation: "ring calc(var(--drawing) * 8) step-end" } : undefined} />
       {playing ? (
         <svg viewBox="0 0 10 10">
           <rect x="1.5" y="1.5" width="7" height="7" rx="0.5" />

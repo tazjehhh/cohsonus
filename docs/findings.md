@@ -18,10 +18,13 @@
 - Everything centered, desktop browser, hub scrolls horizontally, lectures are closed experiences.
 - Song examples: genre classics.
 - Card art: the owner makes it by hand. Single hairline objects did not fit, and neither did miniatures of each lecture's stage. Placeholders until then.
-- Into animation and knows the craft. Motion at most 12 drawings a second (on twos), real-time speed kept: fewer drawings, not slower playback. The card miniatures moved far too quickly.
+- Into animation and knows the craft. Asked first for at most 12 drawings a second at real-time speed; at 12 it did not look right, so motion now runs at up to 24. The card miniatures moved far too quickly. The beat circle unrolling into a line (Pulse, "Bars and beats") was called a slick animation: that is the bar to meet.
 - The hub is a tree, not a line: Anatomy branches into strands that branch again. Switch between the recommended path, all lectures, and by release.
 - The full tree of equal cards was overwhelming. Chosen: only what's near. The lecture to do next is the one big card with art; up to one row below it, small title cards; deeper ones are dots on dashed lines, named on hover.
-- Wants text, images and moving images in the lectures too, composed to fit: an interactive e-learning, not only exercises.
+- Wants text, images and moving images in the lectures too, composed to fit: an interactive e-learning, not only exercises. First pages: building a track in layers, frequency, tempo ranges by genre, the origins of swing.
+- Disliked the terse caption language ("Same beat.", "Four on the floor: the engine of disco and house."). Wants textbook-type explanations. A rule doc for writing follows once the owner is happy with the rewrite.
+- The Pulse "which one makes you nod" pair sounded identical: A was B shifted by one beat, and on repeat nothing marked the one. Fixed with bass and chords that start each bar. Lesson: an A/B pair must differ against a fixed reference, never by rotation alone.
+- Heard the first Anatomy track (house) and found it sounded bad; measurements found mono and dry samples, a raw saw lead, acoustic hats with hum in a house track, and overs at the master.
 - Found the sample version still sounding bad ("the song works, but it sounds really bad").
 - Name: cohsonus, from coherent; co-sonus and co- as in cooperative were also in mind.
 

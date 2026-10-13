@@ -165,7 +165,7 @@ export class Player {
     return ((p % total) + total) % total;
   }
 
-  /** Number of the drawing on screen at an audio time: at most 12 a second, a new one on every beat. */
+  /** Number of the drawing on screen at an audio time: at most 24 a second, a new one on every beat. */
   drawingAt(time: number) {
     const beats = (time - this.origin) / (60 / this.loop.bpm);
     return Math.floor(beats * drawingsPerBeat(this.loop.bpm));

@@ -62,8 +62,27 @@ export const fourFloorStart: Loop = drums({ bpm: 120, stepsPerBeat: 1, voices: M
 
 export const kickSnareEmpty: Loop = drums({ bpm: 96, stepsPerBeat: 2 }, { kick: "........", snare: "........", hat: "xoxoxoxo" });
 
-export const backbeatA: Loop = drums({ bpm: 96, stepsPerBeat: 2 }, { kick: "..x...x.", snare: "x...x...", hat: "xoxoxoxo" });
-export const backbeatB: Loop = drums({ bpm: 96, stepsPerBeat: 2 }, { kick: "x...x...", snare: "..x...x.", hat: "xoxoxoxo" });
+// Two bars of bass and chords mark where "1" is. Without them A is only B started one beat later,
+// and on repeat the ear hears the same groove twice.
+const D_MIN7 = [50, 53, 57, 60];
+const BB_MAJ7 = [46, 50, 53, 57];
+const oneMarkers = (): Loop["lanes"] => [
+  {
+    id: "bass",
+    voice: "eBass",
+    notes: [
+      [0, 38, 2.5], [3, 38, 0.8], [5, 41, 1.5], [7, 40, 0.8],
+      [8, 34, 2.5], [11, 34, 0.8], [13, 36, 1.5], [15, 37, 0.8],
+    ].map(([step, pitch, len]) => ({ step, pitch, len, vel: step % 8 === 0 ? 0.95 : 0.75 })),
+  },
+  { id: "keys", voice: "wurli", notes: [{ step: 0, chord: D_MIN7, len: 6, vel: 0.8 }, { step: 8, chord: BB_MAJ7, len: 6, vel: 0.8 }] },
+];
+const backbeat = (kick: string, snare: string): Loop => {
+  const l = drums({ bpm: 96, stepsPerBeat: 2, bars: 2 }, { kick: kick + kick, snare: snare + snare, hat: "xoxoxoxoxoxoxoxo" });
+  return { ...l, lanes: [...l.lanes, ...oneMarkers()] };
+};
+export const backbeatA: Loop = backbeat("..x...x.", "x...x...");
+export const backbeatB: Loop = backbeat("x...x...", "..x...x.");
 
 export const rebuildTarget: Loop = drums({ bpm: 92, stepsPerBeat: 2 }, { kick: "x..x.x..", snare: "..x...x.", hat: "xoxoxoxo" });
 export const rebuildStart: Loop = drums({ bpm: 92, stepsPerBeat: 2 }, { kick: "........", snare: "........", hat: "xoxoxoxo" });

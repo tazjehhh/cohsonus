@@ -3,12 +3,12 @@ import type { Player } from "../audio/player";
 import { audio, heardOffset } from "../audio/engine";
 import { DRAWINGS_PER_SECOND } from "../music/timing";
 
-/** Screen refreshes land every ~16.7 ms, so 1/12 s can show up as 83 or 100 ms but never 67. */
+/** Screen refreshes land every ~16.7 ms, so 1/24 s can show up as 33 or 50 ms but never 17. */
 const MIN_GAP = 1000 / DRAWINGS_PER_SECOND - 9;
 
 /**
  * While `active`, calls `sample` on every screen refresh and `draw` once per drawing.
- * With a player, drawings follow its beat (every beat starts a new one); without, a plain 12 a second.
+ * With a player, drawings follow its beat (every beat starts a new one); without, a plain 24 a second.
  * `draw` gets the seconds since the last drawing, so decays keep real time.
  */
 export function useDrawings(active: boolean, draw: (dt: number) => void, opts: { player?: Player; sample?: () => void } = {}) {
@@ -26,7 +26,7 @@ export function useDrawings(active: boolean, draw: (dt: number) => void, opts: {
     const frame = (now: number) => {
       sampleRef.current?.();
       const n = player ? player.drawingAt(audio().currentTime - heardOffset()) : Math.floor(((now - t0) / 1000) * DRAWINGS_PER_SECOND);
-      // the audio clock moves in chunks; never let two drawings come closer than a twelfth of a second
+      // the audio clock moves in chunks; never let two drawings come closer than 1/24 s
       if (n !== last && (last === null || now - lastAt >= MIN_GAP)) {
         last = n;
         drawRef.current((now - lastAt) / 1000);

@@ -55,7 +55,7 @@ const verdict = (page) => page.locator(".verdict").first().innerText();
 
 // 2. find the one: tap three times on bar starts
 {
-  const page = await open("pulse", 0, 2);
+  const page = await open("pulse", 0, 3);
   await page.locator(".play").first().click();
   await page.waitForTimeout(800);
   for (let i = 0; i < 3; i++) {
@@ -71,7 +71,7 @@ const verdict = (page) => page.locator(".verdict").first().innerText();
 
 // 3. four on the floor
 {
-  const page = await open("pulse", 0, 3);
+  const page = await open("pulse", 0, 4);
   const cells = page.locator(".grid-row").first().locator(".cell");
   for (let i = 0; i < 4; i++) await cells.nth(i).click();
   results.push(["four on the floor", await verdict(page)]);
@@ -95,7 +95,7 @@ const verdict = (page) => page.locator(".verdict").first().innerText();
 
 // 5. live record: hit kick on beats 1,3 and snare on 2,4 for two bars, then quantize
 {
-  const page = await open("pulse", 3, 4);
+  const page = await open("pulse", 3, 5);
   await page.getByRole("button", { name: "Record" }).click();
   const s = await until(page, 0, 32);
   await page.waitForTimeout(s * 1000 - 30);

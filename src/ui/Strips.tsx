@@ -8,7 +8,7 @@ export interface StripDef {
   color?: string;
 }
 
-/** Live loudness per channel, 0..1. Reads the analyser that sits before each fader; drawn 12 times a second at most. */
+/** Live loudness per channel, 0..1. Reads the analyser that sits before each fader; drawn 24 times a second at most. */
 export function useLevels(player: Player, ids: string[], playing: boolean) {
   const [levels, setLevels] = useState<Record<string, number>>({});
   const shown = useRef<Record<string, number>>({});

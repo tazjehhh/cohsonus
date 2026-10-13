@@ -22,15 +22,15 @@ describe("patterns", () => {
 });
 
 describe("timing", () => {
-  it("draws at most 12 times a second, with every beat on a drawing", () => {
+  it("draws at most 24 times a second, with every beat on a drawing", () => {
     for (const bpm of [60, 90, 96, 124, 140, 174]) {
       const n = drawingsPerBeat(bpm);
       expect(Number.isInteger(n)).toBe(true);
-      expect(n / (60 / bpm)).toBeLessThanOrEqual(12);
-      expect((n + 1) / (60 / bpm)).toBeGreaterThan(12);
+      expect(n / (60 / bpm)).toBeLessThanOrEqual(24);
+      expect((n + 1) / (60 / bpm)).toBeGreaterThan(24);
     }
-    expect(drawingsPerBeat(90)).toBe(8);
-    expect(drawingsPerBeat(124)).toBe(5);
+    expect(drawingsPerBeat(90)).toBe(16);
+    expect(drawingsPerBeat(124)).toBe(11);
   });
 
   it("swings only every second step", () => {

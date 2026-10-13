@@ -48,10 +48,11 @@ Drum machines (808, 909) are to come from Freesound, CC0 only, with the key in `
 
 - Ear first, name second. A step makes the learner listen, guess, build or fail before a term appears. Reveals come after the attempt.
 - No meta text. No "in this lecture you will", no explaining why an exercise exists, no praise filler. Prompts are questions or instructions; reveals are content.
-- Explanations are interactive too: sound, motion, something to click. Text, images and moving images are welcome when they are composed to fit each other and the lecture, like a good interactive e-learning; never a bare wall of text.
+- Explanations are interactive too: sound, motion, something to click. Text, images and moving images are composed together like a good interactive e-learning: pages built from `Page`, `Spread`, `Figure` and `Art` (`src/ui/page.tsx`).
+- Text is written in a textbook voice: prompts are complete sentences, feedback is one neutral sentence, and after the attempt an `Explain` block (`src/ui/Explain.tsx`) defines each new term in bold, explains how it works, ties it to what was just heard, and gives context. The full rules become `docs/text.md` once the owner approves the rewrite.
 - Each lecture has its own mode and look. The house style (hub, Anatomy of a Track, Pulse & Groove, Into the DAW) is a deliberately plain base. Visual direction for lectures with their own world comes from the owner's references: do not invent finished aesthetics unasked.
 - Everything centered. Desktop browser. The hub shows the lectures as a tree that branches down from Anatomy (Path), as a plain list (All) or by release date (Released); a lecture is a closed full-screen experience.
-- Motion runs at 12 drawings a second at most, like animation on twos, at real-time speed: fewer drawings, not slower movement. Every drawing should show a visible change; space them with ease-out, hold key poses, never flicker or rush. CSS: `--drawing` and `--frames-n` in `src/styles.css`, or keyframes held with `step-end`. JS: `useDrawings` in `src/ui/drawings.ts`, which locks drawings to the beat while a player runs. A step that lights up as it sounds is an event, not motion: it lands on time.
+- Motion runs at 24 drawings a second at most, like film animation on ones, at real-time speed. Every drawing should show a visible change; space them with ease-out, hold key poses, never flicker or rush. CSS: `--drawing` and `--frames-n` in `src/styles.css`, or keyframes held with `step-end`. JS: `useDrawings` in `src/ui/drawings.ts`, which locks drawings to the beat while a player runs. A step that lights up as it sounds is an event, not motion: it lands on time. (12 a second was tried and looked wrong to the owner.)
 - Card art is the owner's, made by hand. Do not draw card art; leave the placeholders.
 - One Loop is the single source of truth: it drives the sound, the step grid and the notation at once.
 - Checks are deterministic. There is no AI at runtime.
@@ -68,7 +69,8 @@ Drum machines (808, 909) are to come from Freesound, CC0 only, with the key in `
 - `src/audio/` engine (context, reverb, limiter), `sampler.ts` (velocity layers, round robin, pitched playback, choke groups), `voices.ts` (voice name → instrument and level), `samples.json` (generated manifest), `mixer.ts` (channels with mute, analyser, dusty and echo), `player.ts` (look-ahead scheduler, swing, solo/mute; loads its samples before it starts), `usePlayer.ts`
 - `public/samples/` the audio (FLAC), built by `scripts/samples/build.py`
 - `src/music/` pure logic: `model.ts` (Loop, Lane, Note), `patterns.ts` (pattern strings, humanize), `timing.ts` (swing, tap tempo, quantize), `checks.ts` (backbeat, fills…), `notation.ts` (drum notation layout)
-- `src/ui/` shared pieces: StepGrid + DrumStaff (same column layout), Studio, Strips (mixer), Spectrum, BeatCircle, Choice
+- `src/ui/` shared pieces: StepGrid + DrumStaff (same column layout), Studio, Strips (mixer), Spectrum, BeatCircle, Choice, `page.tsx` (Page, Spread, Figure, Art), `Explain.tsx`, `drawings.ts` (the 24-a-second drawing clock)
+- `src/lectures/<id>/art/` pictures the owner makes for a lecture's pages, picked up by `Art` by file name; until one exists, `Art` shows an empty frame naming the file and size
 - `src/lectures/` `types.ts`, `LectureView.tsx` (cover → part intro → steps → homework), `RefresherView.tsx`, `registry.ts` (all eleven lectures, road order), one folder per built lecture
 - `src/hub/` `Hub.tsx` (Path / All / Released), `map.ts` (tree layout; lines that skip a row get their own gap), `cards/` (card art: `<lecture id>.<png|jpg|gif|webp|svg>`, 600 × 480; replace a placeholder by dropping in a file with the same name)
 

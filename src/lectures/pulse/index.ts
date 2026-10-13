@@ -5,6 +5,7 @@ import { Faster, OpenHat, Sixteenths, SpotTheHat, Syncopation } from "./p3";
 import { GhostNotes, HalfTime, LiveRecord, MatchSwing, ThreeVersions, Velocity } from "./p4";
 import { FindTheFill, Tune808, WriteAFill } from "./p5";
 import { EarTest, ExplainIt, YourBeat } from "./p6";
+import { SwingHistory, TempoHoods } from "./pages";
 import { RefreshRebuild, RefreshSwing, RefreshTap } from "./refresh";
 
 export const pulse: LectureDef = {
@@ -15,16 +16,17 @@ export const pulse: LectureDef = {
     {
       id: "p1",
       title: "The pulse",
-      note: "Headphones on.",
+      note: "Use headphones for this part.",
       minutes: 15,
       steps: [
         { id: "tap", C: TapAlong },
         { id: "sort", C: TempoSort },
+        { id: "hoods", C: TempoHoods },
         { id: "one", C: FindTheOne },
         { id: "floor", C: FourOnTheFloor },
       ],
       homework: {
-        task: "Tap along to three songs you like. Find the one in each, then count to four from there.",
+        task: "Tap along to three songs you like. In each one, find the downbeat and count the four beats of the bar from there.",
         listen: [
           { artist: "Frankie Knuckles", title: "Your Love" },
           { artist: "Donna Summer", title: "I Feel Love" },
@@ -42,7 +44,7 @@ export const pulse: LectureDef = {
         { id: "rebuild", C: RebuildBoomBap },
       ],
       homework: {
-        task: "In three songs from your library: does the snare land on 2 and 4?",
+        task: "Choose three songs from your own library and check whether the snare lands on beats 2 and 4.",
         listen: [
           { artist: "Michael Jackson", title: "Billie Jean" },
           { artist: "Led Zeppelin", title: "When the Levee Breaks", hint: "One of the most sampled drum sounds ever recorded." },
@@ -62,7 +64,7 @@ export const pulse: LectureDef = {
         { id: "sync", C: Syncopation },
       ],
       homework: {
-        task: "Follow only the hi-hats in a song. Eighths or sixteenths? Where do they open up?",
+        task: "Follow only the hi-hats in a song. Decide whether they play eighth notes or sixteenth notes, and note where an open hi-hat appears.",
         listen: [
           { artist: "Mr. Fingers", title: "Can You Feel It" },
           { artist: "Chic", title: "Good Times" },
@@ -73,21 +75,22 @@ export const pulse: LectureDef = {
       id: "p4",
       title: "Groove",
       minutes: 25,
-      note: "Keyboard within reach: F and J.",
+      note: "Keep the keyboard within reach; the F and J keys are used to play drums.",
       steps: [
         { id: "versions", C: ThreeVersions },
         { id: "swing", C: MatchSwing },
+        { id: "history", C: SwingHistory },
         { id: "velocity", C: Velocity },
         { id: "ghost", C: GhostNotes },
         { id: "record", C: LiveRecord },
         { id: "half", C: HalfTime },
       ],
       homework: {
-        task: "Listen for drums that are not on the grid. Where do they drag, where do they push?",
+        task: "Listen for drums that are played off the grid. Note where they fall slightly behind the beat and where they come slightly ahead of it.",
         listen: [
           { artist: "Slum Village", title: "Fall in Love", hint: "Drums by J Dilla, placed by hand rather than by the grid." },
           { artist: "D'Angelo", title: "Untitled (How Does It Feel)" },
-          { artist: "Migos", title: "Bad and Boujee", hint: "Half-time: count it fast, then slow." },
+          { artist: "Migos", title: "Bad and Boujee", hint: "A half-time beat: count it at the fast tempo, then at half that tempo." },
         ],
       },
     },
@@ -101,10 +104,10 @@ export const pulse: LectureDef = {
         { id: "808", C: Tune808 },
       ],
       homework: {
-        task: "Count the bars in a song until something changes. Is it 4, 8 or 16?",
+        task: "Count the bars of a song until something changes, and check whether the change comes after 4, 8 or 16 bars.",
         listen: [
           { artist: "Outkast", title: "SpottieOttieDopaliscious" },
-          { artist: "Kanye West", title: "Love Lockdown", hint: "The 808 as the main instrument." },
+          { artist: "Kanye West", title: "Love Lockdown", hint: "The 808 is the main instrument of the song." },
         ],
       },
     },

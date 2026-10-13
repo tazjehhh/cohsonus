@@ -79,8 +79,8 @@
   border-radius: 999px;
   cursor: pointer;
   transition:
-    color calc(var(--drawing) * 2) var(--frames-2),
-    background calc(var(--drawing) * 2) var(--frames-2);
+    color calc(var(--drawing) * 4) var(--frames-4),
+    background calc(var(--drawing) * 4) var(--frames-4);
 }
 .hub-views button:hover {
   color: var(--ink);
@@ -110,7 +110,7 @@
   fill: none;
   stroke: var(--line);
   stroke-width: 1;
-  transition: stroke calc(var(--drawing) * 2) var(--frames-2);
+  transition: stroke calc(var(--drawing) * 4) var(--frames-4);
 }
 .map-lines path.far {
   stroke-dasharray: 2 5;
@@ -136,7 +136,7 @@
   border: 1px solid var(--line-2);
   background: var(--bg);
   cursor: default;
-  transition: border-color calc(var(--drawing) * 2) var(--frames-2);
+  transition: border-color calc(var(--drawing) * 4) var(--frames-4);
 }
 .map-dot.released {
   background: var(--ink-3);
@@ -160,7 +160,7 @@
   font-size: 13px;
   pointer-events: none;
   opacity: 0;
-  transition: opacity calc(var(--drawing) * 2) var(--frames-2);
+  transition: opacity calc(var(--drawing) * 4) var(--frames-4);
 }
 .map-dot-label .mono {
   color: var(--ink-3);
@@ -218,8 +218,8 @@
   text-decoration: none;
   overflow: hidden;
   transition:
-    border-color calc(var(--drawing) * 2) var(--frames-2),
-    transform calc(var(--drawing) * 4) var(--frames-4);
+    border-color calc(var(--drawing) * 4) var(--frames-4),
+    transform calc(var(--drawing) * 8) var(--frames-8);
 }
 a.card:hover {
   border-color: var(--line-2);
@@ -532,8 +532,8 @@ a.card:hover {
   cursor: pointer;
   overflow: hidden;
   transition:
-    left calc(var(--drawing) * 3) var(--frames-3),
-    border-color calc(var(--drawing) * 2) var(--frames-2);
+    left calc(var(--drawing) * 6) var(--frames-6),
+    border-color calc(var(--drawing) * 4) var(--frames-4);
 }
 .cell.beat {
   border-color: var(--line-2);
@@ -672,7 +672,7 @@ a.card:hover {
   flex-direction: column;
   align-items: center;
   gap: 10px;
-  transition: opacity calc(var(--drawing) * 2) var(--frames-2);
+  transition: opacity calc(var(--drawing) * 4) var(--frames-4);
 }
 .strip.silent .meter i {
   opacity: 0.25;
@@ -788,13 +788,13 @@ a.card:hover {
   font-size: 14px;
 }
 .role:nth-child(2) {
-  animation-delay: calc(var(--drawing) * 2);
-}
-.role:nth-child(3) {
   animation-delay: calc(var(--drawing) * 4);
 }
+.role:nth-child(3) {
+  animation-delay: calc(var(--drawing) * 8);
+}
 .role:nth-child(4) {
-  animation-delay: calc(var(--drawing) * 6);
+  animation-delay: calc(var(--drawing) * 12);
 }
 
 .prompt.small {
@@ -986,7 +986,7 @@ a.card:hover {
   border-radius: 50%;
   border: 2px solid var(--ink);
   opacity: 0;
-  animation: ring calc(var(--drawing) * 4) step-end;
+  animation: ring calc(var(--drawing) * 8) step-end;
 }
 .tap-bpm {
   font-size: 40px;
@@ -1232,7 +1232,7 @@ a.card:hover {
   fill: rgba(255, 255, 255, 0.06);
 }
 .timeline .tl-hit {
-  transition: cx calc(var(--drawing) * 4) var(--frames-4);
+  transition: cx calc(var(--drawing) * 8) var(--frames-8);
 }
 .timeline .tl-hit.kick {
   fill: var(--ink);
@@ -1258,4 +1258,99 @@ a.card:hover {
 .btn.rec {
   border-color: var(--miss);
   color: var(--miss);
+}
+
+/* ---------- pages: text beside pictures, moving pictures and sound ---------- */
+
+.page {
+  width: min(1000px, 100%);
+  display: grid;
+  gap: 44px;
+  justify-items: center;
+}
+.spread {
+  width: 100%;
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  gap: 56px;
+  align-items: center;
+}
+.spread.flip .spread-figure {
+  order: 2;
+}
+.spread-figure {
+  display: grid;
+  justify-items: center;
+  gap: 14px;
+}
+.prose {
+  max-width: 46ch;
+  display: grid;
+  gap: 14px;
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--ink-2);
+}
+.prose p {
+  margin: 0;
+}
+.prose strong {
+  color: var(--ink);
+  font-weight: 500;
+}
+.prose .listen {
+  margin-top: 4px;
+}
+.figure {
+  margin: 0;
+  display: grid;
+  gap: 10px;
+  justify-items: center;
+}
+.figure figcaption {
+  font-size: 13px;
+  color: var(--ink-3);
+  text-align: center;
+}
+.figure svg text {
+  font-family: var(--mono);
+}
+.art {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+.art-empty {
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 4px;
+  padding: 16px;
+  border: 1px dashed var(--line-2);
+  background: var(--bg-2);
+  color: var(--ink-3);
+  font-size: 13px;
+  text-align: center;
+}
+.art-empty .dim {
+  color: var(--line-2);
+}
+.art-alt {
+  margin-top: 8px;
+  color: var(--ink-2);
+  max-width: 30ch;
+}
+.home-row {
+  cursor: pointer;
+  outline: none;
+}
+.home-row:focus-visible rect:first-child {
+  stroke: var(--ink-3);
+}
+.explain {
+  max-width: 62ch;
+  padding-left: 20px;
+  border-left: 2px solid var(--line-2);
+  text-align: left;
 }

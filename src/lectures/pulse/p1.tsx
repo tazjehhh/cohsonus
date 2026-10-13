@@ -8,6 +8,7 @@ import { useKeys } from "../../ui/taps";
 import { cycleDistance, meanPhase } from "../../music/timing";
 import { stepsOf } from "../../music/model";
 import { Listen, TapPad, Verdict, type TapResult } from "./common";
+import { Explain } from "../../ui/Explain";
 import { L, TEMPO_LOOPS, findOne, fourFloorStart, house124 } from "./loops";
 
 export function TapAlong({ complete, saved }: StepProps) {
@@ -17,7 +18,7 @@ export function TapAlong({ complete, saved }: StepProps) {
   const ok = res && res.rel !== "off";
   return (
     <div className="col">
-      <h2 className="prompt">Tap along with your head.</h2>
+      <h2 className="prompt">Press play, nod along, and tap in time with the beat.</h2>
       <PlayButton playing={t.playing} onClick={t.toggle} step={t.step} />
       <TapPad
         playing={t.playing}
@@ -30,12 +31,32 @@ export function TapAlong({ complete, saved }: StepProps) {
         }}
       />
       <Verdict ok={res ? res.rel !== "off" : null}>
-        {res?.rel === "same" && <>The track runs at 124 BPM. Beats per minute: the pulse, counted.</>}
-        {res?.rel === "half" && <>You tapped every second beat: half of 124. Same pulse, counted slower.</>}
-        {res?.rel === "double" && <>You tapped twice per beat: double of 124. Same pulse, counted in between.</>}
-        {res?.rel === "off" && count < 16 && <>Keep going. Let your head lead, not your hand.</>}
-        {res?.rel === "off" && count >= 16 && <>The track runs at 124 BPM. Try again later with a song you know.</>}
+        {res?.rel === "same" && <>You tapped at the tempo of the track: 124 BPM.</>}
+        {res?.rel === "half" && <>You tapped on every second beat, which comes to 62 BPM.</>}
+        {res?.rel === "double" && <>You tapped twice for every beat, which comes to 248 BPM.</>}
+        {res?.rel === "off" && count < 16 && <>The taps are not steady yet. Keep going, and let the movement of your head set the timing.</>}
+        {res?.rel === "off" && count >= 16 && <>The track runs at 124 BPM.</>}
       </Verdict>
+      {res && (res.rel !== "off" || count >= 16) && (
+        <Explain>
+          <p>
+            <strong>Tempo</strong> is the speed of the beat. It is measured in <strong>beats per minute (BPM)</strong>: the number of beats that fall within one
+            minute. At 124 BPM a new beat arrives about every half second (60 ÷ 124 = 0.48 seconds).
+          </p>
+          {res.rel === "half" && (
+            <p>
+              Counting every second beat is a common way to follow a track, and it halves the number. By convention the tempo of a track is given for the beat that
+              the drums mark most clearly; here that is the kick drum, which plays on every beat.
+            </p>
+          )}
+          {res.rel === "double" && (
+            <p>
+              Tapping twice for every beat doubles the number. By convention the tempo of a track is given for the beat that the drums mark most clearly; here that
+              is the kick drum, which plays on every beat.
+            </p>
+          )}
+        </Explain>
+      )}
     </div>
   );
 }
@@ -59,7 +80,7 @@ export function TempoSort({ complete, saved }: StepProps) {
   };
   return (
     <div className="col">
-      <h2 className="prompt">Put them in order, slowest to fastest.</h2>
+      <h2 className="prompt">Put the four loops in order from slowest to fastest.</h2>
       <div className="sortrow">
         <span className="label">slow</span>
         {order.map((id, i) => {
@@ -79,7 +100,15 @@ export function TempoSort({ complete, saved }: StepProps) {
           Check
         </button>
       )}
-      <Verdict ok={checked ? solved : null}>{checked && (solved ? "Right order." : `${placed} of 4 in the right place.`)}</Verdict>
+      <Verdict ok={checked ? solved : null}>{checked && (solved ? "Correct." : `${placed} of the four loops ${placed === 1 ? "is" : "are"} in the right place.`)}</Verdict>
+      {solved && (
+        <Explain>
+          <p>
+            The four loops run at 88, 112, 124 and 136 BPM. Each genre tends to keep to a typical tempo, and these loops sit near the usual tempo of their genres:
+            boom bap, indie rock, house and techno.
+          </p>
+        </Explain>
+      )}
     </div>
   );
 }
@@ -162,14 +191,26 @@ export function FindTheOne({ complete, saved }: StepProps) {
 
   return (
     <div className="col">
-      <h2 className="prompt">{unrolled ? "One bar. Four beats." : "Tap where it starts over."}</h2>
+      <h2 className="prompt">{unrolled ? "Bars and beats" : "Press play and tap the space bar each time the loop starts over."}</h2>
       <PlayButton playing={t.playing} onClick={t.toggle} step={t.step} />
       <BeatCircle player={t.player} playing={t.playing} barSteps={bar} taps={found ? [] : taps.map((p) => p / bar)} numbers={found} unrolled={unrolled} />
       <Verdict ok={found ? true : taps.length >= 6 ? false : null}>
-        {found && !unrolled && "That's the one. Count from there: 1, 2, 3, 4."}
-        {unrolled && "A bar: one turn of the circle, laid flat. Count it: 1, 2, 3, 4."}
-        {!found && taps.length >= 6 && "Listen for the chord. It changes right where the bar starts."}
+        {found && !unrolled && "Correct. Count from there: 1, 2, 3, 4."}
+        {unrolled && "Correct. The loop starts over on the first beat of the bar."}
+        {!found && taps.length >= 6 && "Not yet. Listen for the chord: it changes exactly where the loop starts over."}
       </Verdict>
+      {unrolled && (
+        <Explain>
+          <p>
+            Beats are grouped into <strong>bars</strong> (also called <strong>measures</strong>). In most popular music a bar holds four beats, which is called{" "}
+            <strong>4/4 time</strong>. The first beat of each bar is the <strong>downbeat</strong>, usually called &ldquo;the one&rdquo;.
+          </p>
+          <p>
+            Chords and drum patterns tend to change on the downbeat, which is why the chord change marked the point where the loop started over. The circle and the
+            line show the same bar: once around the circle is one bar, and laid flat it reads from left to right, the way music is written down.
+          </p>
+        </Explain>
+      )}
       {!t.playing && !found && (
         <span className="sub">
           <kbd>Space</kbd>
@@ -187,10 +228,22 @@ export function FourOnTheFloor({ complete, saved }: StepProps) {
   }, [solved, complete]);
   return (
     <div className="col">
-      <h2 className="prompt">A kick on every beat.</h2>
+      <h2 className="prompt">Place a kick drum on every beat of the bar.</h2>
       <Studio loop={loop} onChange={setLoop} lanes={[L.kick]} tempo={[70, 160]} />
-      <Verdict ok={solved || null}>{solved && "Four on the floor: the engine of disco and house."}</Verdict>
-      {solved && <Listen loop={{ ...loop, bpm: 124 }} label="Same thing at 124 BPM" />}
+      <Verdict ok={solved || null}>{solved && "Correct."}</Verdict>
+      {solved && (
+        <Explain>
+          <p>
+            A kick drum on every beat of the bar is called <strong>four on the floor</strong>. The name comes from the drum kit: the kick drum is played with a foot
+            pedal on the floor, and here it plays all four beats.
+          </p>
+          <p>
+            The pattern drives disco from the 1970s, such as Donna Summer&apos;s I Feel Love (1977), and house and techno from the 1980s onward. House usually
+            plays it between 120 and 128 BPM.
+          </p>
+        </Explain>
+      )}
+      {solved && <Listen loop={{ ...loop, bpm: 124 }} label="The same pattern at 124 BPM" />}
     </div>
   );
 }

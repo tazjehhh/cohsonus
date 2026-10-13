@@ -16,3 +16,8 @@
 - All motion runs at 12 drawings a second at most, at real-time speed: stepped easing tokens in CSS, held keyframes for the beat ring, and a drawing clock (useDrawings) for meters, spectrum and the beat circle, locked to the beat. Measured: meters redraw 10.3 times a second at 124 BPM, never closer than 1/12 s.
 - Hub rebuilt as a tree that branches down from Anatomy, with lines routed through their own gaps; plus All and Released views, remembered per browser.
 - Path view reworked to guide the eye: one big card for the lecture to do next (the map is centred on it), small title cards down to one row below it, dots further down drawn in toward the centre, line brightness by role (walked, ahead, far), hovering a lecture lights its branches.
+- Motion moved from 12 to 24 drawings a second (owner: 12 did not look right); same durations, tokens and the beat ring redrawn for 24.
+- Pulse part 2 A/B fixed: both versions now carry a bass line and chords that start each bar, so the swapped snare in A is audible as wrong.
+- Pages: `Page`, `Spread`, `Figure`, `Art` (owner picture slots) and four composed pages: building a track in layers (Anatomy 1), frequency (Anatomy 2), tempo ranges by genre (Pulse 1), the origins of swing (Pulse 4). Each has a figure that moves or plays on the 24-a-second clock.
+- Text rewritten in a textbook voice (draft rules in the session; rule doc after owner approval): prompts as complete sentences, neutral one-line feedback, `Explain` blocks with defined terms after each attempt.
+

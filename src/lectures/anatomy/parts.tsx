@@ -6,6 +6,7 @@ import { Choice } from "../../ui/Choice";
 import { Strips } from "../../ui/Strips";
 import { Spectrum } from "../../ui/Spectrum";
 import { ROLES, TRACKS, lettered, type Role, type Stem, type Track } from "./tracks";
+import { Explain } from "../../ui/Explain";
 
 export const ROLE_COLOR: Record<Role, string> = {
   drums: "#3987e5",
@@ -74,8 +75,8 @@ export function MuteAndDescribe({ complete, saved }: StepProps) {
 
   return (
     <div className="col">
-      <h2 className="prompt">Mute each channel. What goes missing?</h2>
-      <p className="sub">Then mark where it sits: low, mid or high.</p>
+      <h2 className="prompt">Mute each channel in turn and listen to what goes missing.</h2>
+      <p className="sub">Then mark whether the sound sits low, in the middle or high.</p>
       <Transport t={t} />
       <Strips
         player={t.player}
@@ -117,10 +118,10 @@ export function Reveal({ complete, memory }: StepProps) {
   const stems = TRACKS.house.stems;
   return (
     <div className="col">
-      <h2 className="prompt">Six sounds. Four jobs.</h2>
+      <h2 className="prompt">Six sounds and four jobs</h2>
       {count && (
         <p className="sub">
-          You counted <span className="mono">{count}</span>.
+          You counted <span className="mono">{count}</span> sounds{count === "6" ? ", which is correct." : ". The track has six."}
         </p>
       )}
       <Transport t={t} />
@@ -152,6 +153,17 @@ export function Reveal({ complete, memory }: StepProps) {
           );
         })}
       </div>
+      <Explain>
+        <p>
+          Each sound in a track has a <strong>role</strong>: the job it does for the music as a whole. Four roles cover almost all popular music.
+        </p>
+        <p>
+          The <strong>drums</strong> keep time: they mark the beat and divide it into a rhythm. The <strong>bass</strong> plays the lowest notes and gives the music
+          its foundation. The <strong>harmony</strong> is made of several notes sounding together, called <strong>chords</strong>, which set the mood. The{" "}
+          <strong>melody</strong> is the line of single notes that a listener can sing or hum; in songs the voice usually carries it.
+        </p>
+        <p>In this track the drums are three separate sounds: kick, clap and hi-hats. A single role can be played by several instruments at once.</p>
+      </Explain>
     </div>
   );
 }
@@ -162,7 +174,7 @@ export function BassMoment({ complete, saved }: StepProps) {
   const [solved, setSolved] = useState(!!saved);
   return (
     <div className="col">
-      <h2 className="prompt">Mute the bass. Then bring it back.</h2>
+      <h2 className="prompt">Mute the bass, listen for a few seconds, then bring it back.</h2>
       <Transport t={t} />
       <Strips
         player={t.player}
@@ -172,7 +184,7 @@ export function BassMoment({ complete, saved }: StepProps) {
       />
       {flips >= 2 && (
         <div className="col fade-in">
-          <h3 className="prompt small">What changed?</h3>
+          <h3 className="prompt small">What changed when the bass was muted?</h3>
           <Choice
             options={[
               { id: "melody", label: "The melody changed" },
@@ -188,9 +200,17 @@ export function BassMoment({ complete, saved }: StepProps) {
             }}
           />
           {solved && (
-            <p className="sub fade-in">
-              Bass is felt more than heard. On small speakers it almost vanishes. Take it away and everything floats.
-            </p>
+            <Explain>
+              <p>
+                Without the bass the track loses its weight. The bass plays the lowest notes of the music, and much of its energy lies below about 100 Hz, where it is
+                felt in the body as much as it is heard. Small speakers, such as those in phones and laptops, reproduce these low notes poorly, which is why a bass
+                line can seem to vanish on them.
+              </p>
+              <p>
+                The bass also links the drums to the harmony. It usually plays the <strong>root</strong> of each chord, the note on which the chord is built, in a
+                rhythm that locks with the kick drum.
+              </p>
+            </Explain>
           )}
         </div>
       )}
@@ -255,17 +275,37 @@ function RoleAssign({ track, order, onSolved, saved }: { track: Track; order: nu
         )}
       </div>
       <div className={`verdict ${checked ? (solved ? "good" : "miss") : ""}`} aria-live="polite">
-        {checked && (solved ? "All six." : `${wrong.length} not right yet.`)}
+        {checked &&
+          (solved
+            ? "Correct. All six channels are assigned to the right job."
+            : `Not yet: ${wrong.length} ${wrong.length === 1 ? "channel is" : "channels are"} assigned to the wrong job.`)}
       </div>
     </div>
   );
 }
 
 export function RoleTest({ complete, saved }: StepProps) {
+  const [solved, setSolved] = useState(!!saved);
   return (
     <div className="col">
-      <h2 className="prompt">New track. Which job does each channel do?</h2>
-      <RoleAssign track={TRACKS.boombap} order={[4, 2, 0, 5, 1, 3]} saved={!!saved} onSolved={(attempts) => complete({ attempts })} />
+      <h2 className="prompt">This is a different track. Assign each channel to its job.</h2>
+      <RoleAssign
+        track={TRACKS.boombap}
+        order={[4, 2, 0, 5, 1, 3]}
+        saved={!!saved}
+        onSolved={(attempts) => {
+          setSolved(true);
+          complete({ attempts });
+        }}
+      />
+      {solved && (
+        <Explain>
+          <p>
+            This track is a <strong>boom bap</strong> beat, a style of hip-hop. Its instruments differ from the house track: the drums sound as if recorded through
+            an old microphone, the bass is a deep, round sub bass, an electric piano plays the chords and a vibraphone carries the melody. The four jobs are the same.
+          </p>
+        </Explain>
+      )}
     </div>
   );
 }
@@ -301,13 +341,13 @@ export function SameJob({ complete, saved }: StepProps) {
   if (done)
     return (
       <div className="col">
-        <h2 className="prompt">Bass, harmony, melody: found in all three.</h2>
+        <h2 className="prompt">The same jobs appear in all three tracks.</h2>
       </div>
     );
 
   return (
     <div className="col">
-      <h2 className="prompt">Same job, different track.</h2>
+      <h2 className="prompt">Find the channel that does the same job in two other tracks.</h2>
       <div className="label">
         Round {round + 1} of {ROUNDS.length}
       </div>
@@ -315,7 +355,7 @@ export function SameJob({ complete, saved }: StepProps) {
         <span className="track-tag mono">Track 1</span>
         <PlayButton playing={house.playing} onClick={() => (house.playing ? house.stop() : listen(house, target!.id))} size="sm" label={`Play the ${target!.name}`} />
         <span>
-          This is the <strong>{target!.name.toLowerCase()}</strong>. Find the channel doing the same job in tracks 2 and 3.
+          This is the <strong>{target!.name.toLowerCase()}</strong> of track 1. Find the channel that does the same job in track 2 and in track 3.
         </span>
       </div>
       {others.map((o, k) => {
@@ -366,7 +406,7 @@ export function SameJob({ complete, saved }: StepProps) {
         )}
       </div>
       <div className={`verdict ${checked ? (allRight ? "good" : "miss") : ""}`} aria-live="polite">
-        {checked && (allRight ? "Both right." : "Not both. Listen to each again.")}
+        {checked && (allRight ? "Correct in both tracks." : "Not yet: at least one choice is wrong. Listen to each channel again.")}
       </div>
     </div>
   );
@@ -391,7 +431,7 @@ export function Instruments({ complete }: StepProps) {
   const byRole = (w: Track, r: Role) => w.stems.filter((s) => s.role === r && (r !== "drums" || s.id === "kick"));
   return (
     <div className="col">
-      <h2 className="prompt">Same job. Different instruments.</h2>
+      <h2 className="prompt">The same jobs, played by different instruments</h2>
       <table className="matrix">
         <thead>
           <tr>
@@ -427,6 +467,18 @@ export function Instruments({ complete }: StepProps) {
           ))}
         </tbody>
       </table>
+      <Explain>
+        <p>
+          The three tracks come from three different ways of making music. The house track is made with <strong>synthesizers</strong> and a{" "}
+          <strong>drum machine</strong>, electronic instruments that generate their own sound. The boom bap track follows hip-hop production, which builds beats
+          from <strong>samples</strong>: short recordings, often taken from other records. The indie track is played by a band, with drum kit, electric bass and
+          electric guitar.
+        </p>
+        <p>
+          In each of them the four jobs are done by different instruments. A role is therefore defined by what a sound does in the music, not by the instrument that
+          plays it.
+        </p>
+      </Explain>
     </div>
   );
 }
@@ -439,10 +491,10 @@ export function WhereItLives({ complete, saved }: StepProps) {
   const right = picked.length === 2 && picked.includes("kick") && picked.includes("bass");
   return (
     <div className="col">
-      <h2 className="prompt">Where does each sound live?</h2>
+      <h2 className="prompt">Play the track and watch where each sound sits, from low to high.</h2>
       <Transport t={t} />
       <Spectrum player={t.player} lines={lines} playing={t.playing} />
-      <h3 className="prompt small">Which two fight over the lowest space?</h3>
+      <h3 className="prompt small">Which two sounds compete for the lowest range?</h3>
       <div className="choices">
         {TRACKS.house.stems.map((s) => {
           const on = picked.includes(s.id);
@@ -475,8 +527,20 @@ export function WhereItLives({ complete, saved }: StepProps) {
         </button>
       )}
       <div className={`verdict ${checked ? (right ? "good" : "miss") : ""}`} aria-live="polite">
-        {checked && (right ? "Kick and bass share the floor. Keeping them out of each other's way is a craft of its own." : "One of them lives higher up.")}
+        {checked && (right ? "Correct: the kick and the bass." : "Not yet: one of the two sits higher up.")}
       </div>
+      {checked && right && (
+        <Explain>
+          <p>
+            The chart is a <strong>spectrum</strong>: it shows how much energy each sound has from the lowest range on the left to the highest on the right. The
+            kick and the bass both have most of their energy at the far left.
+          </p>
+          <p>
+            When two sounds share a range they cover each other up, an effect called <strong>masking</strong>, and the low end of the mix becomes muddy. Keeping the
+            kick and the bass apart is one of the basic tasks of mixing.
+          </p>
+        </Explain>
+      )}
     </div>
   );
 }
@@ -520,7 +584,7 @@ export function Map({ complete, saved }: StepProps) {
         onResult={(role) => complete({ role })}
       />
       <p className="sub">
-        Taking any of them from an old record: <span className="mono">03</span> Sampling I.
+        Taking a part from an existing record is called sampling; see <span className="mono">03</span> Sampling I.
       </p>
     </div>
   );
@@ -531,7 +595,7 @@ export function Map({ complete, saved }: StepProps) {
 export function RefreshRoles({ complete }: StepProps) {
   return (
     <div className="col">
-      <h2 className="prompt">Which job does each channel do?</h2>
+      <h2 className="prompt">Assign each channel of this track to its job.</h2>
       <RoleAssign track={TRACKS.indie} order={[2, 4, 1, 3, 0, 5]} onSolved={(attempts) => complete({ pass: attempts === 1 })} />
     </div>
   );
@@ -542,7 +606,7 @@ export function RefreshFloor({ complete }: StepProps) {
   const chans = useMemo(() => lettered(TRACKS.boombap, [2, 5, 0, 4, 1, 3]), []);
   return (
     <div className="col">
-      <h2 className="prompt">Which two channels share the lowest space?</h2>
+      <h2 className="prompt">Which two channels share the lowest range?</h2>
       <Transport t={t} />
       <Strips player={t.player} playing={t.playing} solo strips={chans.map((c) => ({ id: c.stem.id, title: <span className="mono">{c.letter}</span> }))} />
       <PairPick
@@ -589,7 +653,7 @@ function PairPick({ options, answer, onDone }: { options: { id: string; label: s
           Check
         </button>
       )}
-      <div className={`verdict ${solved ? "good" : tries ? "miss" : ""}`}>{solved ? "Kick and bass." : tries ? "Not that pair." : ""}</div>
+      <div className={`verdict ${solved ? "good" : tries ? "miss" : ""}`}>{solved ? "Correct: the kick and the bass." : tries ? "Not yet: that is not the pair." : ""}</div>
     </div>
   );
 }

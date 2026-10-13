@@ -7,6 +7,8 @@ import { Choice } from "../../ui/Choice";
 import { gridDiff, snareBeats, type Miss } from "../../music/checks";
 import { stepsOf } from "../../music/model";
 import { Listen, Verdict, Versions } from "./common";
+import { Explain } from "../../ui/Explain";
+import type { ReactNode } from "react";
 import { L, backbeatA, backbeatB, fixed, kickSnareEmpty, rebuildStart, rebuildTarget } from "./loops";
 
 export function NodBuild({ complete, saved }: StepProps) {
@@ -17,7 +19,7 @@ export function NodBuild({ complete, saved }: StepProps) {
   }, [ready, loop, complete]);
   return (
     <div className="col">
-      <h2 className="prompt">Make something you can nod your head to.</h2>
+      <h2 className="prompt">Build a beat with the kick and the snare that you can nod your head to.</h2>
       <Studio loop={loop} onChange={setLoop} lanes={[L.kick, L.snare, fixed(L.hat)]} />
     </div>
   );
@@ -31,7 +33,7 @@ export function Backbeat({ complete, saved, memory }: StepProps) {
   const ownBeats = own ? snareBeats(own) : [];
   return (
     <div className="col">
-      <h2 className="prompt">Which one makes you nod?</h2>
+      <h2 className="prompt">Which of the two versions makes you nod your head?</h2>
       <Versions
         items={[
           { id: "a", label: "A", loop: backbeatA },
@@ -51,9 +53,21 @@ export function Backbeat({ complete, saved, memory }: StepProps) {
       />
       {pick && (
         <div className="col fade-in" style={{ gap: 18 }}>
-          <p className="sub">
-            {pick === "b" ? "B." : "Most heads nod to B."} The snare on 2 and 4 is the <strong>backbeat</strong>. In A, kick and snare swapped places.
-          </p>
+          <Verdict ok={pick === "b"}>{pick === "b" ? "Most listeners choose B as well." : "Most listeners choose B."}</Verdict>
+          <Explain>
+            <p>
+              In version B the snare drum plays on beats 2 and 4. An accent on these two beats is called the <strong>backbeat</strong>. It answers the kick drum on 1
+              and 3, and the alternation of low kick and sharp snare gives the head a down and an up to move to.
+            </p>
+            <p>
+              In version A the kick and the snare have swapped places, so the snare falls on 1 and 3 and the bar feels stiff, like a march. The bass and the chords
+              are the same in both versions; they start on beat 1 and mark where each bar begins.
+            </p>
+            <p>
+              The backbeat became the standard of popular music with rhythm and blues and rock and roll in the 1950s; the New Orleans drummer Earl Palmer is often
+              credited with establishing it on record. In house music a hand clap usually takes the role of the snare.
+            </p>
+          </Explain>
           <div className="pair">
             <div className="col" style={{ gap: 6 }}>
               <span className="label">A</span>
@@ -66,8 +80,8 @@ export function Backbeat({ complete, saved, memory }: StepProps) {
           </div>
           {own && (
             <p className="sub">
-              Your beat from before: snare on {beatsText(ownBeats)}
-              {ownBeats.length === 2 && ownBeats[0] === 2 && ownBeats[1] === 4 ? ". A backbeat already." : "."}
+              In the beat you built before, the snare is on {beatsText(ownBeats)}
+              {ownBeats.length === 2 && ownBeats[0] === 2 && ownBeats[1] === 4 ? ", which is already a backbeat." : "."}
             </p>
           )}
         </div>
@@ -83,8 +97,9 @@ export function Rebuild({
   start,
   lanes,
   editable,
-  prompt = "Listen. Build the same beat.",
+  prompt = "Listen to the beat, then build the same pattern in the grid.",
   onCheck,
+  explain,
 }: StepProps & {
   target: Loop;
   start: Loop;
@@ -92,6 +107,8 @@ export function Rebuild({
   editable: string[];
   prompt?: string;
   onCheck?: (solved: boolean, attempts: number) => void;
+  /** Written explanation shown once the pattern matches. */
+  explain?: ReactNode;
 }) {
   const [loop, setLoop] = useState<Loop>(saved ? target : start);
   const [attempts, setAttempts] = useState(0);
@@ -127,12 +144,37 @@ export function Rebuild({
         </button>
       )}
       <Verdict ok={misses === null ? null : solved}>
-        {misses !== null && (solved ? "Same beat." : `${misses.length} ${misses.length === 1 ? "cell" : "cells"} off.${attempts >= 2 ? " Marked in red." : ""}`)}
+        {misses !== null &&
+          (solved
+            ? "Correct. Your pattern matches the beat."
+            : `Not yet: ${misses.length} ${misses.length === 1 ? "cell differs" : "cells differ"} from the beat.${attempts >= 2 ? " They are marked in red." : ""}`)}
       </Verdict>
+      {solved && explain && <Explain>{explain}</Explain>}
     </div>
   );
 }
 
 export function RebuildBoomBap(p: StepProps) {
-  return <Rebuild {...p} target={rebuildTarget} start={rebuildStart} lanes={[L.kick, L.snare, L.hat]} editable={["kick", "snare"]} />;
+  return (
+    <Rebuild
+      {...p}
+      target={rebuildTarget}
+      start={rebuildStart}
+      lanes={[L.kick, L.snare, L.hat]}
+      editable={["kick", "snare"]}
+      explain={
+        <>
+          <p>
+            This pattern is a <strong>boom bap</strong> beat, the drum style of East Coast hip-hop in the late 1980s and the 1990s. The name imitates its two main
+            sounds: the &ldquo;boom&rdquo; of the kick drum and the &ldquo;bap&rdquo; of the snare.
+          </p>
+          <p>
+            The snare keeps the backbeat on 2 and 4. The kick plays on 1 and then moves off the beats, to the halfway points after 2 and after 3. These in-between
+            points are counted with &ldquo;and&rdquo;: one and two and three and four and. A kick on &ldquo;and&rdquo; arrives before the listener expects it,
+            which gives the beat its push.
+          </p>
+        </>
+      }
+    />
+  );
 }

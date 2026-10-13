@@ -197,11 +197,11 @@ function Outro({ lecture, part, go }: { lecture: LectureDef; part: number; go: (
   const last = part + 1 >= lecture.parts.length;
   return (
     <div className="col outro fade-in">
-      <div className="label">Part {part + 1} done</div>
+      <div className="label">End of part {part + 1}</div>
       <h1 className="intro-title">{p.title}</h1>
       {p.homework && (
         <div className="homework">
-          <div className="label">Until next time</div>
+          <div className="label">Assignment</div>
           <p>{p.homework.task}</p>
           {p.homework.listen && <ListenList items={p.homework.listen} />}
         </div>
