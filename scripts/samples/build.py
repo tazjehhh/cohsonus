@@ -11,7 +11,8 @@ Run:  python3 scripts/samples/build.py            (all)
       python3 scripts/samples/build.py kit.snare  (one instrument)
 
 Surge XT renders need SURGEPY (folder with surgepy*.so) and SURGE_PATCHES
-(Surge's resources/data/patches_factory). Without them those instruments are skipped.
+(Surge's resources/data/patches_factory; the third-party bank is found next to it).
+Without them those instruments are skipped.
 """
 import json
 import os
@@ -66,6 +67,12 @@ SOURCES = {
         "author": "Surge Synth Team",
         "license": "Rendered audio; Surge XT is GPL-3.0",
     },
+    "surge-emu": {
+        "url": "https://github.com/surge-synthesizer/surge/tree/main/resources/data/patches_3rdparty/Emu/Drums",
+        "title": "Surge XT third-party patches, Emu drums, rendered offline",
+        "author": "The Emu (patches), Surge Synth Team (synth)",
+        "license": "Rendered audio; Surge XT and its bundled patches are GPL-3.0",
+    },
 }
 
 NOTE = {"c": 0, "db": 1, "d": 2, "eb": 3, "e": 4, "f": 5, "gb": 6, "g": 7, "ab": 8, "a": 9, "bb": 10, "b": 11}
@@ -113,25 +120,78 @@ def fetch(name: str, path: str) -> Path:
 # ---------------------------------------------------------------- audio
 
 
-def load(path: Path, mono=True) -> tuple[np.ndarray, int]:
+def load(path: Path, mono=False) -> tuple[np.ndarray, int]:
     x, sr = sf.read(str(path), always_2d=True, dtype="float64")
     if mono:
         x = x.mean(axis=1, keepdims=True)
     return x, sr
 
 
-def mix(parts: list[tuple[Path, float]], mono=True) -> tuple[np.ndarray, int]:
-    out, sr0 = None, None
-    for path, w in parts:
-        x, sr = load(path, mono)
-        sr0 = sr0 or sr
-        assert sr == sr0, f"sample rates differ in {parts}"
-        if out is None:
-            out = x * w
-        else:
-            n = max(len(out), len(x))
-            out = np.pad(out, ((0, n - len(out)), (0, 0))) + np.pad(x * w, ((0, n - len(x)), (0, 0)))
+def mix(parts: list[tuple[Path, float]], mono=False) -> tuple[np.ndarray, int]:
+    """Sums the parts. Stereo sources stay stereo (mono parts sit in the middle); a pair
+    whose sides are identical is stored as mono."""
+    loaded = [(load(path, mono), w) for path, w in parts]
+    sr0 = loaded[0][0][1]
+    assert all(sr == sr0 for (_, sr), _ in loaded), f"sample rates differ in {parts}"
+    ch = max(x.shape[1] for (x, _), _ in loaded)
+    n = max(len(x) for (x, _), _ in loaded)
+    out = np.zeros((n, ch))
+    for (x, _), w in loaded:
+        out[: len(x)] += (x if x.shape[1] == ch else np.repeat(x, ch, axis=1)) * w
+    if ch == 2 and np.abs(out[:, 0] - out[:, 1]).max() < 1e-6:
+        out = out[:, :1]
     return out, sr0
+
+
+# ---------------------------------------------------------------- filters (RBJ biquads, run causally)
+
+
+def biquad(kind: str, f0: float, sr: int, q: float = 0.7071) -> tuple[np.ndarray, np.ndarray]:
+    w = 2 * np.pi * f0 / sr
+    alpha = np.sin(w) / (2 * q)
+    c = np.cos(w)
+    if kind == "highpass":
+        b = [(1 + c) / 2, -(1 + c), (1 + c) / 2]
+    elif kind == "notch":
+        b = [1, -2 * c, 1]
+    else:
+        raise ValueError(kind)
+    a = [1 + alpha, -2 * c, 1 - alpha]
+    return np.array(b) / a[0], np.array(a) / a[0]
+
+
+def run_biquad(x: np.ndarray, b: np.ndarray, a: np.ndarray) -> np.ndarray:
+    y = np.zeros_like(x)
+    for ch in range(x.shape[1]):
+        xs, ys = x[:, ch].tolist(), [0.0] * len(x)
+        x1 = x2 = y1 = y2 = 0.0
+        b0, b1, b2, a1, a2 = b[0], b[1], b[2], a[1], a[2]
+        for i, v in enumerate(xs):
+            out = b0 * v + b1 * x1 + b2 * x2 - a1 * y1 - a2 * y2
+            x2, x1, y2, y1 = x1, v, y1, out
+            ys[i] = out
+        y[:, ch] = ys
+    return y
+
+
+def highpass(x: np.ndarray, sr: int, f0: float) -> np.ndarray:
+    """4th-order Butterworth high-pass (two biquads)."""
+    for q in (0.5412, 1.3066):
+        x = run_biquad(x, *biquad("highpass", f0, sr, q))
+    return x
+
+
+def dehum(x: np.ndarray, sr: int, base=60.0) -> np.ndarray:
+    """Narrow notches on mains hum and its first two harmonics."""
+    for k in (1, 2, 3):
+        x = run_biquad(x, *biquad("notch", base * k, sr, 30.0))
+    return x
+
+
+def saturate(x: np.ndarray, drive: float) -> np.ndarray:
+    """tanh saturation at a fixed drive on the note's own peak, so every note gets the same harmonics."""
+    peak = np.abs(x).max() or 1.0
+    return np.tanh(drive * x / peak) / np.tanh(drive) * peak
 
 
 def trim(x: np.ndarray, sr: int, max_len: float, fade=0.04) -> np.ndarray:
@@ -192,7 +252,8 @@ def vir(mic: str, piece_dir: str, name: str) -> Path:
 KIT_MICS = {
     "kick": [("kickmic", 1.0), ("oh", 0.5), ("room", 0.35)],
     "snare": [("snaremic", 1.0), ("oh", 0.6), ("room", 0.4)],
-    "hh": [("oh", 1.0), ("room", 0.35)],
+    # the room pair carries 60 Hz hum and the kit's low ring; hats are the overhead pair alone
+    "hh": [("oh", 1.0)],
     "htom": [("oh", 1.0), ("mid", 0.6), ("room", 0.4)],
     "ltom": [("oh", 1.0), ("mid", 0.6), ("room", 0.4)],
     "crash": [("oh", 1.0), ("room", 0.5)],
@@ -367,7 +428,7 @@ def wurli():
     return zones
 
 
-def surge(patch: str, keys, hold: float, tail: float, vel=110, mono=True):
+def surge(patch: str, keys, hold: float, tail: float, vel=110, bank="patches_factory"):
     sp, pp = os.environ.get("SURGEPY"), os.environ.get("SURGE_PATCHES")
     if not sp or not pp:
         return None
@@ -375,21 +436,44 @@ def surge(patch: str, keys, hold: float, tail: float, vel=110, mono=True):
     from surge_render import render  # noqa: E402
 
     out = CACHE / "surge" / re.sub(r"\W+", "_", patch)
-    rendered = render(str(Path(pp) / f"{patch}.fxp"), keys, vel, hold, tail, str(out), "n")
-    return [dict(parts=[(Path(p), 1.0)], root=k, vlo=0, vhi=1, rr=1, max=hold + tail, mono=mono) for k, p in rendered]
+    rendered = render(str(Path(pp).parent / bank / f"{patch}.fxp"), keys, vel, hold, tail, str(out), "n")
+    return [dict(parts=[(Path(p), 1.0)], root=k, vlo=0, vhi=1, rr=1, max=hold + tail) for k, p in rendered]
 
+
+def surge_drum(patch: str, hold: float, tail: float, vels=(60, 90, 120), takes=2, bank="patches_3rdparty"):
+    """A drum patch at a few velocities, rendered more than once: noise differs per take (round robin)."""
+    sp, pp = os.environ.get("SURGEPY"), os.environ.get("SURGE_PATCHES")
+    if not sp or not pp:
+        return None
+    sys.path.insert(0, str(Path(__file__).parent))
+    from surge_render import Renderer, SR  # noqa: E402
+
+    out = CACHE / "surge" / re.sub(r"\W+", "_", patch)
+    out.mkdir(parents=True, exist_ok=True)
+    r = Renderer(str(Path(pp).parent / bank / f"{patch}.fxp"))
+    edges = np.linspace(0, 1, len(vels) + 1)
+    zones = []
+    for i, vel in enumerate(vels):
+        for take in range(1, takes + 1):
+            p = out / f"v{vel}_rr{take}.wav"
+            sf.write(str(p), r.note(60, vel, hold, tail).T, SR, subtype="FLOAT")
+            zones.append(dict(parts=[(p, 1.0)], vlo=float(edges[i]), vhi=float(edges[i + 1]), rr=take, max=hold + tail))
+    return zones
+
+
+SUB_DRIVE = 2.5
 
 INSTRUMENTS = {
     "kit.kick": dict(src="virtuosity", make=lambda: drum_kick(False)),
     "kit.snare": dict(src="virtuosity", make=lambda: drum_snare(False)),
-    "kit.hat": dict(src="virtuosity", make=lambda: drum_hat(False), choke="hat"),
-    "kit.open": dict(src="virtuosity", make=lambda: drum_open(False), choke="hat", chokedBy=True),
+    "kit.hat": dict(src="virtuosity", make=lambda: drum_hat(False), choke="hat", highpass=300, layer_span=12),
+    "kit.open": dict(src="virtuosity", make=lambda: drum_open(False), choke="hat", chokedBy=True, highpass=200, layer_span=9),
     "kit.tomHigh": dict(src="virtuosity", make=lambda: drum_tom("htom")),
     "kit.tomLow": dict(src="virtuosity", make=lambda: drum_tom("ltom")),
     "kit.crash": dict(src="virtuosity", make=drum_crash),
     "lofi.kick": dict(src="virtuosity", make=lambda: drum_kick(True)),
     "lofi.snare": dict(src="virtuosity", make=lambda: drum_snare(True)),
-    "lofi.hat": dict(src="virtuosity", make=lambda: drum_hat(True), choke="lofihat"),
+    "lofi.hat": dict(src="virtuosity", make=lambda: drum_hat(True), choke="lofihat", dehum=True, highpass=300, layer_span=12),
     "perc.clap": dict(src="vcsl", make=clap),
     "perc.click": dict(src="vcsl", make=click),
     "keys.vibes": dict(src="vcsl", make=vibes, pitched=True, release=1.2),
@@ -400,8 +484,13 @@ INSTRUMENTS = {
     "synth.organ": dict(src="surge", make=lambda: surge("Keys/House Organ", list(range(72, 104, 4)), 0.9, 0.4), pitched=True, release=0.08),
     "synth.lead": dict(src="surge", make=lambda: surge("Leads/Classic Lead 1", list(range(68, 104, 4)), 1.2, 0.5), pitched=True, release=0.1),
     "synth.pad": dict(src="surge", make=lambda: surge("Pads/MKS-70 Warm Pad", list(range(56, 92, 4)), 4.0, 1.5), pitched=True, release=0.9),
-    "synth.sub": dict(src="surge", make=lambda: surge("Basses/Sub 1", list(range(38, 66, 4)), 2.0, 0.3), pitched=True, release=0.08),
+    # a pure sine vanishes on laptop speakers; saturation gives it harmonics above 150 Hz
+    "synth.sub": dict(src="surge", make=lambda: surge("Basses/Sub 1", list(range(38, 66, 4)), 2.0, 0.3), pitched=True, release=0.08, saturate=SUB_DRIVE),
     "machine.kick": dict(src="surge", make=lambda: surge("Percussion/Kick 909ish", [60], 0.6, 0.4)),
+    "machine.hat": dict(src="surge-emu", make=lambda: surge_drum("Emu/Drums/Hat Closed", 0.1, 0.4), choke="mhat"),
+    # held, then an exponential fall like a drum machine's decay knob
+    "machine.open": dict(src="surge-emu", make=lambda: surge_drum("Emu/Drums/Hat Open", 0.7, 0.2), choke="mhat", chokedBy=True, decay=0.12),
+    "machine.clap": dict(src="surge-emu", make=lambda: surge_drum("Emu/Drums/T8 Clap", 0.15, 0.5)),
 }
 
 
@@ -416,9 +505,26 @@ def build(inst_id: str, spec: dict, manifest: dict):
         f.unlink()
     audio = []
     for z in zones:
-        x, sr = mix(z["parts"], mono=z.get("mono", True))
+        x, sr = mix(z["parts"], mono=z.get("mono", False))
+        if spec.get("highpass"):
+            x = highpass(x, sr, spec["highpass"])
+        if spec.get("dehum"):
+            x = dehum(x, sr)
+        if spec.get("saturate"):
+            x = saturate(x, spec["saturate"])
+        if spec.get("decay"):
+            x = x * np.exp(-np.arange(len(x)) / sr / spec["decay"])[:, None]
         x = trim(x, sr, z["max"])
         audio.append((x, sr))
+    if spec.get("layer_span"):
+        # recorded layers can lie 25 dB apart; spread their peaks evenly over layer_span dB instead
+        layers = sorted({z["vlo"] for z in zones})
+        peaks = {lo: np.mean([np.abs(x).max() for z, (x, _) in zip(zones, audio) if z["vlo"] == lo]) for lo in layers}
+        top = peaks[layers[-1]]
+        for i, (z, (x, sr)) in enumerate(zip(zones, audio)):
+            k = layers.index(z["vlo"])
+            want = top * 10 ** (-spec["layer_span"] * (len(layers) - 1 - k) / max(1, len(layers) - 1) / 20)
+            audio[i] = (x * want / peaks[z["vlo"]], sr)
     peak = max(np.abs(x).max() for x, _ in audio) or 1.0
     gain = 10 ** (-1 / 20) / peak
     # pitch: measure every sample, settle the octave by majority, fine-tune each one

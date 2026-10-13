@@ -87,8 +87,17 @@ interface Voice {
 const chokeGroups = new WeakMap<AudioNode, Map<string, Voice[]>>();
 const monoVoices = new WeakMap<AudioNode, Map<string, Voice>>();
 
+/** Drops what is scheduled after t but keeps the value the gain has at t (a pending decay is not undone). */
+function holdAt(p: AudioParam, t: number) {
+  if (typeof p.cancelAndHoldAtTime === "function") p.cancelAndHoldAtTime(t);
+  else {
+    p.cancelScheduledValues(t);
+    p.setValueAtTime(p.value, t);
+  }
+}
+
 function fadeOut(v: Voice, t: number, time = 0.02) {
-  v.gain.gain.cancelScheduledValues(t);
+  holdAt(v.gain.gain, t);
   v.gain.gain.setTargetAtTime(0, t, time / 3);
   try {
     v.src.stop(t + time * 3);

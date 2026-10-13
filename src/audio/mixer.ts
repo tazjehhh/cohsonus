@@ -4,9 +4,17 @@ export interface ChannelOpts {
   /** Old-record treatment: band-limited like a sample lifted from vinyl. */
   dusty?: boolean;
   echo?: boolean;
+  /** Send to the shared room. Low channels (kick, bass, sub, 808) default to none, everything else to 0.1. */
   reverb?: number;
   gain?: number;
+  /** Stereo position, -1 (left) … 1 (right). */
+  pan?: number;
+  /** Cutoff in Hz of a gentle lowpass that takes the fizz off bright sounds. */
+  lowpass?: number;
 }
+
+/** Channels that carry the low end stay out of the reverb unless they ask for it. */
+const LOW = /kick|bass|sub|808/i;
 
 export class Channel {
   readonly input: GainNode;
@@ -41,8 +49,16 @@ export class Channel {
       tail = lp;
       this.nodes.push(hp, lp);
     }
+    if (opts.lowpass) {
+      const lp = c.createBiquadFilter();
+      lp.type = "lowpass";
+      lp.frequency.value = opts.lowpass;
+      lp.Q.value = 0.5;
+      tail.connect(lp);
+      tail = lp;
+      this.nodes.push(lp);
+    }
     tail.connect(this.fader);
-    this.fader.connect(this.analyser);
     if (opts.echo) {
       const d = c.createDelay(1);
       d.delayTime.value = 0.36;
@@ -54,10 +70,20 @@ export class Channel {
       d.connect(wet).connect(this.fader);
       this.nodes.push(d, fb, wet);
     }
-    this.fader.connect(masterIn());
+    let out: AudioNode = this.fader;
+    if (opts.pan) {
+      const pan = c.createStereoPanner();
+      pan.pan.value = opts.pan;
+      this.fader.connect(pan);
+      out = pan;
+      this.nodes.push(pan);
+    }
+    // metered after the pan: a mono sound panned off centre reaches the master quieter than one in the middle
+    out.connect(this.analyser);
+    out.connect(masterIn());
     const send = c.createGain();
-    send.gain.value = opts.reverb ?? 0.1;
-    this.fader.connect(send).connect(reverbIn());
+    send.gain.value = opts.reverb ?? (LOW.test(id) ? 0 : 0.1);
+    out.connect(send).connect(reverbIn());
     this.nodes.push(send);
   }
 

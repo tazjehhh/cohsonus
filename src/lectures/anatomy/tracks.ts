@@ -55,14 +55,14 @@ export const house: Track = {
     bars: 4,
     lanes: [
       lane("kick", "kickMachine", repeat(hits("x...x...x...x..."), 4, 16)),
-      lane("clap", "clap", repeat(hits("....x.......x..."), 4, 16)),
+      lane("clap", "clapMachine", repeat(hits("....x.......x..."), 4, 16)),
       lane(
         "hats",
-        "hatClosed",
+        "hatMachine",
         Array.from({ length: 16 }, (_, b): Note[] => [
-          { step: b * 4, vel: 0.32 },
-          { step: b * 4 + 1, vel: 0.2 },
-          { step: b * 4 + 2, vel: 0.7, voice: "hatOpen" },
+          { step: b * 4, vel: 0.5 },
+          { step: b * 4 + 1, vel: 0.3 },
+          { step: b * 4 + 2, vel: 0.8, voice: "openMachine" },
         ]).flat(),
       ),
       lane("bass", "synthBass", seq([
@@ -93,7 +93,12 @@ export const house: Track = {
     { id: "chords", name: "Chords", instrument: "House organ", role: "harmony", register: "mid" },
     { id: "lead", name: "Lead", instrument: "Synth lead", role: "melody", register: "high" },
   ],
-  channels: { chords: { reverb: 0.18 }, lead: { echo: true, reverb: 0.2 }, hats: { gain: 3.4 } },
+  channels: {
+    clap: { reverb: 0.13 },
+    hats: { pan: 0.3, gain: 0.85 },
+    chords: { reverb: 0.12 },
+    lead: { echo: true, reverb: 0.12, lowpass: 3500, pan: -0.15, gain: 1.4 },
+  },
 };
 
 // ---------- sample world: boom bap, 90 BPM, D minor ----------
@@ -143,7 +148,11 @@ export const boombap: Track = {
     { id: "chords", name: "Chords", instrument: "Wurlitzer electric piano, dusty", role: "harmony", register: "mid" },
     { id: "melody", name: "Vibraphone", instrument: "Vibraphone", role: "melody", register: "high" },
   ],
-  channels: { chords: { dusty: true, reverb: 0.12 }, melody: { reverb: 0.25 } },
+  channels: {
+    hats: { pan: 0.25, gain: 1.35 },
+    chords: { dusty: true, reverb: 0.12, pan: -0.3, gain: 1.3 },
+    melody: { reverb: 0.09, pan: 0.3 },
+  },
 };
 
 // ---------- band world: indie, 112 BPM, G major ----------
@@ -196,7 +205,10 @@ export const indie: Track = {
     { id: "chords", name: "Rhythm guitar", instrument: "Rhythm guitar", role: "harmony", register: "mid" },
     { id: "melody", name: "Lead guitar", instrument: "Lead guitar", role: "melody", register: "high" },
   ],
-  channels: { chords: { reverb: 0.15 }, melody: { reverb: 0.22 } },
+  channels: {
+    chords: { reverb: 0.1, pan: -0.5, gain: 1.7 },
+    melody: { reverb: 0.11, pan: 0.4, gain: 1.5 },
+  },
 };
 
 export const TRACKS = { house, boombap, indie };

@@ -1637,6 +1637,135 @@
      "rr": 1
     }
    ]
+  },
+  "machine.hat": {
+   "source": "surge-emu",
+   "pitched": false,
+   "choke": "mhat",
+   "zones": [
+    {
+     "file": "samples/machine.hat/00.flac",
+     "vlo": 0.0,
+     "vhi": 0.333,
+     "rr": 1
+    },
+    {
+     "file": "samples/machine.hat/01.flac",
+     "vlo": 0.0,
+     "vhi": 0.333,
+     "rr": 2
+    },
+    {
+     "file": "samples/machine.hat/02.flac",
+     "vlo": 0.333,
+     "vhi": 0.667,
+     "rr": 1
+    },
+    {
+     "file": "samples/machine.hat/03.flac",
+     "vlo": 0.333,
+     "vhi": 0.667,
+     "rr": 2
+    },
+    {
+     "file": "samples/machine.hat/04.flac",
+     "vlo": 0.667,
+     "vhi": 1.0,
+     "rr": 1
+    },
+    {
+     "file": "samples/machine.hat/05.flac",
+     "vlo": 0.667,
+     "vhi": 1.0,
+     "rr": 2
+    }
+   ]
+  },
+  "machine.open": {
+   "source": "surge-emu",
+   "pitched": false,
+   "choke": "mhat",
+   "chokedBy": true,
+   "zones": [
+    {
+     "file": "samples/machine.open/00.flac",
+     "vlo": 0.0,
+     "vhi": 0.333,
+     "rr": 1
+    },
+    {
+     "file": "samples/machine.open/01.flac",
+     "vlo": 0.0,
+     "vhi": 0.333,
+     "rr": 2
+    },
+    {
+     "file": "samples/machine.open/02.flac",
+     "vlo": 0.333,
+     "vhi": 0.667,
+     "rr": 1
+    },
+    {
+     "file": "samples/machine.open/03.flac",
+     "vlo": 0.333,
+     "vhi": 0.667,
+     "rr": 2
+    },
+    {
+     "file": "samples/machine.open/04.flac",
+     "vlo": 0.667,
+     "vhi": 1.0,
+     "rr": 1
+    },
+    {
+     "file": "samples/machine.open/05.flac",
+     "vlo": 0.667,
+     "vhi": 1.0,
+     "rr": 2
+    }
+   ]
+  },
+  "machine.clap": {
+   "source": "surge-emu",
+   "pitched": false,
+   "zones": [
+    {
+     "file": "samples/machine.clap/00.flac",
+     "vlo": 0.0,
+     "vhi": 0.333,
+     "rr": 1
+    },
+    {
+     "file": "samples/machine.clap/01.flac",
+     "vlo": 0.0,
+     "vhi": 0.333,
+     "rr": 2
+    },
+    {
+     "file": "samples/machine.clap/02.flac",
+     "vlo": 0.333,
+     "vhi": 0.667,
+     "rr": 1
+    },
+    {
+     "file": "samples/machine.clap/03.flac",
+     "vlo": 0.333,
+     "vhi": 0.667,
+     "rr": 2
+    },
+    {
+     "file": "samples/machine.clap/04.flac",
+     "vlo": 0.667,
+     "vhi": 1.0,
+     "rr": 1
+    },
+    {
+     "file": "samples/machine.clap/05.flac",
+     "vlo": 0.667,
+     "vhi": 1.0,
+     "rr": 2
+    }
+   ]
   }
  },
  "sources": {
@@ -1675,6 +1804,12 @@
    "title": "Surge XT factory patches, rendered offline",
    "author": "Surge Synth Team",
    "license": "Rendered audio; Surge XT is GPL-3.0"
+  },
+  "surge-emu": {
+   "url": "https://github.com/surge-synthesizer/surge/tree/main/resources/data/patches_3rdparty/Emu/Drums",
+   "title": "Surge XT third-party patches, Emu drums, rendered offline",
+   "author": "The Emu (patches), Surge Synth Team (synth)",
+   "license": "Rendered audio; Surge XT and its bundled patches are GPL-3.0"
   }
  }
 }
