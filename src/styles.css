@@ -161,7 +161,7 @@ a {
   opacity: 0;
 }
 /* eight drawings, held (step-end): the hit, then the ring spreads and thins out */
-keyframes ring {
+@keyframes ring {
   0% {
     opacity: 0.8;
     transform: scale(1);
@@ -249,7 +249,7 @@ keyframes ring {
 .fade-in {
   animation: fadeIn calc(var(--drawing) * 12) var(--frames-12) both;
 }
-keyframes fadeIn {
+@keyframes fadeIn {
   from {
     opacity: 0;
     transform: translateY(6px);
@@ -364,7 +364,7 @@ kbd {
   color: var(--ink);
 }
 
-media (prefers-reduced-motion: reduce) {
+@media (prefers-reduced-motion: reduce) {
   *,
   *::before,
   *::after {
