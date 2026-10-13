@@ -17,6 +17,12 @@
 - No self-referential text: no meta explanations of what something is for.
 - Everything centered, desktop browser, hub scrolls horizontally, lectures are closed experiences.
 - Song examples: genre classics.
+- Card art: the owner makes it by hand. Single hairline objects did not fit, and neither did miniatures of each lecture's stage. Placeholders until then.
+- Into animation and knows the craft. Motion at most 12 drawings a second (on twos), real-time speed kept: fewer drawings, not slower playback. The card miniatures moved far too quickly.
+- The hub is a tree, not a line: Anatomy branches into strands that branch again. Switch between the recommended path, all lectures, and by release.
+- Wants text, images and moving images in the lectures too, composed to fit: an interactive e-learning, not only exercises.
+- Found the sample version still sounding bad ("the song works, but it sounds really bad").
+- Name: cohsonus, from coherent; co-sonus and co- as in cooperative were also in mind.
 
 ## Repos the owner likes, and what was taken
 
@@ -29,6 +35,11 @@
 - rebelytics/one-skill-to-rule-them-all: later, for the curator loop.
 - sickn33/agentic-awesome-skills: candidates against generic UI (anti-ui-slop, tastegate), not installed. No Web Audio skill exists there.
 - RyanAlberts/best-of-Agent-Harnesses: pointers only (Playwright for checks, Context7 for library docs).
+
+## Map decisions
+
+- The tree has single-row branches wherever it can, so it reads as branching: Anatomy → Pulse & Groove and Keys I. Pulse → Sampling I and Bass; Keys I → Bass, Keys II and Melody; Sampling I → Sampling II; Keys II → Keys III. Sampling II, Bass, Keys III and Melody meet in Arrangement, which leads to Into the DAW.
+- Earlier prerequisites that were dropped from the map (Bass after Keys II, Melody after Keys II, Sampling II after Keys I) are covered by each lecture's own warm-up: every lecture works on its own.
 
 ## Teaching decisions
 

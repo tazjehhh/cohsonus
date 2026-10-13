@@ -48,9 +48,11 @@ Drum machines (808, 909) are to come from Freesound, CC0 only, with the key in `
 
 - Ear first, name second. A step makes the learner listen, guess, build or fail before a term appears. Reveals come after the attempt.
 - No meta text. No "in this lecture you will", no explaining why an exercise exists, no praise filler. Prompts are questions or instructions; reveals are content.
-- Explanations are interactive too: sound, motion, something to click. No text block without something to hear or touch.
+- Explanations are interactive too: sound, motion, something to click. Text, images and moving images are welcome when they are composed to fit each other and the lecture, like a good interactive e-learning; never a bare wall of text.
 - Each lecture has its own mode and look. The house style (hub, Anatomy of a Track, Pulse & Groove, Into the DAW) is a deliberately plain base. Visual direction for lectures with their own world comes from the owner's references: do not invent finished aesthetics unasked.
-- Everything centered. Desktop browser. The hub scrolls horizontally; a lecture is a closed full-screen experience.
+- Everything centered. Desktop browser. The hub shows the lectures as a tree that branches down from Anatomy (Path), as a plain list (All) or by release date (Released); a lecture is a closed full-screen experience.
+- Motion runs at 12 drawings a second at most, like animation on twos, at real-time speed: fewer drawings, not slower movement. Every drawing should show a visible change; space them with ease-out, hold key poses, never flicker or rush. CSS: `--drawing` and `--frames-n` in `src/styles.css`, or keyframes held with `step-end`. JS: `useDrawings` in `src/ui/drawings.ts`, which locks drawings to the beat while a player runs. A step that lights up as it sounds is an event, not motion: it lands on time.
+- Card art is the owner's, made by hand. Do not draw card art; leave the placeholders.
 - One Loop is the single source of truth: it drives the sound, the step grid and the notation at once.
 - Checks are deterministic. There is no AI at runtime.
 - The road between lectures is a suggestion, not a lock. Every lecture must work on its own.
@@ -68,12 +70,12 @@ Drum machines (808, 909) are to come from Freesound, CC0 only, with the key in `
 - `src/music/` pure logic: `model.ts` (Loop, Lane, Note), `patterns.ts` (pattern strings, humanize), `timing.ts` (swing, tap tempo, quantize), `checks.ts` (backbeat, fills…), `notation.ts` (drum notation layout)
 - `src/ui/` shared pieces: StepGrid + DrumStaff (same column layout), Studio, Strips (mixer), Spectrum, BeatCircle, Choice
 - `src/lectures/` `types.ts`, `LectureView.tsx` (cover → part intro → steps → homework), `RefresherView.tsx`, `registry.ts` (all eleven lectures, road order), one folder per built lecture
-- `src/hub/` lecture cards; `previews.tsx` draws each built lecture's own stage in miniature as its card art
+- `src/hub/` `Hub.tsx` (Path / All / Released), `map.ts` (tree layout; lines that skip a row get their own gap), `cards/` (card art: `<lecture id>.<png|jpg|gif|webp|svg>`, 600 × 480; replace a placeholder by dropping in a file with the same name)
 
 ## Adding a lecture
 
 1. Folder `src/lectures/<id>/` exporting a `LectureDef` (parts → steps, homework, refresher tasks).
 2. Each step is a component that calls `complete(data)` when its task is met; stored data comes back as `saved`, other steps' data as `memory`.
-3. Set `def` on its entry in `registry.ts`.
-4. Add its card art to `PREVIEWS` in `src/hub/previews.tsx`: its own stage in miniature, not a standalone icon. Until then the card shows its number.
+3. On its entry in `registry.ts`: set `def`, `released` (YYYY-MM-DD) and `after` (the lectures it branches from on the map).
+4. A new entry also gets a placeholder in `src/hub/cards/` until the owner makes its art.
 5. Screenshot every step; run the flows that touch it.

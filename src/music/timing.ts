@@ -84,3 +84,9 @@ export function quantize(notes: Note[], amount: number, total: number): Note[] {
     return { ...n, step: amount >= 1 ? ((target % total) + total) % total : step };
   });
 }
+
+/** Anything that moves is drawn at most 12 times a second, like animation on twos. */
+export const DRAWINGS_PER_SECOND = 12;
+
+/** Drawings per beat: as many as fit under 12 a second, so every beat starts on a new drawing. */
+export const drawingsPerBeat = (bpm: number) => Math.max(1, Math.floor((60 / bpm) * DRAWINGS_PER_SECOND));

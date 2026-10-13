@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { drums, hits, humanize } from "../src/music/patterns";
 import { gridDiff, hasBackbeat, hasDynamics, hasFill, hasOffbeatKick, hasSteadyHats, snareBeats } from "../src/music/checks";
-import { cycleDistance, indexLoop, meanPhase, noteOffset, quantize, swingOffset, tapTempo, tempoRelation } from "../src/music/timing";
+import { cycleDistance, drawingsPerBeat, indexLoop, meanPhase, noteOffset, quantize, swingOffset, tapTempo, tempoRelation } from "../src/music/timing";
 import { layoutBar } from "../src/music/notation";
 
 describe("patterns", () => {
@@ -22,6 +22,17 @@ describe("patterns", () => {
 });
 
 describe("timing", () => {
+  it("draws at most 12 times a second, with every beat on a drawing", () => {
+    for (const bpm of [60, 90, 96, 124, 140, 174]) {
+      const n = drawingsPerBeat(bpm);
+      expect(Number.isInteger(n)).toBe(true);
+      expect(n / (60 / bpm)).toBeLessThanOrEqual(12);
+      expect((n + 1) / (60 / bpm)).toBeGreaterThan(12);
+    }
+    expect(drawingsPerBeat(90)).toBe(8);
+    expect(drawingsPerBeat(124)).toBe(5);
+  });
+
   it("swings only every second step", () => {
     expect(swingOffset(0, 0.6, 0.1)).toBe(0);
     expect(swingOffset(1, 0.6, 0.1)).toBeCloseTo(0.02);

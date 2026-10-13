@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import type { Player } from "../audio/player";
+import { useDrawings } from "./drawings";
 
 export interface StripDef {
   id: string;
@@ -7,37 +8,48 @@ export interface StripDef {
   color?: string;
 }
 
-/** Live loudness per channel, 0..1. Reads the analyser that sits before each fader. */
+/** Live loudness per channel, 0..1. Reads the analyser that sits before each fader; drawn 12 times a second at most. */
 export function useLevels(player: Player, ids: string[], playing: boolean) {
   const [levels, setLevels] = useState<Record<string, number>>({});
-  const smooth = useRef<Record<string, number>>({});
+  const shown = useRef<Record<string, number>>({});
+  const loudest = useRef<Record<string, number>>({});
+  const buf = useRef(new Float32Array(2048));
   useEffect(() => {
-    if (!playing) {
-      smooth.current = {};
-      setLevels({});
-      return;
-    }
-    const buf = new Float32Array(2048);
-    let raf = 0;
-    const frame = () => {
+    if (playing) return;
+    shown.current = {};
+    loudest.current = {};
+    setLevels({});
+  }, [playing]);
+  useDrawings(
+    playing,
+    (dt) => {
+      // instant rise, fall with the same real-time release as before (0.88 per 1/60 s)
+      const fall = Math.pow(0.88, dt * 60);
       const next: Record<string, number> = {};
       for (const id of ids) {
-        const a = player.channel(id).analyser;
-        a.getFloatTimeDomainData(buf);
-        let sum = 0;
-        for (let i = 0; i < buf.length; i++) sum += buf[i] * buf[i];
-        const db = 20 * Math.log10(Math.sqrt(sum / buf.length) + 1e-9);
-        const v = Math.max(0, Math.min(1, (db + 54) / 48));
-        const prev = smooth.current[id] ?? 0;
-        next[id] = v > prev ? v : prev * 0.88 + v * 0.12;
+        const v = loudest.current[id] ?? 0;
+        const prev = shown.current[id] ?? 0;
+        next[id] = v > prev ? v : prev * fall + v * (1 - fall);
       }
-      smooth.current = next;
+      shown.current = next;
+      loudest.current = {};
       setLevels(next);
-      raf = requestAnimationFrame(frame);
-    };
-    raf = requestAnimationFrame(frame);
-    return () => cancelAnimationFrame(raf);
-  }, [player, playing, ids.join(",")]);
+    },
+    {
+      player,
+      sample: () => {
+        const b = buf.current;
+        for (const id of ids) {
+          player.channel(id).analyser.getFloatTimeDomainData(b);
+          let sum = 0;
+          for (let i = 0; i < b.length; i++) sum += b[i] * b[i];
+          const db = 20 * Math.log10(Math.sqrt(sum / b.length) + 1e-9);
+          const v = Math.max(0, Math.min(1, (db + 54) / 48));
+          loudest.current[id] = Math.max(loudest.current[id] ?? 0, v);
+        }
+      },
+    },
+  );
   return levels;
 }
 

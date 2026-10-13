@@ -51,50 +51,104 @@
 }
 .hub-top {
   display: flex;
-  justify-content: center;
-  padding: 28px 0 0;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  padding: 28px 0 8px;
 }
 .wordmark {
   font-size: 14px;
   letter-spacing: 0.2em;
   color: var(--ink-2);
 }
-.hub-track {
-  position: relative;
+.hub-views {
   display: flex;
-  align-items: center;
-  gap: 40px;
-  overflow-x: auto;
-  overflow-y: hidden;
-  padding: 0 calc(50vw - 150px);
-  scroll-snap-type: x proximity;
-  scrollbar-width: none;
+  gap: 4px;
+  padding: 3px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
 }
-.hub-track::-webkit-scrollbar {
-  display: none;
+.hub-views button {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: var(--ink-3);
+  font: 12px var(--mono);
+  letter-spacing: 0.04em;
+  padding: 6px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition:
+    color calc(var(--drawing) * 2) var(--frames-2),
+    background calc(var(--drawing) * 2) var(--frames-2);
 }
-.hub-track:focus-visible {
-  outline: none;
+.hub-views button:hover {
+  color: var(--ink);
 }
-.card-slot {
+.hub-views button.on {
+  color: var(--ink);
+  background: var(--bg-3);
+}
+.hub-scroll {
+  overflow: auto;
+  padding: 40px 16px 72px;
+  display: grid;
+  justify-items: center;
+  align-content: start;
+}
+
+/* path: a tree that branches downward */
+.map {
   position: relative;
   flex: none;
-  width: 300px;
-  scroll-snap-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 26px;
-  padding-bottom: 56px;
 }
-.card-slot:not(:last-child)::before {
-  content: "";
+.map-lines {
   position: absolute;
-  top: 5px;
-  left: calc(50% + 10px);
-  width: calc(100% + 40px - 20px);
-  height: 1px;
-  background: var(--line-2);
+  inset: 0;
+}
+.map-lines path {
+  fill: none;
+  stroke: var(--line-2);
+  stroke-width: 1;
+}
+.map-lines path.walked {
+  stroke: var(--ink-3);
+}
+.map-spot {
+  position: absolute;
+}
+
+/* all, released: plain rows of cards */
+.hub-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 40px;
+  justify-content: center;
+  width: 100%;
+  max-width: 1360px;
+}
+.released {
+  display: grid;
+  gap: 56px;
+  width: 100%;
+  justify-items: center;
+}
+.release-day {
+  display: grid;
+  gap: 18px;
+  width: 100%;
+  justify-items: center;
+}
+.release-day h2 {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  color: var(--ink-3);
+}
+
+.card-slot {
+  position: relative;
 }
 .card {
   display: block;
@@ -105,12 +159,16 @@
   text-decoration: none;
   overflow: hidden;
   transition:
-    border-color 0.2s,
-    transform 0.3s var(--ease);
+    border-color calc(var(--drawing) * 2) var(--frames-2),
+    transform calc(var(--drawing) * 4) var(--frames-4);
 }
 a.card:hover {
   border-color: var(--line-2);
   transform: translateY(-4px);
+}
+a.card.small:hover {
+  transform: none;
+  border-color: var(--ink-3);
 }
 .card.next {
   border-color: var(--ink-3);
@@ -126,84 +184,16 @@ a.card:hover {
   overflow: hidden;
   position: relative;
 }
+.card-figure img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
 .card-figure-num {
   font-size: 72px;
   color: var(--line-2);
   letter-spacing: -0.04em;
-}
-
-/* card previews: a miniature of each lecture's own stage */
-.pv-anatomy {
-  width: 240px;
-  display: grid;
-  gap: 8px;
-}
-.pv-groups {
-  display: flex;
-  gap: 6px;
-}
-.pv-groups i {
-  height: 2px;
-}
-.pv-strips {
-  display: flex;
-  gap: 6px;
-}
-.pv-strip {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  border: 1px solid var(--line);
-  border-radius: 5px;
-  padding: 8px 0 6px;
-  background: var(--bg);
-}
-.pv-strip span {
-  font-family: var(--mono);
-  font-size: 8px;
-  color: var(--ink-3);
-}
-.pv-meter {
-  width: 6px;
-  height: 110px;
-  background: var(--bg-2);
-  border-radius: 2px;
-  position: relative;
-  overflow: hidden;
-}
-.pv-meter i {
-  position: absolute;
-  inset: 0;
-  transform-origin: bottom;
-  animation-name: pv-hit;
-  animation-iteration-count: infinite;
-  animation-timing-function: cubic-bezier(0.1, 0.8, 0.3, 1);
-}
-@keyframes pv-hit {
-  from {
-    transform: scaleY(0.95);
-  }
-  to {
-    transform: scaleY(0.12);
-  }
-}
-.pv-pulse {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-}
-.pv-scale {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%) scale(0.48);
-  transform-origin: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
 }
 .card-body {
   padding: 18px 20px 20px;
@@ -240,26 +230,38 @@ a.card:hover {
   height: 100%;
   background: var(--ink);
 }
-.node {
-  width: 11px;
-  height: 11px;
-  border-radius: 50%;
-  border: 1px solid var(--line-2);
-  background: var(--bg);
-  position: relative;
-  z-index: 1;
+.card.small {
+  width: 220px;
+  height: 258px;
+  display: grid;
+  grid-template-rows: 176px 1fr;
 }
-.node.done {
-  background: var(--ink-2);
-  border-color: var(--ink-2);
+.card.small .card-figure {
+  height: auto;
 }
-.node.next {
-  border-color: var(--ink);
-  box-shadow: 0 0 0 4px var(--bg), 0 0 0 5px var(--ink-3);
+.card.small .card-figure-num {
+  font-size: 52px;
+}
+.card.small .card-body {
+  padding: 12px 14px 0;
+  gap: 2px;
+  align-content: start;
+}
+.card.small .card-title {
+  font-size: 15px;
+  min-height: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.card.small .card-bar {
+  display: none;
 }
 .refresh {
   position: absolute;
-  bottom: 0;
+  top: 10px;
+  right: 10px;
+  background: var(--bg-2);
 }
 
 /* ---------- lecture shell ---------- */
@@ -465,8 +467,8 @@ a.card:hover {
   cursor: pointer;
   overflow: hidden;
   transition:
-    left 0.25s var(--ease),
-    border-color 0.15s;
+    left calc(var(--drawing) * 3) var(--frames-3),
+    border-color calc(var(--drawing) * 2) var(--frames-2);
 }
 .cell.beat {
   border-color: var(--line-2);
@@ -605,7 +607,7 @@ a.card:hover {
   flex-direction: column;
   align-items: center;
   gap: 10px;
-  transition: opacity 0.2s;
+  transition: opacity calc(var(--drawing) * 2) var(--frames-2);
 }
 .strip.silent .meter i {
   opacity: 0.25;
@@ -636,7 +638,6 @@ a.card:hover {
   right: 0;
   bottom: 0;
   background: var(--c);
-  transition: height 0.05s linear;
 }
 .strip-buttons {
   display: flex;
@@ -722,13 +723,13 @@ a.card:hover {
   font-size: 14px;
 }
 .role:nth-child(2) {
-  animation-delay: 0.15s;
+  animation-delay: calc(var(--drawing) * 2);
 }
 .role:nth-child(3) {
-  animation-delay: 0.3s;
+  animation-delay: calc(var(--drawing) * 4);
 }
 .role:nth-child(4) {
-  animation-delay: 0.45s;
+  animation-delay: calc(var(--drawing) * 6);
 }
 
 .prompt.small {
@@ -920,7 +921,7 @@ a.card:hover {
   border-radius: 50%;
   border: 2px solid var(--ink);
   opacity: 0;
-  animation: ring 0.4s var(--ease);
+  animation: ring calc(var(--drawing) * 4) step-end;
 }
 .tap-bpm {
   font-size: 40px;
@@ -1056,9 +1057,6 @@ a.card:hover {
   border-radius: 8px;
   background: var(--bg-2);
   cursor: pointer;
-  transition:
-    background 0.1s,
-    border-color 0.1s;
 }
 .barbox.live {
   background: var(--bg-3);
@@ -1169,7 +1167,7 @@ a.card:hover {
   fill: rgba(255, 255, 255, 0.06);
 }
 .timeline .tl-hit {
-  transition: cx 0.3s var(--ease);
+  transition: cx calc(var(--drawing) * 4) var(--frames-4);
 }
 .timeline .tl-hit.kick {
   fill: var(--ink);

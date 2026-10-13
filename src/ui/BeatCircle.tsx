@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import type { Player } from "../audio/player";
 import { audio, heardOffset } from "../audio/engine";
+import { useDrawings } from "./drawings";
 
 const W = 700;
 const H = 300;
@@ -9,6 +10,7 @@ const CY = H / 2;
 const R = 112;
 const LINE_X0 = 110;
 const LINE_X1 = W - 110;
+const UNROLL_DRAWINGS = 13;
 
 function at(phase: number, u: number) {
   const a = phase * Math.PI * 2;
@@ -45,33 +47,24 @@ export function BeatCircle({
   const [phase, setPhase] = useState(0);
   const uRef = useRef(u);
 
+  // 13 drawings (just over a second), slow in and slow out
+  const [unrolling, setUnrolling] = useState(false);
+  const move = useRef({ from: uRef.current, to: uRef.current, k: 0 });
   useEffect(() => {
-    const target = unrolled ? 1 : 0;
-    let raf = 0;
-    const start = performance.now();
-    const from = uRef.current;
-    const step = (now: number) => {
-      const k = Math.min(1, (now - start) / 1100);
-      const e = k < 0.5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2;
-      uRef.current = from + (target - from) * e;
-      setU(uRef.current);
-      if (k < 1) raf = requestAnimationFrame(step);
-    };
-    raf = requestAnimationFrame(step);
-    return () => cancelAnimationFrame(raf);
+    move.current = { from: uRef.current, to: unrolled ? 1 : 0, k: 0 };
+    setUnrolling(move.current.from !== move.current.to);
   }, [unrolled]);
+  useDrawings(unrolling, () => {
+    const m = move.current;
+    m.k += 1;
+    const x = Math.min(1, m.k / UNROLL_DRAWINGS);
+    const e = x < 0.5 ? 2 * x * x : 1 - Math.pow(-2 * x + 2, 2) / 2;
+    uRef.current = m.from + (m.to - m.from) * e;
+    setU(uRef.current);
+    if (x >= 1) setUnrolling(false);
+  });
 
-  useEffect(() => {
-    if (!playing) return;
-    let raf = 0;
-    const frame = () => {
-      const pos = player.positionAt(audio().currentTime - heardOffset());
-      setPhase((pos % barSteps) / barSteps);
-      raf = requestAnimationFrame(frame);
-    };
-    raf = requestAnimationFrame(frame);
-    return () => cancelAnimationFrame(raf);
-  }, [player, playing, barSteps]);
+  useDrawings(playing, () => setPhase((player.positionAt(audio().currentTime - heardOffset()) % barSteps) / barSteps), { player });
 
   const track =
     u < 0.999
