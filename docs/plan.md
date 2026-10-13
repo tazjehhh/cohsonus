@@ -13,7 +13,8 @@
 ## Next
 
 - [ ] Freesound (CC0): 808, 909 and other drum machine one-shots; needs FREESOUND_API_KEY in the environment
-- [ ] Owner listens through both lectures; fix whatever sounds off (levels, instrument choice, patch choice)
+- [x] Audio rework from measurements (stereo, reverb, hats, lead, master, sub, strum)
+- [ ] Owner listens again after the rework; fix whatever still sounds off
 - [ ] Owner goes through 00 and 01 and marks where it was unclear, too easy, or an aha
 - [ ] House style: owner's references → revise the base look
 - [ ] Owner's references for the lectures with their own world (Sampling first)

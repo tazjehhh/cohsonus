@@ -14,8 +14,8 @@ export const L = {
 
 export const fixed = (l: GridLane): GridLane => ({ ...l, editable: false });
 
-/** Drum machine kick for house, techno and trap. */
-const MACHINE = { kick: "kickMachine" } as const;
+/** Drum machine sounds for house, techno and trap. */
+const MACHINE = { kick: "kickMachine", hat: "hatMachine", open: "openMachine", clap: "clapMachine" } as const;
 /** The kit through an old microphone, for boom bap. */
 const LOFI = { kick: "kickLofi", snare: "snareLofi", hat: "hatLofi" } as const;
 
@@ -141,7 +141,7 @@ metronome.lanes.push(
 );
 
 export const trap140: Loop = (() => {
-  const l = drums({ bpm: 140, voices: MACHINE }, { kick: "x.........x.....", snare: "........x.......", hat: "x.x.x.x.x.x.xxxx" });
+  const l = drums({ bpm: 140, voices: MACHINE }, { kick: "x.........x.....", snare: "........x.......", hat: "x.o.x.o.x.o.xooo" });
   l.lanes.push({ id: "808", voice: "bass808", notes: [{ step: 0, pitch: 33, len: 9 }, { step: 10, pitch: 33, len: 6 }] });
   return l;
 })();
@@ -181,7 +181,7 @@ export const fillStart: Loop = (() => {
 })();
 
 export const trapPad: Loop = (() => {
-  const l = drums({ bpm: 140, bars: 2, voices: MACHINE }, { kick: "x.........x.....|x.........x.....", snare: "........x.......|........x.......", hat: "x.x.x.x.x.x.xxxx|x.x.x.x.x.x.x.x." });
+  const l = drums({ bpm: 140, bars: 2, voices: MACHINE }, { kick: "x.........x.....|x.........x.....", snare: "........x.......|........x.......", hat: "x.o.x.o.x.o.xooo|x.o.x.o.x.o.x.o." });
   l.lanes.push({ id: "pad", voice: "pad", notes: [{ step: 0, chord: [57, 60, 64], len: 32, vel: 0.9 }] });
   return l;
 })();

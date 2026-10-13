@@ -42,7 +42,9 @@ cmake -S surge -B surge/buildpy -GNinja -DCMAKE_BUILD_TYPE=Release -DSURGE_BUILD
 SURGEPY=surge/buildpy/src/surge-python SURGE_PATCHES=surge/resources/data/patches_factory python3 scripts/samples/build.py synth.bass
 ```
 
-Drum machines (808, 909) are to come from Freesound, CC0 only, with the key in `FREESOUND_API_KEY`. Until then `machine.kick` is a Surge render and the 808 is the Surge sub bass with a pitch drop.
+Drum machines (808, 909) are to come from Freesound, CC0 only, with the key in `FREESOUND_API_KEY`. Until then they are Surge renders: `machine.kick` from the factory bank, `machine.hat`, `machine.open` and `machine.clap` from the bundled third-party "Emu" drum patches; the 808 is the Surge sub bass with a pitch drop.
+
+Samples keep their stereo; a pair whose sides are identical is stored as mono. Hats use the overhead microphone only, with a highpass, and the lo-fi hat gets hum notches. Channels take `pan` and `lowpass` options; meters read after the pan, so a part panned off centre measures quieter. The master is gain 0.45 → limiter → tanh ceiling, so nothing passes 0 dBFS.
 
 ## Principles
 

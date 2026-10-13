@@ -7,7 +7,7 @@ export type Role = "drums" | "bass" | "harmony" | "melody";
 export const ROLES: { id: Role; name: string; job: string }[] = [
   { id: "drums", name: "Drums", job: "keep time" },
   { id: "bass", name: "Bass", job: "the floor" },
-  { id: "harmony", name: "Harmony", job: "the colour" },
+  { id: "harmony", name: "Harmony", job: "the color" },
   { id: "melody", name: "Melody", job: "the voice" },
 ];
 
@@ -95,7 +95,7 @@ export const house: Track = {
   ],
   channels: {
     clap: { reverb: 0.13 },
-    hats: { pan: 0.3, gain: 0.85 },
+    hats: { pan: 0.3, gain: 0.8 },
     chords: { reverb: 0.12 },
     lead: { echo: true, reverb: 0.12, lowpass: 3500, pan: -0.15, gain: 1.4 },
   },
