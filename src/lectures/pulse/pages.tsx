@@ -95,7 +95,7 @@ export function TempoHoods({ complete }: StepProps) {
     <Page title="Tempo ranges by genre">
       <Spread
         figure={
-          <Figure caption="Click a genre to hear its loop. The ball lands on every beat.">
+          <Figure caption="Click a genre to hear its loop.">
             <svg width={RX1 + 10} height={H} viewBox={`0 0 ${RX1 + 10} ${H}`} role="img" aria-label="Tempo ranges of genres, from 70 to 185 beats per minute">
               <Bounce player={live.player} playing={!!live.player} x={live.x} />
               {[80, 100, 120, 140, 160, 180].map((b) => (
@@ -120,7 +120,7 @@ export function TempoHoods({ complete }: StepProps) {
       >
         <p>
           Each genre has a typical <strong>tempo range</strong>. Boom bap usually sits between 85 and 95 BPM, house between 118 and 128, techno between about
-          128 and 142, and drum and bass near 174. The chart shows these ranges; the dot inside a bar marks the tempo of the loop you can play.
+          128 and 142, and drum and bass near 174.
         </p>
         <p>
           Tempo is part of what defines a genre. DJs mix records whose tempos are close to each other, and a beat moved far outside its usual range changes
@@ -196,8 +196,7 @@ export function SwingHistory({ complete }: StepProps) {
         }
       >
         <p>
-          The figure shows one bar of sixteenth notes. The hollow circles mark the straight positions; the slider moves every second note later. Settings far above
-          66% delay the second note so much that the groove begins to sound uneven.
+          Settings far above 66% delay the second note so much that the groove begins to sound uneven.
         </p>
         <p>
           The producer <strong>J Dilla</strong> took the idea further. On his Akai MPC3000 he often switched off the machine&apos;s correction to the grid and played

@@ -206,8 +206,7 @@ export function FindTheOne({ complete, saved }: StepProps) {
             <strong>4/4 time</strong>. The first beat of each bar is the <strong>downbeat</strong>, usually called &ldquo;the one&rdquo;.
           </p>
           <p>
-            Chords and drum patterns tend to change on the downbeat, which is why the chord change marked the point where the loop started over. The circle and the
-            line show the same bar: once around the circle is one bar, and laid flat it reads from left to right, the way music is written down.
+            Chords and drum patterns tend to change on the downbeat, which is why the chord change marked the point where the loop started over. A bar can be pictured as a circle, because the music returns to its start, or as a line read from left to right, the way music is written down.
           </p>
         </Explain>
       )}

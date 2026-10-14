@@ -97,9 +97,7 @@ export function Sixteenths({ complete, saved }: StepProps) {
             gives <strong>sixteenth notes</strong>, sixteen to a bar, counted &ldquo;1&nbsp;e&nbsp;&amp;&nbsp;a&nbsp;2&nbsp;e&nbsp;&amp;&nbsp;a&rdquo; and so on (one ee and uh, two ee and uh).
           </p>
           <p>
-            At 96 BPM a beat lasts 0.625 seconds, so an eighth note lasts about 0.31 seconds and a sixteenth note about 0.16 seconds. The grid has one column per
-            subdivision: 8 columns in the bar of eighths and 16 in the bar of sixteenths. In the staff, the eighth notes within a beat are joined by one beam and
-            the sixteenth notes by two.
+            At 96 BPM a beat lasts 0.625 seconds, so an eighth note lasts about 0.31 seconds and a sixteenth note about 0.16 seconds. In written music, the eighth notes within a beat are joined by one beam and the sixteenth notes by two.
           </p>
           <p>
             The hi-hat usually plays the subdivision while the kick and the snare mark the beats. Eighth-note hi-hats are common in rock and pop; sixteenth-note
@@ -165,7 +163,7 @@ export function SpotTheHat({ complete, saved }: StepProps) {
           <Explain>
             <p>
               The hi-hat that belongs on &ldquo;3&nbsp;&amp;&rdquo; plays on &ldquo;3&nbsp;a&rdquo; instead, one sixteenth note late. At 100 BPM that is a delay of 0.15
-              seconds. The grid outlines the misplaced hit in red.
+              seconds.
             </p>
             <p>
               Each beat holds four sixteenth-note positions, counted &ldquo;3&nbsp;e&nbsp;&amp;&nbsp;a&rdquo; for beat 3. A steady eighth-note hi-hat plays on the number and on the

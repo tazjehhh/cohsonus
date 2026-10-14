@@ -99,7 +99,7 @@ export function LayerByLayer({ complete }: StepProps) {
           <strong>harmony</strong>, which sets the mood; and finally the <strong>melody</strong>.
         </p>
         <p>
-          The figure shows the house track from this part built up in this way: every two bars a new layer enters. The technique also works in reverse. Daft
+          The technique also works in reverse. Daft
           Punk&apos;s Around the World (1997) repeats a small number of parts for about seven minutes and holds the listener&apos;s attention by removing layers and
           bringing them back.
         </p>
@@ -162,7 +162,7 @@ export function LowMidHigh({ complete }: StepProps) {
     <Page title="Frequency: low, mid and high">
       <Spread
         figure={
-          <Figure caption={picked ? `${house.stems.find((s) => s.id === picked.id)!.name}: around ${Math.round(centre(picked))} Hz` : "Click a sound to hear it. The wave shows its frequency: the higher the sound, the closer the waves."}>
+          <Figure caption={picked ? `${house.stems.find((s) => s.id === picked.id)!.name}: around ${Math.round(centre(picked))} Hz` : "Click a sound to hear it."}>
             <svg width={AX1 + 10} height={H} viewBox={`0 0 ${AX1 + 10} ${H}`} role="img" aria-label="Where each sound sits from low to high frequencies">
               {TICKS.map((f) => (
                 <g key={f}>
@@ -214,8 +214,7 @@ export function LowMidHigh({ complete }: StepProps) {
         </p>
         <p>
           An instrument covers a range of frequencies, not a single one. For a pitched sound, the lowest frequency is the <strong>fundamental</strong>, which is
-          heard as the pitch; above it lie <strong>overtones</strong>, which give the sound its color. In the chart, the solid bar of each sound marks where most of
-          its energy lies and the lighter bar marks its overtones and attack. A kick drum&apos;s energy lies around 50 Hz, while its short click at 2 to 5 kHz is what
+          heard as the pitch; above it lie <strong>overtones</strong>, which give the sound its color. A kick drum&apos;s energy lies around 50 Hz, while its short click at 2 to 5 kHz is what
           remains audible on a phone speaker.
         </p>
         <p>

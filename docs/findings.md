@@ -14,7 +14,7 @@
 - Each lecture gets its own mode and look ("not every one fancy, every one fitting"). Examples given: Sampling in an early-2000s MPC / hip-hop / electro / breaks look, beige-grey with strong contrasts, a touch of Y2K. Early piano white on black, slow, classy.
 - Wants to give the design input themselves. Finished design solutions handed over make it harder to be creative. Collect their references first; do not pre-chew looks.
 - "Anatomy" should not look medical or anatomical.
-- No self-referential text: no meta explanations of what something is for.
+- No self-referential text: the app never describes itself (its screens, figures, structure). Clarified later: explanations are welcome and a little praise is fine, as long as it is not overdone.
 - Everything centered, desktop browser, hub scrolls horizontally, lectures are closed experiences.
 - Song examples: genre classics.
 - Card art: the owner makes it by hand. Single hairline objects did not fit, and neither did miniatures of each lecture's stage. Placeholders until then.
@@ -26,6 +26,7 @@
 - The Pulse "which one makes you nod" pair sounded identical: A was B shifted by one beat, and on repeat nothing marked the one. Fixed with bass and chords that start each bar. Lesson: an A/B pair must differ against a fixed reference, never by rotation alone.
 - Heard the first Anatomy track (house) and found it sounded bad; measurements found mono and dry samples, a raw saw lead, acoustic hats with hum in a house track, and overs at the master.
 - Found the sample version still sounding bad ("the song works, but it sounds really bad").
+- Wants a preview before a lecture starts: the clicked card grows to about half the screen, everything else blurs, a short description says what the lecture covers. Chosen: picture left, text right; only the short description for now.
 - Name: cohsonus, from coherent; co-sonus and co- as in cooperative were also in mind.
 
 ## Repos the owner likes, and what was taken

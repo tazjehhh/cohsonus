@@ -49,7 +49,7 @@ Samples keep their stereo; a pair whose sides are identical is stored as mono. H
 ## Principles
 
 - Ear first, name second. A step makes the learner listen, guess, build or fail before a term appears. Reveals come after the attempt.
-- No meta text. No "in this lecture you will", no explaining why an exercise exists, no praise filler. Prompts are questions or instructions; reveals are content.
+- No meta text: the app never describes itself. No "in this lecture you will", no "this page shows", no "the figure below", no sentences about its own screens, figures or structure. Explanations of the music are welcome, and so is a little praise, kept short and rare. Prompts are questions or instructions. The one place a lecture is described is its preview in the hub (`summary` in `registry.ts`), which says what the lecture covers.
 - Explanations are interactive too: sound, motion, something to click. Text, images and moving images are composed together like a good interactive e-learning: pages built from `Page`, `Spread`, `Figure` and `Art` (`src/ui/page.tsx`).
 - Text is written in a textbook voice: prompts are complete sentences, feedback is one neutral sentence, and after the attempt an `Explain` block (`src/ui/Explain.tsx`) defines each new term in bold, explains how it works, ties it to what was just heard, and gives context. The full rules become `docs/text.md` once the owner approves the rewrite.
 - Each lecture has its own mode and look. The house style (hub, Anatomy of a Track, Pulse & Groove, Into the DAW) is a deliberately plain base. Visual direction for lectures with their own world comes from the owner's references: do not invent finished aesthetics unasked.
@@ -74,7 +74,7 @@ Samples keep their stereo; a pair whose sides are identical is stored as mono. H
 - `src/ui/` shared pieces: StepGrid + DrumStaff (same column layout), Studio, Strips (mixer), Spectrum, BeatCircle, Choice, `page.tsx` (Page, Spread, Figure, Art), `Explain.tsx`, `drawings.ts` (the 24-a-second drawing clock)
 - `src/lectures/<id>/art/` pictures the owner makes for a lecture's pages, picked up by `Art` by file name; until one exists, `Art` shows an empty frame naming the file and size
 - `src/lectures/` `types.ts`, `LectureView.tsx` (cover → part intro → steps → homework), `RefresherView.tsx`, `registry.ts` (all eleven lectures, road order), one folder per built lecture
-- `src/hub/` `Hub.tsx` (Path / All / Released), `map.ts` (tree layout; lines that skip a row get their own gap), `cards/` (card art: `<lecture id>.<png|jpg|gif|webp|svg>`, 600 × 480; replace a placeholder by dropping in a file with the same name)
+- `src/hub/` `Hub.tsx` (Path / All / Released; a click opens `Preview.tsx`, the card grown to half the screen over the blurred hub, timed by `morph.ts`), `map.ts` (tree layout; lines that skip a row get their own gap), `cards/` (card art: `<lecture id>.<png|jpg|gif|webp|svg>`, 600 × 480; replace a placeholder by dropping in a file with the same name)
 
 ## Adding a lecture
 

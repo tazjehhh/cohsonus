@@ -206,7 +206,7 @@ export function GhostNotes({ complete, saved }: StepProps) {
           </p>
           <p>
             In this beat the snare plays the backbeat on 2 and 4 and ghost notes on &ldquo;2&nbsp;a&rdquo;, &ldquo;3&nbsp;e&rdquo; and &ldquo;4&nbsp;a&rdquo;, at about a
-            quarter of the backbeat&apos;s velocity. In the grid they are the short bars in the snare row. Without them the pattern still works, but it sounds
+            quarter of the backbeat&apos;s velocity. Without them the pattern still works, but it sounds
             stiffer and emptier.
           </p>
           <p>

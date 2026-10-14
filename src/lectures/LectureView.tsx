@@ -10,9 +10,14 @@ const key = (p: PartDef, i: number) => `${p.id}/${p.steps[i].id}`;
 
 export function LectureView({ lecture, startPart }: { lecture: LectureDef; startPart?: number }) {
   const progress = useProgress(lecture.id);
-  const [screen, setScreen] = useState<Screen>(
-    startPart !== undefined && lecture.parts[startPart] ? { kind: "intro", part: startPart } : { kind: "cover" },
-  );
+  const [screen, setScreen] = useState<Screen>(() => {
+    if (startPart === undefined || !lecture.parts[startPart]) return { kind: "cover" };
+    // opened to continue a part: pick up at the step where the learner left it, as the cover's Continue does
+    const at = getProgress(lecture.id);
+    const unfinished = !at.parts.includes(lecture.parts[startPart].id);
+    if (unfinished && at.part === startPart && at.step > 0 && at.step < lecture.parts[startPart].steps.length) return { kind: "step", part: startPart, step: at.step };
+    return { kind: "intro", part: startPart };
+  });
 
   const go = useCallback(
     (s: Screen) => {

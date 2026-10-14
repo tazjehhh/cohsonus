@@ -137,7 +137,7 @@ export function Tune808({ complete, saved }: StepProps) {
             stretch it into long notes and play it as a bass line as well as a kick. In this loop it plays on beat 1 and on &ldquo;3&nbsp;&amp;&rdquo; of each bar.
           </p>
           <p>
-            <strong>Tuning</strong> the 808 means choosing which note it plays. The slider covers twelve notes, and three of them fit this chord: E1, A1 and C2.
+            <strong>Tuning</strong> the 808 means choosing which note it plays. Of the twelve notes in an octave, three fit this chord: E1, A1 and C2.
             You chose {FIT_NAMES[pitch]}. The other nine notes clash with the chord.
           </p>
           <p>

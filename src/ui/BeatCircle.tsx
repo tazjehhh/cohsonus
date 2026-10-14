@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import type { Player } from "../audio/player";
 import { audio, heardOffset } from "../audio/engine";
 import { useDrawings } from "./drawings";
+import { DRAWINGS_PER_SECOND } from "../music/timing";
 
 const W = 700;
 const H = 300;
@@ -49,15 +50,16 @@ export function BeatCircle({
 
   // 26 drawings (just over a second), slow in and slow out
   const [unrolling, setUnrolling] = useState(false);
-  const move = useRef({ from: uRef.current, to: uRef.current, k: 0 });
+  const move = useRef({ from: uRef.current, to: uRef.current, at: 0 });
   useEffect(() => {
-    move.current = { from: uRef.current, to: unrolled ? 1 : 0, k: 0 };
+    move.current = { from: uRef.current, to: unrolled ? 1 : 0, at: performance.now() };
     setUnrolling(move.current.from !== move.current.to);
   }, [unrolled]);
   useDrawings(unrolling, () => {
     const m = move.current;
-    m.k += 1;
-    const x = Math.min(1, m.k / UNROLL_DRAWINGS);
+    // counted from the clock, so a slow frame skips a drawing instead of slowing the unroll
+    const k = Math.floor(((performance.now() - m.at) / 1000) * DRAWINGS_PER_SECOND);
+    const x = Math.min(1, k / UNROLL_DRAWINGS);
     const e = x < 0.5 ? 2 * x * x : 1 - Math.pow(-2 * x + 2, 2) / 2;
     uRef.current = m.from + (m.to - m.from) * e;
     setU(uRef.current);

@@ -1,7 +1,9 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, type MouseEvent } from "react";
 import { LECTURES, type LectureEntry } from "../lectures/registry";
 import { useAllProgress, type LectureProgress } from "../progress";
 import { layoutMap, zoneOf, type Zone } from "./map";
+import { Preview, type OriginKind, type PreviewInfo } from "./Preview";
+import type { Rect } from "./morph";
 
 const DAY = 86_400_000;
 
@@ -37,10 +39,40 @@ function status(l: LectureEntry, p?: LectureProgress) {
   return p.parts.length || Object.keys(p.steps).length ? ("started" as const) : ("new" as const);
 }
 
+/** Status, meta line and the part to resume, as the card and its preview show them. */
+function cardInfo(l: LectureEntry, p?: LectureProgress) {
+  const st = status(l, p);
+  const parts = l.def?.parts ?? [];
+  const minutes = parts.reduce((a, x) => a + x.minutes, 0);
+  const doneParts = parts.filter((x) => p?.parts.includes(x.id)).length;
+  const since = p?.refreshedAt ?? p?.finishedAt;
+  const stale = st === "done" && since !== undefined && Date.now() - since > 14 * DAY;
+  const next = parts.findIndex((x) => !p?.parts.includes(x.id));
+  return { st, parts, minutes, doneParts, stale, resume: next === -1 ? 0 : next };
+}
+
+type Opened = { id: string; from: Rect; kind: OriginKind; el: HTMLElement };
+type OpenFn = (id: string, kind: OriginKind, e: MouseEvent<HTMLElement>) => void;
+
 export function Hub() {
   const all = useAllProgress();
   const [view, setView] = useState<View>(savedView);
+  const [opened, setOpened] = useState<Opened | null>(null);
   const scroller = useRef<HTMLDivElement>(null);
+  const returnTo = useRef<HTMLElement | null>(null);
+  const open: OpenFn = (id, kind, e) => {
+    const el = e.currentTarget;
+    const r = el.getBoundingClientRect();
+    returnTo.current = el;
+    setOpened({ id, kind, el, from: { x: r.left, y: r.top, w: r.width, h: r.height } });
+  };
+  const closed = useCallback(() => setOpened(null), []);
+  // focus goes back to the card once it is visible again
+  useEffect(() => {
+    if (opened || !returnTo.current) return;
+    returnTo.current.focus();
+    returnTo.current = null;
+  }, [opened]);
   const next = LECTURES.find((l) => l.def && status(l, all[l.id]) !== "done") ?? LECTURES.find((l) => !l.def);
 
   const choose = (v: View) => {
@@ -60,7 +92,8 @@ export function Hub() {
     el.scrollTop = Math.max(0, top - el.clientHeight / 2 + card.clientHeight / 2);
   }, [view]);
 
-  const cardProps = (l: LectureEntry) => ({ lecture: l, progress: all[l.id], isNext: l.id === next?.id });
+  const cardProps = (l: LectureEntry) => ({ lecture: l, progress: all[l.id], isNext: l.id === next?.id, onOpen: open, lifted: opened?.id === l.id });
+  const openedLecture = opened && LECTURES.find((l) => l.id === opened.id);
 
   return (
     <div className="hub">
@@ -74,7 +107,7 @@ export function Hub() {
           ))}
         </nav>
       </header>
-      <div className="hub-scroll" ref={scroller}>
+      <div className={`hub-scroll ${opened ? "locked" : ""}`} ref={scroller}>
         {view === "path" && <PathMap card={cardProps} focus={next?.id} />}
         {view === "all" && (
           <div className="hub-grid">
@@ -88,11 +121,44 @@ export function Hub() {
       <footer className="hub-foot">
         <a href="#/credits">Sounds</a>
       </footer>
+      {opened && openedLecture && (
+        <Preview
+          lecture={openedLecture}
+          info={previewInfo(openedLecture, all[openedLecture.id])}
+          art={ART[openedLecture.id]}
+          origin={opened.from}
+          kind={opened.kind}
+          face={
+            opened.kind === "dot" ? (
+              <span className={`map-dot ${openedLecture.def ? "released" : ""}`} />
+            ) : (
+              <CardFace lecture={openedLecture} progress={all[openedLecture.id]} isNext={openedLecture.id === next?.id} size={opened.kind} />
+            )
+          }
+          onClosed={closed}
+        />
+      )}
     </div>
   );
 }
 
-type CardPropsOf = (l: LectureEntry) => { lecture: LectureEntry; progress?: LectureProgress; isNext: boolean };
+function previewInfo(l: LectureEntry, p?: LectureProgress): PreviewInfo {
+  const i = cardInfo(l, p);
+  const meta =
+    i.st === "soon"
+      ? "Coming later"
+      : i.st === "new"
+        ? `${i.parts.length} parts · ${i.minutes} min`
+        : i.st === "started"
+          ? `${i.doneParts} of ${i.parts.length} parts`
+          : i.stale
+            ? "Done · due for a refresh"
+            : "Done";
+  return { status: i.st, meta, resume: i.resume };
+}
+
+type CardProps = { lecture: LectureEntry; progress?: LectureProgress; isNext: boolean; onOpen: OpenFn; lifted: boolean };
+type CardPropsOf = (l: LectureEntry) => CardProps;
 
 const COL = 300;
 const FAR_SQUEEZE = 0.55;
@@ -175,7 +241,11 @@ function PathMap({ card, focus }: { card: CardPropsOf; focus?: string }) {
         const l = byId.get(p.id)!;
         return (
           <div key={p.id} className={`map-spot ${zone}`} data-id={p.id} style={{ left: cx(p.x, p.row) - w / 2, top: rowTop[p.row], width: w, height: h }} {...point(p.id)}>
-            {zone === "far" ? <Dot lecture={l} side={p.x < 0 ? "left" : "right"} /> : <Card {...card(l)} size={zone === "focus" ? "large" : "compact"} />}
+            {zone === "far" ? (
+              <Dot lecture={l} side={p.x < 0 ? "left" : "right"} onOpen={card(l).onOpen} lifted={card(l).lifted} />
+            ) : (
+              <Card {...card(l)} size={zone === "focus" ? "large" : "compact"} />
+            )}
           </div>
         );
       })}
@@ -184,20 +254,19 @@ function PathMap({ card, focus }: { card: CardPropsOf; focus?: string }) {
 }
 
 /** A lecture far down the path: a point on the line, its name when pointed at. */
-function Dot({ lecture, side }: { lecture: LectureEntry; side: "left" | "right" }) {
-  const name = (
-    <span className={`map-dot-label ${side}`}>
-      <span className="mono">{String(lecture.number).padStart(2, "0")}</span> {lecture.title}
-    </span>
-  );
-  return lecture.def ? (
-    <a className="map-dot released" href={`#/l/${lecture.id}`} aria-label={lecture.title}>
-      {name}
-    </a>
-  ) : (
-    <span className="map-dot" tabIndex={0} aria-label={`${lecture.title}, soon`}>
-      {name}
-    </span>
+function Dot({ lecture, side, onOpen, lifted }: { lecture: LectureEntry; side: "left" | "right"; onOpen: OpenFn; lifted: boolean }) {
+  return (
+    <button
+      type="button"
+      className={`map-dot ${lecture.def ? "released" : ""}`}
+      style={lifted ? { visibility: "hidden" } : undefined}
+      aria-label={lecture.def ? lecture.title : `${lecture.title}, soon`}
+      onClick={(e) => onOpen(lecture.id, "dot", e)}
+    >
+      <span className={`map-dot-label ${side}`}>
+        <span className="mono">{String(lecture.number).padStart(2, "0")}</span> {lecture.title}
+      </span>
+    </button>
   );
 }
 
@@ -235,16 +304,12 @@ function Released({ card }: { card: CardPropsOf }) {
   );
 }
 
-function Card({ lecture, progress, isNext, size = "large" }: { lecture: LectureEntry; progress?: LectureProgress; isNext: boolean; size?: "large" | "compact" }) {
-  const st = status(lecture, progress);
-  const parts = lecture.def?.parts ?? [];
-  const minutes = parts.reduce((a, p) => a + p.minutes, 0);
-  const doneParts = parts.filter((p) => progress?.parts.includes(p.id)).length;
-  const since = progress?.refreshedAt ?? progress?.finishedAt;
-  const stale = st === "done" && since !== undefined && Date.now() - since > 14 * DAY;
+/** The inside of a card: art (large only), number, title, status. */
+function CardFace({ lecture, progress, isNext, size }: { lecture: LectureEntry; progress?: LectureProgress; isNext: boolean; size: "large" | "compact" }) {
+  const { st, parts, minutes, doneParts, stale } = cardInfo(lecture, progress);
   const art = ART[lecture.id];
-  const body = (
-    <>
+  return (
+    <div className={`card ${size} ${st} ${isNext ? "next" : ""} ${stale ? "stale" : ""}`}>
       {size === "large" && (
         <div className="card-figure">
           {art ? <img src={art} alt="" draggable={false} /> : <span className="card-figure-num mono">{String(lecture.number).padStart(2, "0")}</span>}
@@ -263,20 +328,17 @@ function Card({ lecture, progress, isNext, size = "large" }: { lecture: LectureE
           <i style={{ width: `${(doneParts / Math.max(1, parts.length)) * 100}%` }} />
         </div>
       </div>
-    </>
+    </div>
   );
-  const cls = `card ${size} ${st} ${isNext ? "next" : ""} ${stale ? "stale" : ""}`;
+}
+
+function Card({ lecture, progress, isNext, onOpen, lifted, size = "large" }: CardProps & { size?: "large" | "compact" }) {
+  const { st } = cardInfo(lecture, progress);
   return (
-    <div className="card-slot" data-id={lecture.id}>
-      {st === "soon" ? (
-        <div className={cls} aria-disabled>
-          {body}
-        </div>
-      ) : (
-        <a className={cls} href={`#/l/${lecture.id}`}>
-          {body}
-        </a>
-      )}
+    <div className={`card-slot ${size}`} data-id={lecture.id} style={lifted ? { visibility: "hidden" } : undefined}>
+      <button type="button" className="card-button" aria-haspopup="dialog" onClick={(e) => onOpen(lecture.id, size, e)}>
+        <CardFace lecture={lecture} progress={progress} isNext={isNext} size={size} />
+      </button>
       {st === "done" && lecture.def?.refresher && (
         <a className="btn small refresh" href={`#/r/${lecture.id}`}>
           Refresh
