@@ -51,14 +51,16 @@ describe("preview motion", () => {
     expect(opening(OPEN_DRAWINGS, from, to).text).toEqual([1, 1, 1]);
   });
 
+  const between = Array.from({ length: OPEN_DRAWINGS * 10 + 1 }, (_, i) => i / 10);
+
   it("dips before it grows and overshoots by at most 1%", () => {
     expect(opening(1, from, to).scale).toBeLessThan(1);
-    const scales = Array.from({ length: OPEN_DRAWINGS + 1 }, (_, k) => opening(k, from, to).scale);
-    expect(Math.max(...scales)).toBeLessThanOrEqual(1.01);
+    expect(Math.max(...between.map((k) => opening(k, from, to).scale))).toBeLessThanOrEqual(1.01 + 1e-9);
+    expect(Math.min(...between.map((k) => opening(k, from, to).scale))).toBeGreaterThanOrEqual(0.97 - 1e-9);
   });
 
   it("keeps the text out until the card has landed, then brings it in block by block", () => {
-    for (let k = 0; k <= OPEN_DRAWINGS; k++) {
+    for (const k of between) {
       const p = opening(k, from, to);
       if (p.text.some((v) => v > 0)) expect(p.rect).toEqual(to);
       expect(p.text[0]).toBeGreaterThanOrEqual(p.text[1]);

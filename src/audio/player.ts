@@ -3,7 +3,7 @@ import { Channel, type ChannelOpts } from "./mixer";
 import { VOICES, instrumentOf } from "./voices";
 import { load } from "./sampler";
 import { loopSteps, stepSeconds, type Lane, type Loop, type Note } from "../music/model";
-import { drawingsPerBeat, indexLoop, noteOffset, type Indexed } from "../music/timing";
+import { indexLoop, noteOffset, type Indexed } from "../music/timing";
 
 type Listener = (step: number | null) => void;
 
@@ -163,12 +163,6 @@ export class Player {
     const total = loopSteps(this.loop);
     const p = (time - this.origin) / stepSeconds(this.loop);
     return ((p % total) + total) % total;
-  }
-
-  /** Number of the drawing on screen at an audio time: at most 24 a second, a new one on every beat. */
-  drawingAt(time: number) {
-    const beats = (time - this.origin) / (60 / this.loop.bpm);
-    return Math.floor(beats * drawingsPerBeat(this.loop.bpm));
   }
 
   subscribe(fn: Listener) {

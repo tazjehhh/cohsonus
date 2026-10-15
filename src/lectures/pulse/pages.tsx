@@ -7,6 +7,7 @@ import { audio, heardOffset } from "../../audio/engine";
 import { PlayButton } from "../../ui/PlayButton";
 import { ListenList } from "../../ui/ListenList";
 import { useDrawings } from "../../ui/drawings";
+import { DRAWINGS_PER_SECOND } from "../../music/timing";
 import { Art, Figure, Page, Spread } from "../../ui/page";
 import { TEMPO_LOOPS, swingTarget } from "./loops";
 
@@ -28,21 +29,17 @@ const HOODS: { id: string; genre: string; range: [number, number]; loop?: Loop }
   { id: "dnb", genre: "Drum & bass", range: [170, 178] },
 ];
 
-/** A ball that lands on every beat: slow at the top, fast at the bottom, squashed for one drawing on the hit. */
+/** A ball that lands on every beat: slow at the top, fast at the bottom, squashed on the first drawing after each hit. */
 function Bounce({ player, playing, x }: { player: Player | null; playing: boolean; x: number }) {
-  const [phase, setPhase] = useState(0);
-  useDrawings(
-    playing && !!player,
-    () => {
-      if (!player) return;
-      const loop = player.getLoop();
-      setPhase(((player.positionAt(audio().currentTime - heardOffset()) / loop.stepsPerBeat) % 1 + 1) % 1);
-    },
-    { player: player ?? undefined },
-  );
+  const [{ phase, beat }, setPose] = useState({ phase: 0, beat: 0.5 });
+  useDrawings(playing && !!player, () => {
+    if (!player) return;
+    const loop = player.getLoop();
+    setPose({ phase: (((player.positionAt(audio().currentTime - heardOffset()) / loop.stepsPerBeat) % 1) + 1) % 1, beat: 60 / loop.bpm });
+  });
   const ground = 58;
   const lift = playing ? 44 * 4 * phase * (1 - phase) : 0;
-  const contact = playing && (phase < 0.05 || phase > 0.97);
+  const contact = playing && phase * beat < 1 / DRAWINGS_PER_SECOND;
   const fast = playing && (phase < 0.2 || phase > 0.8);
   const rx = contact ? 9.5 : fast ? 6.2 : 7;
   const ry = contact ? 4.5 : fast ? 8 : 7;
@@ -95,7 +92,7 @@ export function TempoHoods({ complete }: StepProps) {
     <Page title="Tempo ranges by genre">
       <Spread
         figure={
-          <Figure caption="Click a genre to hear its loop.">
+          <Figure caption="Click a genre to hear its loop. The ball lands on every beat.">
             <svg width={RX1 + 10} height={H} viewBox={`0 0 ${RX1 + 10} ${H}`} role="img" aria-label="Tempo ranges of genres, from 70 to 185 beats per minute">
               <Bounce player={live.player} playing={!!live.player} x={live.x} />
               {[80, 100, 120, 140, 160, 180].map((b) => (
@@ -120,7 +117,7 @@ export function TempoHoods({ complete }: StepProps) {
       >
         <p>
           Each genre has a typical <strong>tempo range</strong>. Boom bap usually sits between 85 and 95 BPM, house between 118 and 128, techno between about
-          128 and 142, and drum and bass near 174.
+          128 and 142, and drum and bass near 174. The chart shows these ranges; the dot inside a bar marks the tempo of the loop you can play.
         </p>
         <p>
           Tempo is part of what defines a genre. DJs mix records whose tempos are close to each other, and a beat moved far outside its usual range changes
@@ -169,7 +166,7 @@ export function SwingHistory({ complete }: StepProps) {
   useEffect(() => {
     if (!t.playing) setAt(null);
   }, [t.playing]);
-  useDrawings(t.playing, () => setAt(t.player.positionAt(audio().currentTime - heardOffset()) % STEPS), { player: t.player });
+  useDrawings(t.playing, () => setAt(t.player.positionAt(audio().currentTime - heardOffset()) % STEPS));
   return (
     <Page title="The origins of swing">
       <Spread figure={<Art name="pulse/mpc60" w={300} h={210} alt="An Akai MPC60, 1988" />}>
@@ -196,7 +193,8 @@ export function SwingHistory({ complete }: StepProps) {
         }
       >
         <p>
-          Settings far above 66% delay the second note so much that the groove begins to sound uneven.
+          The figure shows one bar of sixteenth notes. The hollow circles mark the straight positions; the slider moves every second note later. Settings far above
+          66% delay the second note so much that the groove begins to sound uneven.
         </p>
         <p>
           The producer <strong>J Dilla</strong> took the idea further. On his Akai MPC3000 he often switched off the machine&apos;s correction to the grid and played

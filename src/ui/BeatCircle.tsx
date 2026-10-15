@@ -11,7 +11,7 @@ const CY = H / 2;
 const R = 112;
 const LINE_X0 = 110;
 const LINE_X1 = W - 110;
-const UNROLL_DRAWINGS = 26;
+const UNROLL_DRAWINGS = 33;
 
 function at(phase: number, u: number) {
   const a = phase * Math.PI * 2;
@@ -48,7 +48,7 @@ export function BeatCircle({
   const [phase, setPhase] = useState(0);
   const uRef = useRef(u);
 
-  // 26 drawings (just over a second), slow in and slow out
+  // 33 drawings at 30 a second (1.1 s), slow in and slow out
   const [unrolling, setUnrolling] = useState(false);
   const move = useRef({ from: uRef.current, to: uRef.current, at: 0 });
   useEffect(() => {
@@ -66,7 +66,7 @@ export function BeatCircle({
     if (x >= 1) setUnrolling(false);
   });
 
-  useDrawings(playing, () => setPhase((player.positionAt(audio().currentTime - heardOffset()) % barSteps) / barSteps), { player });
+  useDrawings(playing, () => setPhase((player.positionAt(audio().currentTime - heardOffset()) % barSteps) / barSteps));
 
   const track =
     u < 0.999

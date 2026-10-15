@@ -85,8 +85,5 @@ export function quantize(notes: Note[], amount: number, total: number): Note[] {
   });
 }
 
-/** Anything that moves is drawn at most 24 times a second, like film animation on ones. */
-export const DRAWINGS_PER_SECOND = 24;
-
-/** Drawings per beat: as many as fit under 24 a second, so every beat starts on a new drawing. */
-export const drawingsPerBeat = (bpm: number) => Math.max(1, Math.floor((60 / bpm) * DRAWINGS_PER_SECOND));
+/** Illustrations meant to look drawn run at 30 drawings a second: an even 2 refreshes each on 60 Hz screens, 4 on 120 Hz. */
+export const DRAWINGS_PER_SECOND = 30;

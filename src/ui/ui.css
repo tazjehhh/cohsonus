@@ -79,8 +79,8 @@
   border-radius: 999px;
   cursor: pointer;
   transition:
-    color calc(var(--drawing) * 4) var(--frames-4),
-    background calc(var(--drawing) * 4) var(--frames-4);
+    color 167ms var(--ease),
+    background 167ms var(--ease);
 }
 .hub-views button:hover {
   color: var(--ink);
@@ -110,7 +110,7 @@
   fill: none;
   stroke: var(--line);
   stroke-width: 1;
-  transition: stroke calc(var(--drawing) * 4) var(--frames-4);
+  transition: stroke 167ms var(--ease);
 }
 .map-lines path.far {
   stroke-dasharray: 2 5;
@@ -139,7 +139,7 @@
   border: 1px solid var(--line-2);
   background: var(--bg);
   cursor: default;
-  transition: border-color calc(var(--drawing) * 4) var(--frames-4);
+  transition: border-color 167ms var(--ease);
 }
 .map-dot.released {
   background: var(--ink-3);
@@ -162,7 +162,7 @@
   font-size: 13px;
   pointer-events: none;
   opacity: 0;
-  transition: opacity calc(var(--drawing) * 4) var(--frames-4);
+  transition: opacity 167ms var(--ease);
 }
 .map-dot-label .mono {
   color: var(--ink-3);
@@ -220,8 +220,8 @@
   text-decoration: none;
   overflow: hidden;
   transition:
-    border-color calc(var(--drawing) * 4) var(--frames-4),
-    transform calc(var(--drawing) * 8) var(--frames-8);
+    border-color 167ms var(--ease),
+    transform 333ms var(--ease);
 }
 .card-button {
   display: block;
@@ -549,8 +549,8 @@
   cursor: pointer;
   overflow: hidden;
   transition:
-    left calc(var(--drawing) * 6) var(--frames-6),
-    border-color calc(var(--drawing) * 4) var(--frames-4);
+    left 250ms var(--ease),
+    border-color 167ms var(--ease);
 }
 .cell.beat {
   border-color: var(--line-2);
@@ -689,7 +689,7 @@
   flex-direction: column;
   align-items: center;
   gap: 10px;
-  transition: opacity calc(var(--drawing) * 4) var(--frames-4);
+  transition: opacity 167ms var(--ease);
 }
 .strip.silent .meter i {
   opacity: 0.25;
@@ -805,13 +805,13 @@
   font-size: 14px;
 }
 .role:nth-child(2) {
-  animation-delay: calc(var(--drawing) * 4);
+  animation-delay: 167ms;
 }
 .role:nth-child(3) {
-  animation-delay: calc(var(--drawing) * 8);
+  animation-delay: 333ms;
 }
 .role:nth-child(4) {
-  animation-delay: calc(var(--drawing) * 12);
+  animation-delay: 500ms;
 }
 
 .prompt.small {
@@ -1003,7 +1003,7 @@
   border-radius: 50%;
   border: 2px solid var(--ink);
   opacity: 0;
-  animation: ring calc(var(--drawing) * 8) step-end;
+  animation: ring 333ms var(--ease);
 }
 .tap-bpm {
   font-size: 40px;
@@ -1249,7 +1249,7 @@
   fill: rgba(255, 255, 255, 0.06);
 }
 .timeline .tl-hit {
-  transition: cx calc(var(--drawing) * 8) var(--frames-8);
+  transition: cx 333ms var(--ease);
 }
 .timeline .tl-hit.kick {
   fill: var(--ink);

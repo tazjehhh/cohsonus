@@ -19,14 +19,19 @@ export interface Pose {
   asOrigin: boolean;
 }
 
-/** Drawings of the opening: dip, grow, settle, then the text block by block. */
+/**
+ * The choreography is timed in drawings of 1/24 s, the way an animator times a move on a dope
+ * sheet, and played back smoothly at the screen's own rate: `k` may fall between drawings.
+ */
+export const UNIT_SECONDS = 1 / 24;
+/** Opening: dip, grow, settle, then the text block by block. */
 export const OPEN_DRAWINGS = 18;
-/** Drawings of the closing: text out, shrink home. */
+/** Closing: text out, shrink home. */
 export const CLOSE_DRAWINGS = 8;
 
-const GROW_FROM = 2;
-const GROW_TO = 10;
-const TEXT_AT = [12, 14, 16];
+const GROW_FROM = 1;
+const LANDED = 10;
+const TEXT_AT = [11, 13, 15];
 const TEXT_DRAWINGS = 3;
 
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
@@ -36,34 +41,35 @@ const clamp01 = (v: number) => Math.max(0, Math.min(1, v));
 const easeOut = (t: number) => 1 - (1 - t) * (1 - t);
 const easeIn = (t: number) => t * t;
 
-/** The card as it opens: drawing 0 is the card in the hub, OPEN_DRAWINGS is landed with all text in. */
+/** The card as it opens: k = 0 is the card in the hub, OPEN_DRAWINGS is landed with all text in. */
 export function opening(k: number, from: Rect, to: Rect): Pose {
-  // 1: dip in place (anticipation); 2–10: grow to the centre, eased out; 11: overshoot 1%; 12: rest
-  const grow = clamp01((k - GROW_FROM + 1) / (GROW_TO - GROW_FROM + 1));
-  const e = easeOut(grow);
-  const scale = k === 1 ? 0.97 : k === GROW_TO + 1 ? 1.01 : 1;
-  const text = TEXT_AT.map((at) => clamp01((k - at + 1) / TEXT_DRAWINGS)) as Pose["text"];
+  const e = easeOut(clamp01((k - GROW_FROM) / (LANDED - GROW_FROM)));
+  // 0–2: a 3% dip that recovers as the growth gets going (anticipation); 10–12: a 1% overshoot that settles
+  const dip = k < 2 ? 0.03 * Math.sin((Math.PI * Math.max(0, k)) / 2) : 0;
+  const over = k > LANDED && k < LANDED + 2 ? 0.01 * Math.sin((Math.PI * (k - LANDED)) / 2) : 0;
   return {
-    rect: k < GROW_FROM ? from : lerpRect(from, to, e),
-    scale,
-    veil: clamp01(k / GROW_TO),
+    rect: lerpRect(from, to, e),
+    scale: 1 - dip + over,
+    veil: clamp01(k / LANDED),
     art: e,
-    text,
+    text: TEXT_AT.map((at) => clamp01((k - at) / TEXT_DRAWINGS)) as Pose["text"],
+    // the card changes from its hub face to the open layout as it starts to move (a cut on action)
     asOrigin: k < GROW_FROM,
   };
 }
 
-/** The card as it closes: drawing 0 is landed, CLOSE_DRAWINGS is back in the hub. */
+/** The card as it closes: k = 0 is landed, CLOSE_DRAWINGS is back in the hub. */
 export function closing(k: number, from: Rect, to: Rect): Pose {
-  // 1: text out; 2–8: shrink home, eased in, so it accelerates into place
+  // 0–1: text out; 1–8: shrink home, eased in, so it accelerates into place
   const t = clamp01((k - 1) / (CLOSE_DRAWINGS - 1));
   const e = easeIn(t);
+  const textOut = clamp01(1 - k);
   return {
     rect: lerpRect(to, from, e),
     scale: 1,
     veil: 1 - t,
     art: 1 - e,
-    text: k === 0 ? [1, 1, 1] : [0, 0, 0],
+    text: [textOut, textOut, textOut],
     asOrigin: k >= CLOSE_DRAWINGS,
   };
 }

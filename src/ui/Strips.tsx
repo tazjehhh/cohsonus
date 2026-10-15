@@ -36,7 +36,7 @@ export function useLevels(player: Player, ids: string[], playing: boolean) {
       setLevels(next);
     },
     {
-      player,
+      smooth: true,
       sample: () => {
         const b = buf.current;
         for (const id of ids) {

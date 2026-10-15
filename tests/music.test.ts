@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { drums, hits, humanize } from "../src/music/patterns";
 import { gridDiff, hasBackbeat, hasDynamics, hasFill, hasOffbeatKick, hasSteadyHats, snareBeats } from "../src/music/checks";
-import { cycleDistance, drawingsPerBeat, indexLoop, meanPhase, noteOffset, quantize, swingOffset, tapTempo, tempoRelation } from "../src/music/timing";
+import { DRAWINGS_PER_SECOND, cycleDistance, indexLoop, meanPhase, noteOffset, quantize, swingOffset, tapTempo, tempoRelation } from "../src/music/timing";
 import { layoutBar } from "../src/music/notation";
 
 describe("patterns", () => {
@@ -22,15 +22,9 @@ describe("patterns", () => {
 });
 
 describe("timing", () => {
-  it("draws at most 24 times a second, with every beat on a drawing", () => {
-    for (const bpm of [60, 90, 96, 124, 140, 174]) {
-      const n = drawingsPerBeat(bpm);
-      expect(Number.isInteger(n)).toBe(true);
-      expect(n / (60 / bpm)).toBeLessThanOrEqual(24);
-      expect((n + 1) / (60 / bpm)).toBeGreaterThan(24);
-    }
-    expect(drawingsPerBeat(90)).toBe(16);
-    expect(drawingsPerBeat(124)).toBe(11);
+  it("holds drawn illustrations an even number of refreshes on 60 and 120 Hz screens", () => {
+    expect(Number.isInteger(60 / DRAWINGS_PER_SECOND)).toBe(true);
+    expect(Number.isInteger(120 / DRAWINGS_PER_SECOND)).toBe(true);
   });
 
   it("swings only every second step", () => {

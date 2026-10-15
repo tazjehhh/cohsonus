@@ -14,7 +14,7 @@
 - Each lecture gets its own mode and look ("not every one fancy, every one fitting"). Examples given: Sampling in an early-2000s MPC / hip-hop / electro / breaks look, beige-grey with strong contrasts, a touch of Y2K. Early piano white on black, slow, classy.
 - Wants to give the design input themselves. Finished design solutions handed over make it harder to be creative. Collect their references first; do not pre-chew looks.
 - "Anatomy" should not look medical or anatomical.
-- No self-referential text: the app never describes itself (its screens, figures, structure). Clarified later: explanations are welcome and a little praise is fine, as long as it is not overdone.
+- No self-referential text: the app never talks about itself as an app. Clarified later: explanations are welcome, including how to read a figure, and a little praise is fine if not overdone. A cleanup that removed figure-reading sentences went too far and was reverted; the owner flags specific sentences instead.
 - Everything centered, desktop browser, hub scrolls horizontally, lectures are closed experiences.
 - Song examples: genre classics.
 - Card art: the owner makes it by hand. Single hairline objects did not fit, and neither did miniatures of each lecture's stage. Placeholders until then.

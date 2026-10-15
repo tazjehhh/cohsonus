@@ -1,8 +1,7 @@
 import { useEffect, useMemo, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import type { LectureEntry } from "../lectures/registry";
 import { useDrawings } from "../ui/drawings";
-import { DRAWINGS_PER_SECOND } from "../music/timing";
-import { CLOSE_DRAWINGS, OPEN_DRAWINGS, centred, closing, opening, type Rect } from "./morph";
+import { CLOSE_DRAWINGS, OPEN_DRAWINGS, UNIT_SECONDS, centred, closing, opening, type Rect } from "./morph";
 
 export type OriginKind = "large" | "compact" | "dot";
 
@@ -46,8 +45,8 @@ export function Preview({
   const dialog = useRef<HTMLDivElement>(null);
 
   const end = phase === "open" ? OPEN_DRAWINGS : CLOSE_DRAWINGS;
-  // drawings follow the clock: a slow frame skips a drawing rather than slowing the move down
-  useDrawings(k < end, () => setK(Math.min(end, Math.floor(((performance.now() - startedAt.current) / 1000) * DRAWINGS_PER_SECOND))));
+  // interface motion: smooth at the screen's rate, timed by the clock so it keeps its speed on any machine
+  useDrawings(k < end, () => setK(Math.min(end, (performance.now() - startedAt.current) / 1000 / UNIT_SECONDS)), { smooth: true });
 
   useEffect(() => {
     if (phase === "close" && k >= CLOSE_DRAWINGS) onClosed();

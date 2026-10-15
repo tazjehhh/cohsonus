@@ -532,7 +532,8 @@ export function WhereItLives({ complete, saved }: StepProps) {
       {checked && right && (
         <Explain>
           <p>
-            A <strong>spectrum</strong> shows how much energy a sound has at each pitch range, from the lowest to the highest. The kick and the bass both have most of their energy at the very bottom.
+            The chart is a <strong>spectrum</strong>: it shows how much energy each sound has from the lowest range on the left to the highest on the right. The
+            kick and the bass both have most of their energy at the far left.
           </p>
           <p>
             When two sounds share a range they cover each other up, an effect called <strong>masking</strong>, and the low end of the mix becomes muddy. Keeping the

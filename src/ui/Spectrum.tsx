@@ -103,7 +103,7 @@ export function Spectrum({ player, lines, playing }: { player: Player; lines: Sp
       render();
     },
     {
-      player,
+      smooth: true,
       sample: () => {
         const hz = audio().sampleRate / 2;
         for (const line of lines) {
