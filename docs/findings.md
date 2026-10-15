@@ -18,7 +18,7 @@
 - Everything centered, desktop browser, hub scrolls horizontally, lectures are closed experiences.
 - Song examples: genre classics.
 - Card art: the owner makes it by hand. Single hairline objects did not fit, and neither did miniatures of each lecture's stage. Placeholders until then.
-- Into animation and knows the craft. Asked first for at most 12 drawings a second at real-time speed; at 12 it did not look right, so motion now runs at up to 24. The card miniatures moved far too quickly. The beat circle unrolling into a line (Pulse, "Bars and beats") was called a slick animation: that is the bar to meet.
+- Into animation and knows the craft. Asked first for at most 12 drawings a second at real-time speed; 12 did not look right, and 24 felt a little unsmooth (24 does not divide a 60 Hz refresh, so drawings are held 2 and 3 refreshes in turn). Chosen: interface motion smooth at the screen's rate, drawn illustrations at 30. The card miniatures moved far too quickly. The beat circle unrolling into a line (Pulse, "Bars and beats") was called a slick animation: that is the bar to meet.
 - The hub is a tree, not a line: Anatomy branches into strands that branch again. Switch between the recommended path, all lectures, and by release.
 - The full tree of equal cards was overwhelming. Chosen: only what's near. The lecture to do next is the one big card with art; up to one row below it, small title cards; deeper ones are dots on dashed lines, named on hover.
 - Wants text, images and moving images in the lectures too, composed to fit: an interactive e-learning, not only exercises. First pages: building a track in layers, frequency, tempo ranges by genre, the origins of swing.
@@ -26,6 +26,7 @@
 - The Pulse "which one makes you nod" pair sounded identical: A was B shifted by one beat, and on repeat nothing marked the one. Fixed with bass and chords that start each bar. Lesson: an A/B pair must differ against a fixed reference, never by rotation alone.
 - Heard the first Anatomy track (house) and found it sounded bad; measurements found mono and dry samples, a raw saw lead, acoustic hats with hum in a house track, and overs at the master.
 - Found the sample version still sounding bad ("the song works, but it sounds really bad").
+- Wants the interactive part of a step in a box, apart from the prompt and the explanation, with cleaner distances.
 - Wants a preview before a lecture starts: the clicked card grows to about half the screen, everything else blurs, a short description says what the lecture covers. Chosen: picture left, text right; only the short description for now.
 - Name: cohsonus, from coherent; co-sonus and co- as in cooperative were also in mind.
 

@@ -637,15 +637,46 @@
   text-anchor: middle;
 }
 
+/* the box that holds what a step lets you play with; prompt above it, feedback and explanation below */
 .panel {
   border: 1px solid var(--line);
-  border-radius: 10px;
+  border-radius: 12px;
   background: var(--bg-2);
-  padding: 22px 26px 18px;
+  padding: 24px 28px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 14px;
+  gap: 20px;
+}
+.panel .strip {
+  background: var(--bg);
+}
+.panel .meter {
+  background: var(--bg-3);
+}
+/* strips in one box share a height, whether their tag takes one line or two */
+.panel .strips {
+  align-items: stretch;
+}
+.panel .roles {
+  align-items: stretch;
+}
+.panel .role .strips {
+  flex: 1;
+}
+
+/* one vertical rhythm for every step: prompt and its line belong together, the box sits a little apart,
+   feedback follows the box, the written explanation gets the most room */
+.prompt + .sub {
+  margin-top: -14px;
+}
+.prompt + .panel,
+.sub + .panel,
+.label + .panel {
+  margin-top: 8px;
+}
+.explain {
+  margin-top: 16px;
 }
 .toolbar {
   display: flex;

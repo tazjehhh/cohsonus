@@ -19,17 +19,19 @@ export function TapAlong({ complete, saved }: StepProps) {
   return (
     <div className="col">
       <h2 className="prompt">Press play, nod along, and tap in time with the beat.</h2>
-      <PlayButton playing={t.playing} onClick={t.toggle} step={t.step} />
-      <TapPad
-        playing={t.playing}
-        actual={house124.bpm}
-        onResult={(r, n) => {
-          setCount(n);
-          if (ok) return;
-          setRes(r);
-          if (r.rel !== "off" || n >= 16) complete(r);
-        }}
-      />
+      <div className="panel">
+        <PlayButton playing={t.playing} onClick={t.toggle} step={t.step} />
+        <TapPad
+          playing={t.playing}
+          actual={house124.bpm}
+          onResult={(r, n) => {
+            setCount(n);
+            if (ok) return;
+            setRes(r);
+            if (r.rel !== "off" || n >= 16) complete(r);
+          }}
+        />
+      </div>
       <Verdict ok={res ? res.rel !== "off" : null}>
         {res?.rel === "same" && <>You tapped at the tempo of the track: 124 BPM.</>}
         {res?.rel === "half" && <>You tapped on every second beat, which comes to 62 BPM.</>}
@@ -81,13 +83,15 @@ export function TempoSort({ complete, saved }: StepProps) {
   return (
     <div className="col">
       <h2 className="prompt">Put the four loops in order from slowest to fastest.</h2>
-      <div className="sortrow">
-        <span className="label">slow</span>
-        {order.map((id, i) => {
-          const item = TEMPO_LOOPS.find((x) => x.id === id)!;
-          return <SortCard key={id} letter={letter(id)} item={item} revealed={solved} onLeft={() => move(i, -1)} onRight={() => move(i, 1)} first={i === 0} last={i === order.length - 1} />;
-        })}
-        <span className="label">fast</span>
+      <div className="panel">
+        <div className="sortrow">
+          <span className="label">slow</span>
+          {order.map((id, i) => {
+            const item = TEMPO_LOOPS.find((x) => x.id === id)!;
+            return <SortCard key={id} letter={letter(id)} item={item} revealed={solved} onLeft={() => move(i, -1)} onRight={() => move(i, 1)} first={i === 0} last={i === order.length - 1} />;
+          })}
+          <span className="label">fast</span>
+        </div>
       </div>
       {!solved && (
         <button
@@ -192,8 +196,10 @@ export function FindTheOne({ complete, saved }: StepProps) {
   return (
     <div className="col">
       <h2 className="prompt">{unrolled ? "Bars and beats" : "Press play and tap the space bar each time the loop starts over."}</h2>
-      <PlayButton playing={t.playing} onClick={t.toggle} step={t.step} />
-      <BeatCircle player={t.player} playing={t.playing} barSteps={bar} taps={found ? [] : taps.map((p) => p / bar)} numbers={found} unrolled={unrolled} />
+      <div className="panel">
+        <PlayButton playing={t.playing} onClick={t.toggle} step={t.step} />
+        <BeatCircle player={t.player} playing={t.playing} barSteps={bar} taps={found ? [] : taps.map((p) => p / bar)} numbers={found} unrolled={unrolled} />
+      </div>
       <Verdict ok={found ? true : taps.length >= 6 ? false : null}>
         {found && !unrolled && "Correct. Count from there: 1, 2, 3, 4."}
         {unrolled && "Correct. The loop starts over on the first beat of the bar."}

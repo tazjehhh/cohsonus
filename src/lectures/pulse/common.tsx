@@ -8,10 +8,12 @@ import { tapTempo, tempoRelation } from "../../music/timing";
 /** One labelled play button per loop; only one plays at a time. */
 export function Versions({ items }: { items: { id: string; label: ReactNode; loop: Loop; caption?: ReactNode }[] }) {
   return (
-    <div className="versions">
-      {items.map((it) => (
-        <Version key={it.id} {...it} />
-      ))}
+    <div className="panel">
+      <div className="versions">
+        {items.map((it) => (
+          <Version key={it.id} {...it} />
+        ))}
+      </div>
     </div>
   );
 }

@@ -77,35 +77,37 @@ export function MuteAndDescribe({ complete, saved }: StepProps) {
     <div className="col">
       <h2 className="prompt">Mute each channel in turn and listen to what goes missing.</h2>
       <p className="sub">Then mark whether the sound sits low, in the middle or high.</p>
-      <Transport t={t} />
-      <Strips
-        player={t.player}
-        playing={t.playing}
-        strips={chans.map((c) => ({ id: c.stem.id, title: <span className="mono">{c.letter}</span> }))}
-        onMute={(id, m) => {
-          if (!m) return;
-          const n = { ...tried, [id]: true };
-          setTried(n);
-          update(tags, n);
-        }}
-        footer={(id) => (
-          <div className="seg">
-            {(["high", "mid", "low"] as Register[]).map((r) => (
-              <button
-                key={r}
-                className={tags[id] === r ? "on" : ""}
-                onClick={() => {
-                  const n = { ...tags, [id]: r };
-                  setTags(n);
-                  update(n, tried);
-                }}
-              >
-                {r}
-              </button>
-            ))}
-          </div>
-        )}
-      />
+      <div className="panel">
+        <Transport t={t} />
+        <Strips
+          player={t.player}
+          playing={t.playing}
+          strips={chans.map((c) => ({ id: c.stem.id, title: <span className="mono">{c.letter}</span> }))}
+          onMute={(id, m) => {
+            if (!m) return;
+            const n = { ...tried, [id]: true };
+            setTried(n);
+            update(tags, n);
+          }}
+          footer={(id) => (
+            <div className="seg">
+              {(["high", "mid", "low"] as Register[]).map((r) => (
+                <button
+                  key={r}
+                  className={tags[id] === r ? "on" : ""}
+                  onClick={() => {
+                    const n = { ...tags, [id]: r };
+                    setTags(n);
+                    update(n, tried);
+                  }}
+                >
+                  {r}
+                </button>
+              ))}
+            </div>
+          )}
+        />
+      </div>
     </div>
   );
 }
@@ -124,34 +126,36 @@ export function Reveal({ complete, memory }: StepProps) {
           You counted <span className="mono">{count}</span> sounds{count === "6" ? ", which is correct." : ". The track has six."}
         </p>
       )}
-      <Transport t={t} />
-      <div className="roles">
-        {ROLES.map((r) => {
-          const own = stems.filter((s) => s.role === r.id);
-          return (
-            <div key={r.id} className="role fade-in" style={{ ["--c" as string]: ROLE_COLOR[r.id] }}>
-              <div className="role-head">
-                <span className="role-name">{r.name}</span>
-                <span className="role-job">{r.job}</span>
+      <div className="panel">
+        <Transport t={t} />
+        <div className="roles">
+          {ROLES.map((r) => {
+            const own = stems.filter((s) => s.role === r.id);
+            return (
+              <div key={r.id} className="role fade-in" style={{ ["--c" as string]: ROLE_COLOR[r.id] }}>
+                <div className="role-head">
+                  <span className="role-name">{r.name}</span>
+                  <span className="role-job">{r.job}</span>
+                </div>
+                <Strips
+                  player={t.player}
+                  playing={t.playing}
+                  strips={own.map((s) => ({ id: s.id, title: s.name, color: ROLE_COLOR[r.id] }))}
+                  footer={(id) => {
+                    const stem = stems.find((s) => s.id === id)!;
+                    const mine = tags[id];
+                    if (!mine) return null;
+                    return (
+                      <span className={`tag ${mine === stem.register ? "good" : "miss"}`}>
+                        {mine === stem.register ? `${stem.register} ✓` : `${stem.register}, not ${mine}`}
+                      </span>
+                    );
+                  }}
+                />
               </div>
-              <Strips
-                player={t.player}
-                playing={t.playing}
-                strips={own.map((s) => ({ id: s.id, title: s.name, color: ROLE_COLOR[r.id] }))}
-                footer={(id) => {
-                  const stem = stems.find((s) => s.id === id)!;
-                  const mine = tags[id];
-                  if (!mine) return null;
-                  return (
-                    <span className={`tag ${mine === stem.register ? "good" : "miss"}`}>
-                      {mine === stem.register ? `${stem.register} ✓` : `${stem.register}, not ${mine}`}
-                    </span>
-                  );
-                }}
-              />
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
       </div>
       <Explain>
         <p>
@@ -175,13 +179,15 @@ export function BassMoment({ complete, saved }: StepProps) {
   return (
     <div className="col">
       <h2 className="prompt">Mute the bass, listen for a few seconds, then bring it back.</h2>
-      <Transport t={t} />
-      <Strips
-        player={t.player}
-        playing={t.playing}
-        strips={TRACKS.house.stems.map((s) => ({ id: s.id, title: s.name, color: ROLE_COLOR[s.role] }))}
-        onMute={(id) => id === "bass" && setFlips((f) => f + 1)}
-      />
+      <div className="panel">
+        <Transport t={t} />
+        <Strips
+          player={t.player}
+          playing={t.playing}
+          strips={TRACKS.house.stems.map((s) => ({ id: s.id, title: s.name, color: ROLE_COLOR[s.role] }))}
+          onMute={(id) => id === "bass" && setFlips((f) => f + 1)}
+        />
+      </div>
       {flips >= 2 && (
         <div className="col fade-in">
           <h3 className="prompt small">What changed when the bass was muted?</h3>
@@ -230,34 +236,36 @@ function RoleAssign({ track, order, onSolved, saved }: { track: Track; order: nu
 
   return (
     <div className="col">
-      <Transport t={t} />
-      <Strips
-        player={t.player}
-        playing={t.playing}
-        strips={chans.map((c) => ({
-          id: c.stem.id,
-          title: <span className="mono">{c.letter}</span>,
-          color: pick[c.stem.id] ? ROLE_COLOR[pick[c.stem.id]] : undefined,
-        }))}
-        footer={(id) => (
-          <div className={`seg vertical ${checked && wrong.includes(id) ? "miss" : ""}`}>
-            {ROLES.map((r) => (
-              <button
-                key={r.id}
-                className={pick[id] === r.id ? "on" : ""}
-                style={{ ["--c" as string]: ROLE_COLOR[r.id] }}
-                disabled={solved}
-                onClick={() => {
-                  setPick((p) => ({ ...p, [id]: r.id }));
-                  setChecked(false);
-                }}
-              >
-                {r.name}
-              </button>
-            ))}
-          </div>
-        )}
-      />
+      <div className="panel">
+        <Transport t={t} />
+        <Strips
+          player={t.player}
+          playing={t.playing}
+          strips={chans.map((c) => ({
+            id: c.stem.id,
+            title: <span className="mono">{c.letter}</span>,
+            color: pick[c.stem.id] ? ROLE_COLOR[pick[c.stem.id]] : undefined,
+          }))}
+          footer={(id) => (
+            <div className={`seg vertical ${checked && wrong.includes(id) ? "miss" : ""}`}>
+              {ROLES.map((r) => (
+                <button
+                  key={r.id}
+                  className={pick[id] === r.id ? "on" : ""}
+                  style={{ ["--c" as string]: ROLE_COLOR[r.id] }}
+                  disabled={solved}
+                  onClick={() => {
+                    setPick((p) => ({ ...p, [id]: r.id }));
+                    setChecked(false);
+                  }}
+                >
+                  {r.name}
+                </button>
+              ))}
+            </div>
+          )}
+        />
+      </div>
       <div className="row">
         {!solved && (
           <button
@@ -351,39 +359,41 @@ export function SameJob({ complete, saved }: StepProps) {
       <div className="label">
         Round {round + 1} of {ROUNDS.length}
       </div>
-      <div className="match-target">
-        <span className="track-tag mono">Track 1</span>
-        <PlayButton playing={house.playing} onClick={() => (house.playing ? house.stop() : listen(house, target!.id))} size="sm" label={`Play the ${target!.name}`} />
-        <span>
-          This is the <strong>{target!.name.toLowerCase()}</strong> of track 1. Find the channel that does the same job in track 2 and in track 3.
-        </span>
+      <div className="panel">
+        <div className="match-target">
+          <span className="track-tag mono">Track 1</span>
+          <PlayButton playing={house.playing} onClick={() => (house.playing ? house.stop() : listen(house, target!.id))} size="sm" label={`Play the ${target!.name}`} />
+          <span>
+            This is the <strong>{target!.name.toLowerCase()}</strong> of track 1. Find the channel that does the same job in track 2 and in track 3.
+          </span>
+        </div>
+        {others.map((o, k) => {
+          const chans = lettered(o.track, o.order);
+          return (
+            <div key={o.track.id} className="match-row">
+              <span className="track-tag mono">Track {k + 2}</span>
+              <PlayButton playing={o.p.playing} onClick={() => (o.p.playing ? o.p.stop() : listen(o.p, null))} size="sm" label="Play the whole track" />
+              {chans.map((c) => {
+                const picked = picks[o.track.id] === c.stem.id;
+                const state = checked && picked ? (right(o.track.id) ? "right" : "wrong") : picked ? "picked" : "";
+                return (
+                  <button
+                    key={c.stem.id}
+                    className={`choice chan ${state}`}
+                    onClick={() => {
+                      listen(o.p, c.stem.id);
+                      setPicks((p) => ({ ...p, [o.track.id]: c.stem.id }));
+                      setChecked(false);
+                    }}
+                  >
+                    <span className="mono">{c.letter}</span>
+                  </button>
+                );
+              })}
+            </div>
+          );
+        })}
       </div>
-      {others.map((o, k) => {
-        const chans = lettered(o.track, o.order);
-        return (
-          <div key={o.track.id} className="match-row">
-            <span className="track-tag mono">Track {k + 2}</span>
-            <PlayButton playing={o.p.playing} onClick={() => (o.p.playing ? o.p.stop() : listen(o.p, null))} size="sm" label="Play the whole track" />
-            {chans.map((c) => {
-              const picked = picks[o.track.id] === c.stem.id;
-              const state = checked && picked ? (right(o.track.id) ? "right" : "wrong") : picked ? "picked" : "";
-              return (
-                <button
-                  key={c.stem.id}
-                  className={`choice chan ${state}`}
-                  onClick={() => {
-                    listen(o.p, c.stem.id);
-                    setPicks((p) => ({ ...p, [o.track.id]: c.stem.id }));
-                    setChecked(false);
-                  }}
-                >
-                  <span className="mono">{c.letter}</span>
-                </button>
-              );
-            })}
-          </div>
-        );
-      })}
       <div className="row">
         {!allRight || !checked ? (
           <button className="btn" disabled={!allPicked} onClick={() => setChecked(true)}>
@@ -432,41 +442,43 @@ export function Instruments({ complete }: StepProps) {
   return (
     <div className="col">
       <h2 className="prompt">The same jobs, played by different instruments</h2>
-      <table className="matrix">
-        <thead>
-          <tr>
-            <th />
-            {worlds.map((w) => (
-              <th key={w.id}>
-                <span className="label">{w.world}</span>
-                <div>{w.genre}</div>
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {ROLES.map((r) => (
-            <tr key={r.id} style={{ ["--c" as string]: ROLE_COLOR[r.id] }}>
-              <th>
-                <span className="role-dot" />
-                {r.name}
-              </th>
-              {worlds.map((w, wi) =>
-                byRole(w, r.id).map((s) => (
-                  <td key={w.id}>
-                    <button className={`cellplay ${on === `${wi}:${s.id}` ? "on" : ""}`} onClick={() => play(wi, s.id)}>
-                      <span className="tri" aria-hidden>
-                        {on === `${wi}:${s.id}` ? "■" : "▶"}
-                      </span>
-                      {s.instrument}
-                    </button>
-                  </td>
-                )),
-              )}
+      <div className="panel">
+        <table className="matrix">
+          <thead>
+            <tr>
+              <th />
+              {worlds.map((w) => (
+                <th key={w.id}>
+                  <span className="label">{w.world}</span>
+                  <div>{w.genre}</div>
+                </th>
+              ))}
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {ROLES.map((r) => (
+              <tr key={r.id} style={{ ["--c" as string]: ROLE_COLOR[r.id] }}>
+                <th>
+                  <span className="role-dot" />
+                  {r.name}
+                </th>
+                {worlds.map((w, wi) =>
+                  byRole(w, r.id).map((s) => (
+                    <td key={w.id}>
+                      <button className={`cellplay ${on === `${wi}:${s.id}` ? "on" : ""}`} onClick={() => play(wi, s.id)}>
+                        <span className="tri" aria-hidden>
+                          {on === `${wi}:${s.id}` ? "■" : "▶"}
+                        </span>
+                        {s.instrument}
+                      </button>
+                    </td>
+                  )),
+                )}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
       <Explain>
         <p>
           The three tracks come from three different ways of making music. The house track is made with <strong>synthesizers</strong> and a{" "}
@@ -492,8 +504,10 @@ export function WhereItLives({ complete, saved }: StepProps) {
   return (
     <div className="col">
       <h2 className="prompt">Play the track and watch where each sound sits, from low to high.</h2>
-      <Transport t={t} />
-      <Spectrum player={t.player} lines={lines} playing={t.playing} />
+      <div className="panel">
+        <Transport t={t} />
+        <Spectrum player={t.player} lines={lines} playing={t.playing} />
+      </div>
       <h3 className="prompt small">Which two sounds compete for the lowest range?</h3>
       <div className="choices">
         {TRACKS.house.stems.map((s) => {
@@ -607,8 +621,10 @@ export function RefreshFloor({ complete }: StepProps) {
   return (
     <div className="col">
       <h2 className="prompt">Which two channels share the lowest range?</h2>
-      <Transport t={t} />
-      <Strips player={t.player} playing={t.playing} solo strips={chans.map((c) => ({ id: c.stem.id, title: <span className="mono">{c.letter}</span> }))} />
+      <div className="panel">
+        <Transport t={t} />
+        <Strips player={t.player} playing={t.playing} solo strips={chans.map((c) => ({ id: c.stem.id, title: <span className="mono">{c.letter}</span> }))} />
+      </div>
       <PairPick
         options={chans.map((c) => ({ id: c.stem.id, label: c.letter }))}
         answer={["kick", "bass"]}
